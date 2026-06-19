@@ -1,0 +1,2792 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<link rel="manifest" href="manifest.json">
+</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный словарь</title>
+    <meta name="theme-color" content="#1a0b2e">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #1a0b2e;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.day-theme {
+            background-color: #e0f7fa;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-top: 10px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-icon {
+            font-size: 28px;
+            color: #b388ff;        }
+        body.day-theme .header-icon {
+            color: #00838f;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #e1bee7;
+        }
+
+        body.day-theme .header h1 {
+            color: #006064;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn-header {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #4a148c;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.2s;
+            color: #e1bee7;
+        }
+
+        body.day-theme .icon-btn-header {
+            background: #b2ebf2;
+            color: #006064;
+        }
+
+        .icon-btn-header:hover {
+            background: #6a1b9a;
+            transform: scale(1.1);
+        }
+
+        body.day-theme .icon-btn-header:hover {
+            background: #80deea;
+        }
+
+        .stats-bar {            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #2d1b4e;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        body.day-theme .stat-card {
+            background: #b2ebf2;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #b388ff;
+            margin-bottom: 4px;
+        }
+
+        body.day-theme .stat-value {
+            color: #00838f;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #9575cd;
+        }
+
+        body.day-theme .stat-label {
+            color: #006064;
+        }
+
+        .dict-selector {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .dict-button {            flex: 1;
+            background: #4a148c;
+            border: none;
+            padding: 14px 18px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        body.day-theme .dict-button {
+            background: #b2ebf2;
+        }
+
+        .dict-button:hover {
+            background: #6a1b9a;
+        }
+
+        body.day-theme .dict-button:hover {
+            background: #80deea;
+        }
+
+        .dict-button-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dict-icon {
+            font-size: 20px;
+            color: #b388ff;
+        }
+
+        body.day-theme .dict-icon {
+            color: #00838f;
+        }
+
+        .dict-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: #b388ff;
+        }
+
+        body.day-theme .dict-name {
+            color: #00838f;
+        }
+
+        .dict-arrow {            color: #b388ff;
+            font-size: 18px;
+        }
+
+        body.day-theme .dict-arrow {
+            color: #00838f;
+        }
+
+        .word-count {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #7c4dff;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        body.day-theme .word-count {
+            background: #00838f;
+        }
+
+        .category-filter {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .category-chip {
+            padding: 8px 16px;
+            background: #2d1b4e;
+            border: none;
+            border-radius: 20px;
+            color: #b388ff;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        body.day-theme .category-chip {
+            background: #b2ebf2;
+            color: #006064;
+        }        .category-chip:hover {
+            background: #4a148c;
+            color: white;
+        }
+
+        body.day-theme .category-chip:hover {
+            background: #80deea;
+        }
+
+        .category-chip.active {
+            background: #7c4dff;
+            color: white;
+        }
+
+        body.day-theme .category-chip.active {
+            background: #00838f;
+            color: white;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: #2d1b4e;
+            border: 1px solid #4a148c;
+            padding: 14px 18px;
+            padding-left: 48px;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.2s;
+            color: #e0e0e0;
+        }
+
+        body.day-theme .search-input {
+            background: white;
+            border-color: #b2ebf2;
+            color: #006064;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #b388ff;
+        }
+
+        body.day-theme .search-input:focus {
+            border-color: #00838f;
+        }
+        .search-icon {            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9575cd;
+            font-size: 18px;
+        }
+
+        body.day-theme .search-icon {
+            color: #999;
+        }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+        .words-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .word-card {
+            background: #2d1b4e;
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        body.day-theme .word-card {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .word-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 77, 255, 0.3);
+        }
+
+        body.day-theme .word-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 131, 143, 0.2);
+        }
+        .word-image {
+            width: 60px;
+            height: 60px;            border-radius: 12px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .word-image-placeholder {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: #4a148c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        body.day-theme .word-image-placeholder {
+            background: #b2ebf2;
+        }
+
+        .word-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .word-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: #ea80fc;
+            margin-bottom: 6px;
+            word-break: break-word;
+            line-height: 1.3;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        body.day-theme .word-text {
+            color: #00695c;
+            text-shadow: none;
+        }
+
+        .word-meaning {
+            font-size: 18px;
+            color: #ffab91;
+            word-break: break-word;
+            line-height: 1.4;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        body.day-theme .word-meaning {
+            color: #00838f;
+        }
+
+        .word-category {
+            font-size: 10px;
+            color: #7e57c2;
+            opacity: 0.4;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        body.day-theme .word-category {
+            color: #00838f;
+            opacity: 0.3;
+        }
+
+        /* Стили для общего списка */
+        .compact-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .compact-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            border-bottom: 1px solid #4a148c;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        body.day-theme .compact-item {
+            border-bottom-color: #b2ebf2;
+        }
+
+        .compact-item:hover {
+            background: #2d1b4e;
+        }
+
+        body.day-theme .compact-item:hover {
+            background: #f0faff;
+        }
+
+        .compact-word {
+            font-size: 14px;
+            font-weight: 600;            color: #b388ff;
+            flex: 1;
+            padding-right: 10px;
+        }
+
+        body.day-theme .compact-word {
+            color: #006064;
+        }
+
+        .compact-meaning {
+            font-size: 14px;
+            color: #ffab91;
+            text-align: right;
+            flex: 1;
+        }
+
+        body.day-theme .compact-meaning {
+            color: #00838f;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .view-toggle-btn {
+            flex: 1;
+            padding: 10px;
+            background: #2d1b4e;
+            border: 2px solid #4a148c;
+            border-radius: 10px;
+            color: #b388ff;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        body.day-theme .view-toggle-btn {
+            background: white;
+            border-color: #b2ebf2;
+            color: #006064;
+        }
+
+        .view-toggle-btn:hover {
+            background: #4a148c;
+            color: white;
+        }
+        body.day-theme .view-toggle-btn:hover {
+            background: #80deea;
+        }
+
+        .view-toggle-btn.active {
+            background: #7c4dff;
+            border-color: #7c4dff;
+            color: white;
+        }
+
+        body.day-theme .view-toggle-btn.active {
+            background: #00838f;
+            border-color: #00838f;
+            color: white;
+        }
+
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #7c4dff;
+            border: none;
+            color: white;
+            font-size: 32px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(124, 77, 255, 0.4);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        body.day-theme .fab {
+            background: #00838f;
+            box-shadow: 0 4px 12px rgba(0, 131, 143, 0.4);
+        }
+
+        .fab:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 6px 16px rgba(124, 77, 255, 0.5);
+        }
+        body.day-theme .fab:hover {
+            box-shadow: 0 6px 16px rgba(0, 131, 143, 0.5);
+        }
+
+        .modal {            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.active {
+            display: flex !important;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        @media (min-width: 600px) {
+            .modal.active {
+                align-items: center;
+            }
+        }
+
+        .modal-content {
+            background: #1a0b2e;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 24px 24px 0 0;
+            padding: 24px;
+            animation: slideUp 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        body.day-theme .modal-content {
+            background: #e0f7fa;
+        }
+
+        @media (min-width: 600px) {
+            .modal-content {
+                border-radius: 24px;
+                margin: 20px;
+            }
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #e1bee7;
+        }
+
+        body.day-theme .modal-title {
+            color: #006064;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #4a148c;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            color: #e1bee7;
+        }
+
+        body.day-theme .modal-close {
+            background: #b2ebf2;
+            color: #006064;
+        }
+
+        .modal-close:hover {
+            background: #6a1b9a;
+        }
+        body.day-theme .modal-close:hover {
+            background: #80deea;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #b388ff;
+            font-size: 15px;
+        }
+
+        body.day-theme .form-label {
+            color: #00838f;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            background: #2d1b4e;
+            border: 1px solid #4a148c;
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.2s;
+            color: #e0e0e0;
+        }
+
+        body.day-theme .form-input,
+        body.day-theme .form-textarea {
+            background: white;
+            border-color: #b2ebf2;
+            color: #006064;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #b388ff;
+        }
+
+        body.day-theme .form-input:focus,
+        body.day-theme .form-textarea:focus {
+            border-color: #00838f;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-select-wrapper {            position: relative;
+            width: 150px;
+        }
+
+        .form-select {
+            width: 100%;
+            background: #2d1b4e;
+            border: 1px solid #4a148c;
+            padding: 12px 40px 12px 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            color: #e0e0e0;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        body.day-theme .form-select {
+            background: white;
+            border-color: #b2ebf2;
+            color: #006064;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: #b388ff;
+        }
+
+        body.day-theme .form-select:focus {
+            border-color: #00838f;
+        }
+
+        .form-select option {
+            background: #2d1b4e;
+            color: #e0e0e0;
+            padding: 8px;
+        }
+
+        body.day-theme .form-select option {
+            background: white;
+            color: #006064;
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);            pointer-events: none;
+            color: #b388ff;
+            font-size: 12px;
+        }
+
+        body.day-theme .select-arrow {
+            color: #00838f;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-label {
+            display: block;
+            background: #4a148c;
+            color: #b388ff;
+            padding: 14px 16px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            border: 2px dashed #7c4dff;
+        }
+
+        body.day-theme .file-input-label {
+            background: #b2ebf2;
+            color: #00838f;
+            border-color: #00838f;
+        }
+
+        .file-input-label:hover {
+            background: #6a1b9a;
+        }
+
+        body.day-theme .file-input-label:hover {
+            background: #80deea;        }
+
+        .file-input-label.has-file {
+            background: #7c4dff;
+            color: white;
+            border-style: solid;
+        }
+
+        body.day-theme .file-input-label.has-file {
+            background: #00838f;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 150px;
+            border-radius: 12px;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: #7c4dff;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 8px;
+        }
+
+        body.day-theme .btn-primary {
+            background: #00838f;
+        }
+
+        .btn-primary:hover {
+            background: #651fff;
+            transform: translateY(-2px);
+        }
+        body.day-theme .btn-primary:hover {
+            background: #006064;
+        }
+
+        .btn-warning {
+            background: #ff9800;
+        }
+        .btn-warning:hover {
+            background: #f57c00;
+        }
+
+        .btn-danger {
+            background: #e53935;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c62828;
+        }
+
+        .quiz-container {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .quiz-progress {
+            font-size: 14px;
+            color: #9575cd;
+            margin-bottom: 15px;
+        }
+
+        body.day-theme .quiz-progress {
+            color: #00838f;
+        }
+
+        .quiz-direction {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .quiz-direction-btn {
+            padding: 10px 18px;
+            background: #2d1b4e;
+            border: 2px solid #4a148c;
+            border-radius: 10px;
+            color: #b388ff;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        body.day-theme .quiz-direction-btn {
+            background: white;            border-color: #b2ebf2;
+            color: #006064;
+        }
+
+        .quiz-direction-btn:hover {
+            background: #4a148c;
+            color: white;
+        }
+
+        body.day-theme .quiz-direction-btn:hover {
+            background: #80deea;
+        }
+
+        .quiz-direction-btn.active {
+            background: #7c4dff;
+            border-color: #7c4dff;
+            color: white;
+        }
+
+        body.day-theme .quiz-direction-btn.active {
+            background: #00838f;
+            border-color: #00838f;
+            color: white;
+        }
+
+        .quiz-word {
+            font-size: 32px;
+            font-weight: bold;
+            color: #b388ff;
+            margin: 20px 0;
+            padding: 30px;
+            background: #2d1b4e;
+            border-radius: 16px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.day-theme .quiz-word {
+            color: #006064;
+            background: #b2ebf2;
+        }
+
+        .quiz-label {
+            font-size: 14px;
+            color: #9575cd;
+            margin-bottom: 10px;
+        }
+        body.day-theme .quiz-label {            color: #00838f;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .quiz-option {
+            padding: 16px;
+            background: #2d1b4e;
+            border: 2px solid #4a148c;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 16px;
+            color: #e0e0e0;
+            font-weight: 500;
+        }
+
+        body.day-theme .quiz-option {
+            background: white;
+            border-color: #b2ebf2;
+            color: #006064;
+        }
+
+        .quiz-option:hover:not(:disabled) {
+            background: #4a148c;
+            transform: scale(1.02);
+        }
+
+        body.day-theme .quiz-option:hover:not(:disabled) {
+            background: #b2ebf2;
+        }
+
+        .quiz-option:disabled {
+            cursor: not-allowed;
+        }
+
+        .quiz-option.correct {
+            background: #2e7d32 !important;
+            border-color: #4caf50 !important;
+            color: white !important;
+            animation: pulseGreen 0.5s;
+        }
+
+        .quiz-option.wrong {
+            background: #c62828 !important;            border-color: #f44336 !important;
+            color: white !important;
+            animation: shake 0.5s;
+        }
+
+        @keyframes pulseGreen {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        .quiz-score {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .quiz-score-correct {
+            color: #4caf50;
+            font-weight: 600;
+        }
+
+        .quiz-score-wrong {
+            color: #f44336;
+            font-weight: 600;
+        }
+
+        .quiz-score-remaining {
+            color: #9575cd;
+        }
+
+        body.day-theme .quiz-score-remaining {
+            color: #00838f;
+        }
+
+        .quiz-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .quiz-buttons .btn-primary {            flex: 1;
+            min-width: 140px;
+            margin-top: 0;
+        }
+
+        .results-container {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .results-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #b388ff;
+            margin-bottom: 20px;
+        }
+
+        body.day-theme .results-title {
+            color: #006064;
+        }
+
+        .results-percentage {
+            font-size: 64px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .results-percentage.good {
+            color: #4caf50;
+        }
+
+        .results-percentage.medium {
+            color: #ff9800;
+        }
+
+        .results-percentage.bad {
+            color: #f44336;
+        }
+
+        .results-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            gap: 10px;
+        }
+
+        .results-stat {
+            background: #2d1b4e;
+            padding: 16px;
+            border-radius: 12px;            flex: 1;
+        }
+
+        body.day-theme .results-stat {
+            background: #b2ebf2;
+        }
+
+        .results-stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .results-stat-label {
+            font-size: 13px;
+            color: #9575cd;
+        }
+
+        body.day-theme .results-stat-label {
+            color: #006064;
+        }
+
+        .wrong-words-list {
+            background: #2d1b4e;
+            border-radius: 16px;
+            padding: 16px;
+            margin: 20px 0;
+            max-height: 250px;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        body.day-theme .wrong-words-list {
+            background: #b2ebf2;
+        }
+
+        .wrong-words-title {
+            color: #f44336;
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .wrong-word-item {
+            padding: 10px 12px;
+            border-bottom: 1px solid #4a148c;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;        }
+
+        body.day-theme .wrong-word-item {
+            border-bottom-color: #80deea;
+            color: #006064;
+        }
+
+        .wrong-word-item:last-child {
+            border-bottom: none;
+        }
+
+        .wrong-word-text {
+            font-weight: 600;
+            color: #ea80fc;
+        }
+
+        body.day-theme .wrong-word-text {
+            color: #00695c;
+        }
+
+        .wrong-word-meaning {
+            color: #ffab91;
+            font-size: 14px;
+        }
+
+        body.day-theme .wrong-word-meaning {
+            color: #00838f;
+        }
+
+        .perfect-result {
+            background: #2d1b4e;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        body.day-theme .perfect-result {
+            background: #b2ebf2;
+        }
+
+        .perfect-emoji {
+            font-size: 64px;
+            margin-bottom: 10px;
+        }
+
+        .perfect-text {
+            color: #4caf50;
+            font-size: 20px;
+            font-weight: 600;        }
+
+        .dict-switch-item {
+            padding: 16px;
+            background: #2d1b4e;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        body.day-theme .dict-switch-item {
+            background: white;
+        }
+
+        .dict-switch-item:hover {
+            background: #4a148c;
+            transform: translateX(4px);
+        }
+
+        body.day-theme .dict-switch-item:hover {
+            background: #b2ebf2;
+        }
+
+        .dict-switch-item.active {
+            background: #7c4dff;
+            color: white;
+        }
+
+        body.day-theme .dict-switch-item.active {
+            background: #00838f;
+        }
+
+        .dict-switch-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .dict-switch-count {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .settings-modal .modal-content {
+            max-height: 85vh;
+        }
+        .settings-section {
+            margin-bottom: 28px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid #4a148c;
+        }
+
+        body.day-theme .settings-section {
+            border-bottom-color: #b2ebf2;
+        }
+
+        .settings-section:last-child {
+            border-bottom: none;
+        }
+
+        .settings-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #b388ff;
+            margin-bottom: 16px;
+        }
+
+        body.day-theme .settings-section h3 {
+            color: #00838f;
+        }
+
+        .dict-manage-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            background: #2d1b4e;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        body.day-theme .dict-manage-item {
+            background: white;
+        }
+
+        .dict-manage-info {
+            flex: 1;
+        }
+
+        .dict-manage-name {
+            font-weight: 600;
+            color: #e1bee7;
+            margin-bottom: 4px;
+        }
+        body.day-theme .dict-manage-name {
+            color: #006064;        }
+
+        .dict-manage-count {
+            font-size: 14px;
+            color: #b0b0b0;
+        }
+
+        body.day-theme .dict-manage-count {
+            color: #666;
+        }
+
+        .dict-manage-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn-small {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .icon-btn-small.edit {
+            background: #4a148c;
+            color: #b388ff;
+        }
+
+        body.day-theme .icon-btn-small.edit {
+            background: #b2ebf2;
+            color: #00838f;
+        }
+
+        .icon-btn-small.delete {
+            background: #ffebee;
+            color: #e53935;
+        }
+
+        body.day-theme .icon-btn-small.delete {
+            background: #ffebee;
+        }
+        .icon-btn-small:hover {
+            transform: scale(1.1);
+        }
+        .new-dict-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .new-dict-form input {
+            flex: 1;
+        }
+
+        .btn-secondary {
+            background: #7c4dff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        body.day-theme .btn-secondary {
+            background: #00838f;
+        }
+
+        .btn-secondary:hover {
+            background: #651fff;
+        }
+
+        body.day-theme .btn-secondary:hover {
+            background: #006064;
+        }
+
+        .theme-toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+        }
+
+        .theme-toggle-label {
+            color: #e1bee7;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        body.day-theme .theme-toggle-label {
+            color: #006064;        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #4a148c;
+            transition: .3s;
+            border-radius: 28px;
+        }
+
+        body.day-theme .slider {
+            background-color: #b2ebf2;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #7c4dff;
+        }
+
+        body.day-theme input:checked + .slider {
+            background-color: #00838f;
+        }
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #9575cd;
+        }
+
+        body.day-theme .empty-state {
+            color: #00838f;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .info-text {
+            font-size: 13px;
+            color: #9575cd;
+            margin-top: 8px;
+        }
+
+        body.day-theme .info-text {
+            color: #00838f;
+            opacity: 0.7;
+        }
+
+        .author-signature {
+            position: fixed;
+            bottom: 8px;
+            left: 12px;
+            font-size: 11px;
+            color: #b388ff;
+            opacity: 0.6;
+            font-style: italic;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        body.day-theme .author-signature {
+            color: #00838f;
+        }
+
+        .hidden {
+            display: none !important;        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 16px;
+                padding-bottom: 100px;
+            }
+
+            .fab {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .quiz-direction {
+                flex-direction: column;
+            }
+
+            .quiz-direction-btn {
+                width: 100%;
+            }
+
+            .quiz-buttons {
+                flex-direction: column;
+            }
+
+            .quiz-buttons .btn-primary {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <span class="header-icon">📖</span>
+                <h1>Личный словарь</h1>
+            </div>
+            <div class="header-controls">
+                <button class="icon-btn-header" onclick="toggleTheme()" title="Сменить тему">
+                    <span id="themeIcon">☀️</span>
+                </button>
+                <button class="icon-btn-header" onclick="openQuiz()" title="Режим изучения">🎯</button>
+                <button class="icon-btn-header" onclick="openSettings()" title="Настройки">⚙</button>
+            </div>
+        </div>
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-value" id="totalWords">0</div>
+                <div class="stat-label">Всего слов</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="todayWords">0</div>
+                <div class="stat-label">Сегодня</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="weekWords">0</div>
+                <div class="stat-label">За неделю</div>
+            </div>
+        </div>
+
+        <div class="dict-selector">
+            <button class="dict-button" onclick="openDictSwitch()">
+                <div class="dict-button-left">
+                    <span class="dict-icon">📚</span>
+                    <span class="dict-name" id="currentDictName">Мой словарь</span>
+                </div>
+                <span class="dict-arrow">›</span>
+            </button>
+            <div class="word-count" id="wordCount">0</div>
+        </div>
+
+        <div class="category-filter" id="categoryFilter">
+            <button class="category-chip active" onclick="filterCategory('all')">Все</button>
+        </div>
+
+        <!-- Переключатель вида -->
+        <div class="view-toggle">
+            <button class="view-toggle-btn active" id="viewCardsBtn" onclick="setViewMode('cards')">📋 Карточки</button>
+            <button class="view-toggle-btn" id="viewCompactBtn" onclick="setViewMode('compact')">📃 Общий список</button>
+        </div>
+
+        <div class="search-container">
+            <div class="search-wrapper">
+                <span class="search-icon"></span>
+                <input type="text" class="search-input" id="searchInput" placeholder="Поиск..." oninput="searchWords()">
+            </div>
+        </div>
+        <div class="words-list" id="wordsList">
+        </div>
+    </div>
+
+    <button class="fab" onclick="openAddModal()">+</button>
+
+    <div class="modal" id="wordModal">        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Добавить слово</h2>
+                <button class="modal-close" onclick="closeWordModal()">✕</button>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Слово</label>
+                <input type="text" class="form-input" id="wordInput" placeholder="например: home">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Значение/Перевод</label>
+                <textarea class="form-textarea" id="meaningInput" placeholder="например: дом"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Категория</label>
+                <input type="text" class="form-input" id="categoryInput" list="categoriesList" placeholder="например: Еда">
+                <datalist id="categoriesList"></datalist>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Заметки</label>
+                <textarea class="form-textarea" id="notesInput" placeholder="Примеры использования, примечания..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Картинка</label>
+                <div class="file-input-wrapper">
+                    <div class="file-input-label" id="fileInputLabel"> Выбрать картинку</div>
+                    <input type="file" id="imageInput" accept="image/*">
+                </div>
+                <img id="imagePreview" class="preview-image" alt="Preview">
+            </div>
+
+            <button class="btn-primary" onclick="saveWord()">💾 Сохранить</button>
+            <button class="btn-primary btn-danger hidden" id="deleteWordBtn" onclick="deleteWordFromEdit()" style="margin-top: 10px;">🗑️ Удалить слово</button>
+        </div>
+    </div>
+
+    <div class="modal" id="quizModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">🎯 Режим изучения</h2>
+                <button class="modal-close" onclick="closeQuiz()">✕</button>
+            </div>
+            
+            <div id="quizStartScreen" class="quiz-container">
+                <div class="quiz-direction">                    <button class="quiz-direction-btn active" id="dirWordToMeaning" onclick="setQuizDirection('wordToMeaning')">
+                        Слово → Перевод
+                    </button>
+                    <button class="quiz-direction-btn" id="dirMeaningToWord" onclick="setQuizDirection('meaningToWord')">
+                        Перевод → Слово
+                    </button>
+                    <button class="quiz-direction-btn" id="dirMixed" onclick="setQuizDirection('mixed')">
+                        Смешанный
+                    </button>
+                </div>
+                <p style="color: #9575cd; margin-bottom: 20px; font-size: 14px;">
+                    Всего слов в словаре: <strong id="quizTotalWords">0</strong>
+                </p>
+                <button class="btn-primary" onclick="beginQuiz()">▶️ Начать тест</button>
+            </div>
+
+            <div id="quizGameScreen" class="quiz-container hidden">
+                <div class="quiz-progress" id="quizProgress">Вопрос 1 из 10</div>
+                <div class="quiz-score">
+                    <span class="quiz-score-correct">✓ <span id="correctCount">0</span></span>
+                    <span class="quiz-score-wrong">✗ <span id="wrongCount">0</span></span>
+                    <span class="quiz-score-remaining">Осталось: <span id="remainingCount">0</span></span>
+                </div>
+                <div class="quiz-label" id="quizLabel">Выберите перевод:</div>
+                <div class="quiz-word" id="quizWord">—</div>
+                <div class="quiz-options" id="quizOptions"></div>
+                <div class="quiz-buttons">
+                    <button class="btn-primary btn-warning" onclick="finishQuizEarly()">⏹ Завершить</button>
+                </div>
+            </div>
+
+            <div id="quizResultsScreen" class="results-container hidden">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="dictSwitchModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">📚 Выбор словаря</h2>
+                <button class="modal-close" onclick="closeDictSwitch()">✕</button>
+            </div>
+            <div id="dictSwitchList"></div>
+        </div>
+    </div>
+
+    <div class="modal settings-modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">⚙ Настройки</h2>                <button class="modal-close" onclick="closeSettings()">✕</button>
+            </div>
+
+            <div class="settings-section">
+                <h3>📚 Управление словарями</h3>
+                <div class="new-dict-form">
+                    <input type="text" class="form-input" id="newDictName" placeholder="Название нового словаря...">
+                    <button class="btn-secondary" onclick="createDictionary()">➕</button>
+                </div>
+                <div id="dictionariesList"></div>
+            </div>
+
+            <div class="settings-section">
+                <h3>🎨 Оформление</h3>
+                <div class="theme-toggle-row">
+                    <span class="theme-toggle-label">Размер шрифта</span>
+                    <div class="form-select-wrapper">
+                        <select class="form-select" id="fontSizeSelect" onchange="changeFontSize()">
+                            <option value="small">Мелкий</option>
+                            <option value="medium" selected>Средний</option>
+                            <option value="large">Крупный</option>
+                        </select>
+                        <span class="select-arrow">▼</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>💾 Резервное копирование</h3>
+                <button class="btn-secondary" onclick="exportDictionary()" style="margin-right: 8px; margin-bottom: 8px;">📤 Экспорт</button>
+                <button class="btn-secondary" onclick="exportAllDictionaries()" style="margin-right: 8px; margin-bottom: 8px;">📤 Все словари</button>
+                <button class="btn-secondary" onclick="importDictionary()" style="margin-bottom: 8px;">📥 Импорт</button>
+            </div>
+
+            <div class="settings-section">
+                <h3>⚠️ Опасная зона</h3>
+                <button class="btn-secondary btn-danger" onclick="clearAllWords()"> Очистить словарь</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="wordDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">📝 Слово</h2>
+                <button class="modal-close" onclick="closeWordDetail()">✕</button>
+            </div>
+            <div id="wordDetailContent"></div>
+        </div>
+    </div>
+    <div class="author-signature">Мухаммад абу Абдульмалик</div>
+
+    <script>
+        let data = loadData();
+        let currentImageBase64 = null;
+        let editingWordId = null;
+        let isEditing = false;
+        let currentCategory = 'all';
+        let currentViewMode = 'cards'; // 'cards' или 'compact'
+        let quizData = { 
+            correct: 0, 
+            wrong: 0, 
+            currentWord: null, 
+            options: [], 
+            direction: 'wordToMeaning',
+            wordQueue: [],
+            wrongWords: [],
+            isRetryMode: false,
+            isFinished: false
+        };
+
+        function loadData() {
+            try {
+                const saved = localStorage.getItem('myDictionaryData');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.dictionaries && parsed.currentDictionary) {
+                        for (let dictName in parsed.dictionaries) {
+                            parsed.dictionaries[dictName] = parsed.dictionaries[dictName].map(word => ({
+                                ...word,
+                                category: word.category || 'Общее',
+                                notes: word.notes || '',
+                                createdAt: word.createdAt || new Date().toISOString(),
+                                lastReviewed: word.lastReviewed || null
+                            }));
+                        }
+                        return parsed;
+                    }
+                }
+            } catch (e) {
+                console.error('Error loading data:', e);
+            }
+            return {
+                dictionaries: { "Мой словарь": [] },
+                currentDictionary: "Мой словарь"
+            };
+        }
+
+        function saveData() {            try {
+                localStorage.setItem('myDictionaryData', JSON.stringify(data));
+                updateStats();
+            } catch (e) {
+                console.error('Error saving data:', e);
+            }
+        }
+
+        function getCurrentWords() {
+            return data.dictionaries[data.currentDictionary] || [];
+        }
+
+        function setCurrentWords(words) {
+            data.dictionaries[data.currentDictionary] = words;
+            saveData();
+        }
+
+        function updateThemeIcon() {
+            const isDay = document.body.classList.contains('day-theme');
+            document.getElementById('themeIcon').textContent = isDay ? '🌙' : '☀️';
+        }
+
+        try {
+            if (localStorage.getItem('theme') === 'day') {
+                document.body.classList.add('day-theme');
+            }
+        } catch (e) {}
+        updateThemeIcon();
+
+        function toggleTheme() {
+            document.body.classList.toggle('day-theme');
+            const isDay = document.body.classList.contains('day-theme');
+            try {
+                localStorage.setItem('theme', isDay ? 'day' : 'night');
+            } catch (e) {}
+            updateThemeIcon();
+        }
+
+        function changeFontSize() {
+            const size = document.getElementById('fontSizeSelect').value;
+            try {
+                localStorage.setItem('fontSize', size);
+            } catch (e) {}            
+            const wordTexts = document.querySelectorAll('.word-text');
+            const wordMeanings = document.querySelectorAll('.word-meaning');
+            
+            if (size === 'small') {
+                wordTexts.forEach(el => el.style.fontSize = '19px');
+                wordMeanings.forEach(el => el.style.fontSize = '15px');
+            } else if (size === 'large') {                wordTexts.forEach(el => el.style.fontSize = '26px');
+                wordMeanings.forEach(el => el.style.fontSize = '22px');
+            } else {
+                wordTexts.forEach(el => el.style.fontSize = '22px');
+                wordMeanings.forEach(el => el.style.fontSize = '18px');
+            }
+        }
+
+        try {
+            const savedSize = localStorage.getItem('fontSize');
+            if (savedSize) {
+                document.getElementById('fontSizeSelect').value = savedSize;
+            }
+        } catch (e) {}
+
+        function updateStats() {
+            const words = getCurrentWords();
+            const today = new Date().toDateString();
+            const weekAgo = new Date();
+            weekAgo.setDate(weekAgo.getDate() - 7);
+
+            const todayCount = words.filter(w => {
+                const date = new Date(w.createdAt);
+                return date.toDateString() === today;
+            }).length;
+
+            const weekCount = words.filter(w => {
+                const date = new Date(w.createdAt);
+                return date >= weekAgo;
+            }).length;
+
+            document.getElementById('totalWords').textContent = words.length;
+            document.getElementById('todayWords').textContent = todayCount;
+            document.getElementById('weekWords').textContent = weekCount;
+            document.getElementById('wordCount').textContent = words.length;
+        }
+
+        try {
+            renderDictionarySelect();
+            displayWords();
+            updateStats();
+            updateCategories();
+            setTimeout(changeFontSize, 100);
+        } catch (e) {
+            console.error('Error initializing:', e);
+        }
+
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const label = document.getElementById('fileInputLabel');            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentImageBase64 = e.target.result;
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = currentImageBase64;
+                    preview.style.display = 'block';
+                    label.textContent = '✅ ' + file.name;
+                    label.classList.add('has-file');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function renderDictionarySelect() {
+            document.getElementById('currentDictName').textContent = data.currentDictionary;
+        }
+
+        function updateCategories() {
+            const words = getCurrentWords();
+            const categories = [...new Set(words.map(w => w.category || 'Общее'))];
+            
+            const filterHtml = '<button class="category-chip active" onclick="filterCategory(\'all\')">Все</button>' +
+                categories.map(cat => `<button class="category-chip" onclick="filterCategory('${cat.replace(/'/g, "\\'")}')">${cat}</button>`).join('');
+            
+            document.getElementById('categoryFilter').innerHTML = filterHtml;
+
+            const datalist = document.getElementById('categoriesList');
+            datalist.innerHTML = categories.map(cat => `<option value="${cat}">`).join('');
+        }
+
+        function filterCategory(category) {
+            currentCategory = category;
+            document.querySelectorAll('.category-chip').forEach(chip => {
+                chip.classList.remove('active');
+                if (chip.textContent === category || (category === 'all' && chip.textContent === 'Все')) {
+                    chip.classList.add('active');
+                }
+            });
+            displayWords();
+        }
+
+        function setViewMode(mode) {
+            currentViewMode = mode;
+            document.getElementById('viewCardsBtn').classList.toggle('active', mode === 'cards');
+            document.getElementById('viewCompactBtn').classList.toggle('active', mode === 'compact');
+            displayWords();
+        }
+
+        function openDictSwitch() {            renderDictSwitchList();
+            document.getElementById('dictSwitchModal').classList.add('active');
+        }
+
+        function closeDictSwitch() {
+            document.getElementById('dictSwitchModal').classList.remove('active');
+        }
+
+        function renderDictSwitchList() {
+            const list = document.getElementById('dictSwitchList');
+            const dictNames = Object.keys(data.dictionaries);
+            
+            list.innerHTML = dictNames.map(name => {
+                const count = data.dictionaries[name].length;
+                const isActive = name === data.currentDictionary;
+                return `
+                    <div class="dict-switch-item ${isActive ? 'active' : ''}" onclick="switchToDictionary('${name.replace(/'/g, "\\'")}')">
+                        <div class="dict-switch-name">${name} ${isActive ? '✓' : ''}</div>
+                        <div class="dict-switch-count">${count} слов</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function createDictionary() {
+            const input = document.getElementById('newDictName');
+            const name = input.value.trim();
+            
+            if (!name) {
+                alert('Введите название словаря');
+                return;
+            }
+            
+            if (data.dictionaries[name]) {
+                alert('Словарь с таким названием уже существует');
+                return;
+            }
+
+            data.dictionaries[name] = [];
+            data.currentDictionary = name;
+            saveData();
+            
+            input.value = '';
+            renderDictionarySelect();
+            displayWords();
+            renderDictionariesList();
+            updateStats();
+        }
+        function renameDictionary(oldName) {
+            const newName = prompt('Новое название словаря:', oldName);            if (!newName || newName.trim() === '' || newName.trim() === oldName) return;
+            
+            const trimmed = newName.trim();
+            if (data.dictionaries[trimmed]) {
+                alert('Словарь с таким названием уже существует');
+                return;
+            }
+
+            const newDicts = {};
+            for (const key of Object.keys(data.dictionaries)) {
+                if (key === oldName) {
+                    newDicts[trimmed] = data.dictionaries[key];
+                } else {
+                    newDicts[key] = data.dictionaries[key];
+                }
+            }
+            data.dictionaries = newDicts;
+            
+            if (data.currentDictionary === oldName) {
+                data.currentDictionary = trimmed;
+            }
+            
+            saveData();
+            renderDictionarySelect();
+            renderDictionariesList();
+            displayWords();
+            updateStats();
+        }
+
+        function deleteDictionary(name) {
+            const dictCount = Object.keys(data.dictionaries).length;
+            if (dictCount === 1) {
+                alert('Нельзя удалить последний словарь');
+                return;
+            }
+
+            if (!confirm(`Удалить словарь "${name}"?`)) return;
+
+            delete data.dictionaries[name];
+            
+            if (data.currentDictionary === name) {
+                data.currentDictionary = Object.keys(data.dictionaries)[0];
+            }
+            
+            saveData();
+            renderDictionarySelect();
+            renderDictionariesList();
+            displayWords();
+            updateStats();
+        }
+        function switchToDictionary(name) {
+            data.currentDictionary = name;
+            saveData();
+            renderDictionarySelect();
+            renderDictionariesList();
+            renderDictSwitchList();
+            displayWords();
+            updateStats();
+            updateCategories();
+            closeDictSwitch();
+        }
+
+        function renderDictionariesList() {
+            const list = document.getElementById('dictionariesList');
+            const dictNames = Object.keys(data.dictionaries);
+            
+            list.innerHTML = dictNames.map(name => {
+                const count = data.dictionaries[name].length;
+                const isActive = name === data.currentDictionary;
+                return `
+                    <div class="dict-manage-item">
+                        <div class="dict-manage-info">
+                            <div class="dict-manage-name">${name} ${isActive ? '(текущий)' : ''}</div>
+                            <div class="dict-manage-count">${count} слов</div>
+                        </div>
+                        <div class="dict-manage-actions">
+                            <button class="icon-btn-small edit" onclick="renameDictionary('${name.replace(/'/g, "\\'")}')" title="Переименовать">✏️</button>
+                            <button class="icon-btn-small delete" onclick="deleteDictionary('${name.replace(/'/g, "\\'")}')" title="Удалить">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openAddModal() {
+            isEditing = false;
+            editingWordId = null;
+            currentImageBase64 = null;
+            
+            document.getElementById('modalTitle').textContent = 'Добавить слово';
+            document.getElementById('wordInput').value = '';
+            document.getElementById('meaningInput').value = '';
+            document.getElementById('categoryInput').value = 'Общее';
+            document.getElementById('notesInput').value = '';
+            document.getElementById('imageInput').value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            const label = document.getElementById('fileInputLabel');
+            label.textContent = '📷 Выбрать картинку';
+            label.classList.remove('has-file');            
+            // Скрываем кнопку удаления при добавлении нового слова
+            document.getElementById('deleteWordBtn').classList.add('hidden');
+            
+            document.getElementById('wordModal').classList.add('active');
+        }
+
+        function openEditModal(wordId) {
+            const words = getCurrentWords();
+            const word = words.find(w => w.id === wordId);
+            if (!word) return;
+
+            isEditing = true;
+            editingWordId = wordId;
+            currentImageBase64 = word.image || null;
+
+            document.getElementById('modalTitle').textContent = 'Редактировать слово';
+            document.getElementById('wordInput').value = word.word;
+            document.getElementById('meaningInput').value = word.meaning;
+            document.getElementById('categoryInput').value = word.category || 'Общее';
+            document.getElementById('notesInput').value = word.notes || '';
+
+            const preview = document.getElementById('imagePreview');
+            const label = document.getElementById('fileInputLabel');
+
+            if (word.image) {
+                preview.src = word.image;
+                preview.style.display = 'block';
+                label.textContent = '✅ Картинка добавлена';
+                label.classList.add('has-file');
+            } else {
+                preview.style.display = 'none';
+                label.textContent = ' Выбрать картинку';
+                label.classList.remove('has-file');
+            }
+
+            // Показываем кнопку удаления при редактировании
+            document.getElementById('deleteWordBtn').classList.remove('hidden');
+            
+            document.getElementById('wordModal').classList.add('active');
+        }
+
+        function closeWordModal() {
+            document.getElementById('wordModal').classList.remove('active');
+        }
+
+        function saveWord() {
+            const word = document.getElementById('wordInput').value.trim();
+            const meaning = document.getElementById('meaningInput').value.trim();
+            const category = document.getElementById('categoryInput').value.trim() || 'Общее';            const notes = document.getElementById('notesInput').value.trim();
+
+            if (!word || !meaning) {
+                alert('Заполните оба поля');
+                return;
+            }
+
+            const words = getCurrentWords();
+
+            // Проверка на дубликаты: ищем слово с таким же названием (без учёта регистра)
+            const duplicateWord = words.find(w => 
+                w.word.toLowerCase().trim() === word.toLowerCase().trim() && 
+                (!isEditing || w.id !== editingWordId)
+            );
+            
+            if (duplicateWord) {
+                alert('Слово "' + word + '" уже существует в словаре');
+                return;
+            }
+
+            if (isEditing) {
+                const index = words.findIndex(w => w.id === editingWordId);
+                if (index !== -1) {
+                    words[index].word = word;
+                    words[index].meaning = meaning;
+                    words[index].category = category;
+                    words[index].notes = notes;
+                    words[index].image = currentImageBase64;
+                    words[index].updatedAt = new Date().toISOString();
+                }
+            } else {
+                words.push({
+                    id: Date.now(),
+                    word: word,
+                    meaning: meaning,
+                    category: category,
+                    notes: notes,
+                    image: currentImageBase64,
+                    createdAt: new Date().toISOString(),
+                    lastReviewed: null
+                });
+            }
+
+            setCurrentWords(words);
+            closeWordModal();
+            displayWords();
+            updateStats();
+            updateCategories();
+            setTimeout(changeFontSize, 50);
+        }
+        function deleteWordFromEdit() {
+            if (!editingWordId) return;
+            if (!confirm('Удалить это слово из словаря?')) return;
+            
+            let words = getCurrentWords();
+            words = words.filter(w => w.id !== editingWordId);
+            setCurrentWords(words);
+            closeWordModal();
+            displayWords();
+            updateStats();
+            updateCategories();
+        }
+
+        function showWordDetail(wordId) {
+            const words = getCurrentWords();
+            const word = words.find(w => w.id === wordId);
+            if (!word) return;
+
+            const content = document.getElementById('wordDetailContent');
+            content.innerHTML = `
+                <div style="padding: 20px;">
+                    ${word.image ? `<img src="${word.image}" style="max-width: 100%; border-radius: 12px; margin-bottom: 16px;">` : ''}
+                    <h2 style="color: #ea80fc; margin-bottom: 12px; font-size: 32px;">${word.word}</h2>
+                    <p style="color: #ffab91; font-size: 22px; margin-bottom: 16px;"><strong>Значение:</strong> ${word.meaning}</p>
+                    <p style="color: #9575cd; margin-bottom: 8px;"><strong>Категория:</strong> ${word.category}</p>
+                    ${word.notes ? `<p style="color: #e0e0e0;"><strong>Заметки:</strong> ${word.notes}</p>` : ''}
+                    <p style="color: #9575cd; font-size: 12px; margin-top: 20px;">
+                        Добавлено: ${new Date(word.createdAt).toLocaleDateString('ru-RU')}
+                    </p>
+                </div>
+                <button class="btn-primary" onclick="closeWordDetail(); openEditModal(${word.id})" style="margin-top: 16px;">✏️ Редактировать</button>
+            `;
+            
+            document.getElementById('wordDetailModal').classList.add('active');
+        }
+
+        function closeWordDetail() {
+            document.getElementById('wordDetailModal').classList.remove('active');
+        }
+
+        function deleteWord(id) {
+            if (!confirm('Удалить это слово?')) return;
+            
+            let words = getCurrentWords();
+            words = words.filter(w => w.id !== id);
+            setCurrentWords(words);
+            displayWords();
+            updateStats();
+            updateCategories();        }
+
+        function displayWords() {
+            const wordsList = document.getElementById('wordsList');
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+
+            let words = getCurrentWords();
+            
+            if (currentCategory !== 'all') {
+                words = words.filter(w => w.category === currentCategory);
+            }
+            
+            if (searchQuery) {
+                words = words.filter(w => 
+                    w.word.toLowerCase().includes(searchQuery) || 
+                    w.meaning.toLowerCase().includes(searchQuery) ||
+                    (w.notes && w.notes.toLowerCase().includes(searchQuery))
+                );
+            }
+
+            words = [...words].sort((a, b) => 
+                a.word.toLowerCase().localeCompare(b.word.toLowerCase(), 'ru')
+            );
+
+            if (words.length === 0) {
+                if (searchQuery || currentCategory !== 'all') {
+                    wordsList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔍</div>Ничего не найдено</div>';
+                } else {
+                    wordsList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📝</div>В словаре пока нет слов<br>Нажмите + чтобы добавить</div>';
+                }
+                return;
+            }
+
+            if (currentViewMode === 'compact') {
+                // Компактный вид - общий список
+                wordsList.innerHTML = '<div class="compact-list">' + 
+                    words.map(item => `
+                        <div class="compact-item" onclick="showWordDetail(${item.id})">
+                            <div class="compact-word">${escapeHtml(item.word)}</div>
+                            <div class="compact-meaning">${escapeHtml(item.meaning)}</div>
+                        </div>
+                    `).join('') + 
+                '</div>';
+            } else {
+                // Карточный вид
+                wordsList.innerHTML = words.map(item => `
+                    <div class="word-card" onclick="showWordDetail(${item.id})">
+                        ${item.image ? 
+                            `<img src="${item.image}" class="word-image" alt="${item.word}">` : 
+                            `<div class="word-image-placeholder">️</div>`                        }
+                        <div class="word-info">
+                            <div class="word-text">${item.word}</div>
+                            <div class="word-meaning">${item.meaning}</div>
+                            <div class="word-category">${item.category}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            setTimeout(changeFontSize, 50);
+        }
+
+        function searchWords() {
+            displayWords();
+        }
+
+        // =====================
+        // QUIZ MODE
+        // =====================
+
+        function openQuiz() {
+            document.getElementById('quizModal').classList.add('active');
+            
+            quizData = { 
+                correct: 0, 
+                wrong: 0, 
+                currentWord: null, 
+                options: [], 
+                direction: 'wordToMeaning',
+                wordQueue: [],
+                wrongWords: [],
+                isRetryMode: false,
+                isFinished: false
+            };
+            
+            document.getElementById('quizStartScreen').classList.remove('hidden');
+            document.getElementById('quizGameScreen').classList.add('hidden');
+            document.getElementById('quizResultsScreen').classList.add('hidden');
+            document.getElementById('quizTotalWords').textContent = getCurrentWords().length;
+            
+            updateQuizScore();
+            updateQuizDirectionButtons();
+        }
+
+        function closeQuiz() {
+            document.getElementById('quizModal').classList.remove('active');
+        }
+
+        function setQuizDirection(direction) {            quizData.direction = direction;
+            updateQuizDirectionButtons();
+        }
+
+        function updateQuizDirectionButtons() {
+            document.getElementById('dirWordToMeaning').classList.toggle('active', quizData.direction === 'wordToMeaning');
+            document.getElementById('dirMeaningToWord').classList.toggle('active', quizData.direction === 'meaningToWord');
+            document.getElementById('dirMixed').classList.toggle('active', quizData.direction === 'mixed');
+        }
+
+        function beginQuiz() {
+            const words = getCurrentWords();
+            if (words.length < 4) {
+                alert('Нужно минимум 4 слова для теста');
+                return;
+            }
+
+            quizData.wordQueue = [...words].sort(() => 0.5 - Math.random());
+            quizData.correct = 0;
+            quizData.wrong = 0;
+            quizData.wrongWords = [];
+            quizData.isRetryMode = false;
+            quizData.isFinished = false;
+
+            document.getElementById('quizStartScreen').classList.add('hidden');
+            document.getElementById('quizResultsScreen').classList.add('hidden');
+            document.getElementById('quizGameScreen').classList.remove('hidden');
+
+            updateQuizScore();
+            showNextWord();
+        }
+
+        function showNextWord() {
+            if (quizData.wordQueue.length === 0) {
+                showResults();
+                return;
+            }
+
+            quizData.currentWord = quizData.wordQueue.shift();            
+            let direction = quizData.direction;
+            if (direction === 'mixed') {
+                direction = Math.random() > 0.5 ? 'wordToMeaning' : 'meaningToWord';
+            }
+
+            const allWords = getCurrentWords();
+            const otherWords = allWords.filter(w => w.id !== quizData.currentWord.id);
+            const shuffledOthers = otherWords.sort(() => 0.5 - Math.random());
+            const wrongOptions = shuffledOthers.slice(0, 3);
+            
+            quizData.options = [quizData.currentWord, ...wrongOptions].sort(() => 0.5 - Math.random());
+            if (direction === 'wordToMeaning') {
+                document.getElementById('quizWord').textContent = quizData.currentWord.word;
+                document.getElementById('quizLabel').textContent = 'Выберите перевод:';
+                
+                document.getElementById('quizOptions').innerHTML = quizData.options.map((opt, idx) => 
+                    `<button class="quiz-option" onclick="checkAnswer(${idx})">${escapeHtml(opt.meaning)}</button>`
+                ).join('');
+            } else {
+                document.getElementById('quizWord').textContent = quizData.currentWord.meaning;
+                document.getElementById('quizLabel').textContent = 'Выберите слово:';
+                
+                document.getElementById('quizOptions').innerHTML = quizData.options.map((opt, idx) => 
+                    `<button class="quiz-option" onclick="checkAnswer(${idx})">${escapeHtml(opt.word)}</button>`
+                ).join('');
+            }
+
+            const totalWords = quizData.wordQueue.length + 1;
+            const answered = quizData.correct + quizData.wrong;
+            document.getElementById('quizProgress').textContent = 
+                `Вопрос ${answered + 1} из ${totalWords + answered}`;
+            document.getElementById('remainingCount').textContent = quizData.wordQueue.length;
+        }
+
+        function checkAnswer(selectedIndex) {
+            const selectedIndexNum = parseInt(selectedIndex);
+            const correctIndex = quizData.options.findIndex(opt => opt.id === quizData.currentWord.id);
+            const isCorrect = selectedIndexNum === correctIndex;
+
+            const buttons = document.querySelectorAll('.quiz-option');
+            
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === correctIndex) {
+                    btn.classList.add('correct');
+                } else if (idx === selectedIndexNum && !isCorrect) {
+                    btn.classList.add('wrong');
+                }
+            });
+
+            if (isCorrect) {
+                quizData.correct++;
+            } else {
+                quizData.wrong++;
+                quizData.wrongWords.push(quizData.currentWord);
+            }
+
+            updateQuizScore();
+
+            const words = getCurrentWords();            const wordIndex = words.findIndex(w => w.id === quizData.currentWord.id);
+            if (wordIndex !== -1) {
+                words[wordIndex].lastReviewed = new Date().toISOString();
+                setCurrentWords(words);
+            }
+
+            setTimeout(() => {
+                showNextWord();
+            }, 1500);
+        }
+
+        function updateQuizScore() {
+            document.getElementById('correctCount').textContent = quizData.correct;
+            document.getElementById('wrongCount').textContent = quizData.wrong;
+        }
+
+        function finishQuizEarly() {
+            if (!confirm('Завершить тест досрочно?')) return;
+            showResults();
+        }
+
+        function showResults() {
+            quizData.isFinished = true;
+            
+            const total = quizData.correct + quizData.wrong;
+            const percentage = total > 0 ? Math.round(quizData.correct / total * 100) : 0;
+            
+            let percentClass = 'bad';
+            let emoji = '';
+            let message = 'Нужно потренироваться';
+            if (percentage >= 80) {
+                percentClass = 'good';
+                emoji = '🎉';
+                message = 'Отличный результат!';
+            } else if (percentage >= 50) {
+                percentClass = 'medium';
+                emoji = '';
+                message = 'Неплохо, но можно лучше';
+            }
+
+            const resultsHtml = `
+                <div class="results-title"> Результаты теста</div>
+                
+                <div class="results-percentage ${percentClass}">
+                    ${percentage}%
+                </div>
+                <div style="color: #9575cd; margin-bottom: 20px; font-size: 16px;">
+                    ${emoji} ${message}
+                </div>
+                <div class="results-stats">
+                    <div class="results-stat">
+                        <div class="results-stat-value" style="color: #4caf50;">${quizData.correct}</div>
+                        <div class="results-stat-label">Правильно</div>
+                    </div>
+                    <div class="results-stat">
+                        <div class="results-stat-value" style="color: #f44336;">${quizData.wrong}</div>
+                        <div class="results-stat-label">Ошибок</div>
+                    </div>
+                    <div class="results-stat">
+                        <div class="results-stat-value" style="color: #b388ff;">${total}</div>
+                        <div class="results-stat-label">Всего</div>
+                    </div>
+                </div>
+            `;
+
+            let actionsHtml = '';
+
+            if (quizData.wrongWords.length > 0) {
+                const wrongListHtml = quizData.wrongWords.map(w => `
+                    <div class="wrong-word-item">
+                        <div>
+                            <div class="wrong-word-text">${escapeHtml(w.word)}</div>
+                            <div class="wrong-word-meaning">${escapeHtml(w.meaning)}</div>
+                        </div>
+                    </div>
+                `).join('');
+
+                actionsHtml += `
+                    <div class="wrong-words-list">
+                        <div class="wrong-words-title">❌ Неправильные ответы (${quizData.wrongWords.length}):</div>
+                        ${wrongListHtml}
+                    </div>
+                    <button class="btn-primary btn-warning" onclick="retryWrongWords()">
+                        🔄 Пересдать неправильные (${quizData.wrongWords.length})
+                    </button>
+                `;
+            } else {
+                actionsHtml += `
+                    <div class="perfect-result">
+                        <div class="perfect-emoji"></div>
+                        <div class="perfect-text">Идеально! Все ответы правильные!</div>
+                    </div>
+                `;
+            }
+
+            actionsHtml += `
+                <button class="btn-primary" onclick="beginQuiz()" style="margin-top: 10px;">
+                    🔄 Начать заново (все слова)
+                </button>                <button class="btn-primary" onclick="closeQuiz()" style="background: #4a148c; margin-top: 10px;">
+                    ✕ Закрыть
+                </button>
+            `;
+
+            document.getElementById('quizResultsScreen').innerHTML = resultsHtml + actionsHtml;
+            
+            document.getElementById('quizStartScreen').classList.add('hidden');
+            document.getElementById('quizGameScreen').classList.add('hidden');
+            document.getElementById('quizResultsScreen').classList.remove('hidden');
+        }
+
+        function retryWrongWords() {
+            if (quizData.wrongWords.length === 0) {
+                alert('Нет неправильных ответов для пересдачи!');
+                return;
+            }
+
+            quizData.wordQueue = [...quizData.wrongWords].sort(() => 0.5 - Math.random());
+            quizData.correct = 0;
+            quizData.wrong = 0;
+            quizData.wrongWords = [];
+            quizData.isRetryMode = true;
+            quizData.isFinished = false;
+
+            document.getElementById('quizResultsScreen').classList.add('hidden');
+            document.getElementById('quizGameScreen').classList.remove('hidden');
+
+            updateQuizScore();
+            showNextWord();
+        }
+
+        // =====================
+        // ОСТАЛЬНОЙ КОД
+        // =====================
+
+        function openSettings() {
+            renderDictionariesList();
+            document.getElementById('settingsModal').classList.add('active');
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('active');
+        }
+
+        async function exportDictionary() {
+            const words = getCurrentWords();
+            const exportData = {
+                name: data.currentDictionary,
+                words: words,                exportDate: new Date().toISOString()
+            };
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const suggestedName = `${data.currentDictionary}_${new Date().toISOString().split('T')[0]}.json`;
+            
+            await saveToFile(dataStr, suggestedName);
+        }
+
+        async function exportAllDictionaries() {
+            const exportData = {
+                allDictionaries: true,
+                dictionaries: data.dictionaries,
+                exportDate: new Date().toISOString()
+            };
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const suggestedName = `all_dictionaries_${new Date().toISOString().split('T')[0]}.json`;
+            
+            await saveToFile(dataStr, suggestedName);
+        }
+
+        async function saveToFile(content, suggestedName) {
+            if ('showSaveFilePicker' in window) {
+                try {
+                    const handle = await window.showSaveFilePicker({
+                        suggestedName: suggestedName,
+                        types: [{
+                            description: 'JSON файл',
+                            accept: {'application/json': ['.json']}
+                        }]
+                    });
+                    const writable = await handle.createWritable();
+                    await writable.write(content);
+                    await writable.close();
+                    alert('✅ Файл сохранён');
+                    return;
+                } catch (err) {
+                    if (err.name === 'AbortError') return;
+                }
+            }
+            
+            const blob = new Blob([content], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = suggestedName;
+            link.click();
+            URL.revokeObjectURL(url);
+            alert('✅ Файл сохранён в загрузки');
+        }
+        async function importDictionary() {
+            let fileContent = null;
+            
+            if ('showOpenFilePicker' in window) {
+                try {
+                    const [handle] = await window.showOpenFilePicker({
+                        types: [{
+                            description: 'JSON файл',
+                            accept: {'application/json': ['.json']}
+                        }]
+                    });
+                    const file = await handle.getFile();
+                    fileContent = await file.text();
+                } catch (err) {
+                    if (err.name === 'AbortError') return;
+                }
+            }
+            
+            if (fileContent === null) {
+                fileContent = await new Promise((resolve) => {
+                    const input = document.createElement('input');
+                    input.type = 'file';
+                    input.accept = '.json,application/json';
+                    input.onchange = function(e) {
+                        const file = e.target.files[0];
+                        if (!file) { resolve(null); return; }
+                        const reader = new FileReader();
+                        reader.onload = function(ev) { resolve(ev.target.result); };
+                        reader.onerror = function() { resolve(null); };
+                        reader.readAsText(file);
+                    };
+                    input.click();
+                });
+            }
+            
+            if (!fileContent) return;
+            
+            try {
+                const imported = JSON.parse(fileContent);
+                
+                if (imported.allDictionaries && imported.dictionaries) {
+                    const dictNames = Object.keys(imported.dictionaries);
+                    const totalWords = dictNames.reduce((sum, name) => sum + imported.dictionaries[name].length, 0);
+                    
+                    if (!confirm(`Импортировать ${dictNames.length} словарей (${totalWords} слов)?`)) return;
+                    
+                    for (const name of dictNames) {
+                        if (data.dictionaries[name]) {
+                            const existingWords = new Set(data.dictionaries[name].map(w => w.word.toLowerCase().trim()));
+                            for (const word of imported.dictionaries[name]) {                                if (!existingWords.has(word.word.toLowerCase().trim())) {
+                                    data.dictionaries[name].push({
+                                        ...word,
+                                        category: word.category || 'Общее',
+                                        notes: word.notes || ''
+                                    });
+                                    existingWords.add(word.word.toLowerCase().trim());
+                                }
+                            }
+                        } else {
+                            data.dictionaries[name] = imported.dictionaries[name].map(w => ({
+                                ...w,
+                                category: w.category || 'Общее',
+                                notes: w.notes || ''
+                            }));
+                        }
+                    }
+                    
+                    saveData();
+                    renderDictionarySelect();
+                    displayWords();
+                    updateStats();
+                    updateCategories();
+                    alert('✅ Словари импортированы');
+                    return;
+                }
+                
+                if (imported.name && Array.isArray(imported.words)) {
+                    let dictName = imported.name;
+                    
+                    if (data.dictionaries[dictName]) {
+                        if (!confirm(`Словарь "${dictName}" существует. Добавить слова?`)) return;
+                    } else {
+                        data.dictionaries[dictName] = [];
+                    }
+                    
+                    const existingWords = new Set(data.dictionaries[dictName].map(w => w.word.toLowerCase().trim()));
+                    let addedCount = 0;
+                    for (const word of imported.words) {
+                        if (!existingWords.has(word.word.toLowerCase().trim())) {
+                            data.dictionaries[dictName].push({
+                                ...word,
+                                category: word.category || 'Общее',
+                                notes: word.notes || ''
+                            });
+                            existingWords.add(word.word.toLowerCase().trim());
+                            addedCount++;
+                        }
+                    }
+                                        data.currentDictionary = dictName;
+                    saveData();
+                    renderDictionarySelect();
+                    displayWords();
+                    updateStats();
+                    updateCategories();
+                    alert(`✅ Импортировано ${addedCount} слов`);
+                    return;
+                }
+                
+                if (Array.isArray(imported)) {
+                    const dictName = prompt('Название словаря:', 'Импортированный');
+                    if (!dictName) return;
+                    
+                    if (!data.dictionaries[dictName]) {
+                        data.dictionaries[dictName] = [];
+                    }
+                    
+                    const existingWords = new Set(data.dictionaries[dictName].map(w => w.word.toLowerCase().trim()));
+                    let addedCount = 0;
+                    for (const word of imported) {
+                        if (!existingWords.has(word.word.toLowerCase().trim())) {
+                            data.dictionaries[dictName].push({
+                                ...word,
+                                category: word.category || 'Общее',
+                                notes: word.notes || ''
+                            });
+                            existingWords.add(word.word.toLowerCase().trim());
+                            addedCount++;
+                        }
+                    }
+                    
+                    data.currentDictionary = dictName;
+                    saveData();
+                    renderDictionarySelect();
+                    displayWords();
+                    updateStats();
+                    updateCategories();
+                    alert(`✅ Импортировано ${addedCount} слов`);
+                }
+            } catch (err) {
+                alert('❌ Ошибка: ' + err.message);
+            }
+        }
+
+        function clearAllWords() {
+            if (!confirm(`Очистить словарь "${data.currentDictionary}"?`)) return;
+            if (!confirm('Это нельзя отменить. Продолжить?')) return;
+            
+            setCurrentWords([]);            displayWords();
+            updateStats();
+            updateCategories();
+            alert('Словарь очищен');
+        }
+
+        function escapeHtml(text) {
+            if (text === null || text === undefined) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        document.getElementById('dictSwitchModal').addEventListener('click', function(e) {
+            if (e.target === this) closeDictSwitch();
+        });
+
+        document.getElementById('settingsModal').addEventListener('click', function(e) {
+            if (e.target === this) closeSettings();
+        });
+
+        document.getElementById('wordModal').addEventListener('click', function(e) {
+            if (e.target === this) closeWordModal();
+        });
+
+        document.getElementById('quizModal').addEventListener('click', function(e) {
+            if (e.target === this) closeQuiz();
+        });
+
+        document.getElementById('wordDetailModal').addEventListener('click', function(e) {
+            if (e.target === this) closeWordDetail();
+        });
+
+        document.getElementById('newDictName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                createDictionary();
+            }
+        });
+        document.getElementById('wordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                document.getElementById('meaningInput').focus();
+            }
+        });
+    </script>
+</body>
+</html>
