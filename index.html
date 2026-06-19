@@ -47,8 +47,7 @@
 
         .header-icon {
             font-size: 28px;
-            color: #b388ff;
-        }
+            color: #b388ff;        }
         body.day-theme .header-icon {
             color: #00838f;
         }
@@ -244,8 +243,7 @@
         body.day-theme .category-chip {
             background: #b2ebf2;
             color: #006064;
-        }
-        .category-chip:hover {
+        }        .category-chip:hover {
             background: #4a148c;
             color: white;
         }
@@ -294,8 +292,7 @@
         body.day-theme .search-input:focus {
             border-color: #00838f;
         }
-        .search-icon {
-            position: absolute;
+        .search-icon {            position: absolute;
             left: 16px;
             top: 50%;
             transform: translateY(-50%);
@@ -344,8 +341,7 @@
         }
         .word-image {
             width: 60px;
-            height: 60px;
-            border-radius: 12px;
+            height: 60px;            border-radius: 12px;
             object-fit: cover;
             flex-shrink: 0;
         }
@@ -391,9 +387,9 @@
             color: #ffab91;
             word-break: break-word;
             line-height: 1.4;
-            margin-bottom: 6px;            font-weight: 500;
+            margin-bottom: 6px;
+            font-weight: 500;
         }
-
         body.day-theme .word-meaning {
             color: #00838f;
         }
@@ -410,6 +406,102 @@
         body.day-theme .word-category {
             color: #00838f;
             opacity: 0.3;
+        }
+
+        /* Стили для общего списка */
+        .compact-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .compact-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            border-bottom: 1px solid #4a148c;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        body.day-theme .compact-item {
+            border-bottom-color: #b2ebf2;
+        }
+
+        .compact-item:hover {
+            background: #2d1b4e;
+        }
+
+        body.day-theme .compact-item:hover {
+            background: #f0faff;
+        }
+
+        .compact-word {
+            font-size: 14px;
+            font-weight: 600;            color: #b388ff;
+            flex: 1;
+            padding-right: 10px;
+        }
+
+        body.day-theme .compact-word {
+            color: #006064;
+        }
+
+        .compact-meaning {
+            font-size: 14px;
+            color: #ffab91;
+            text-align: right;
+            flex: 1;
+        }
+
+        body.day-theme .compact-meaning {
+            color: #00838f;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .view-toggle-btn {
+            flex: 1;
+            padding: 10px;
+            background: #2d1b4e;
+            border: 2px solid #4a148c;
+            border-radius: 10px;
+            color: #b388ff;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        body.day-theme .view-toggle-btn {
+            background: white;
+            border-color: #b2ebf2;
+            color: #006064;
+        }
+
+        .view-toggle-btn:hover {
+            background: #4a148c;
+            color: white;
+        }
+        body.day-theme .view-toggle-btn:hover {
+            background: #80deea;
+        }
+
+        .view-toggle-btn.active {
+            background: #7c4dff;
+            border-color: #7c4dff;
+            color: white;
+        }
+
+        body.day-theme .view-toggle-btn.active {
+            background: #00838f;
+            border-color: #00838f;
+            color: white;
         }
 
         .fab {
@@ -445,8 +537,7 @@
             box-shadow: 0 6px 16px rgba(0, 131, 143, 0.5);
         }
 
-        .modal {
-            display: none;
+        .modal {            display: none;
             position: fixed;
             z-index: 1000;
             left: 0;
@@ -495,8 +586,7 @@
                 transform: translateY(100%);
             }
             to {
-                transform: translateY(0);
-            }
+                transform: translateY(0);            }
         }
 
         .modal-header {
@@ -546,7 +636,6 @@
         .form-group {
             margin-bottom: 20px;
         }
-
         .form-label {
             display: block;
             margin-bottom: 8px;
@@ -587,15 +676,15 @@
 
         body.day-theme .form-input:focus,
         body.day-theme .form-textarea:focus {
-            border-color: #00838f;        }
+            border-color: #00838f;
+        }
 
         .form-textarea {
             resize: vertical;
             min-height: 100px;
         }
 
-        .form-select-wrapper {
-            position: relative;
+        .form-select-wrapper {            position: relative;
             width: 150px;
         }
 
@@ -636,15 +725,15 @@
         }
 
         body.day-theme .form-select option {
-            background: white;            color: #006064;
+            background: white;
+            color: #006064;
         }
 
         .select-arrow {
             position: absolute;
             right: 14px;
             top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
+            transform: translateY(-50%);            pointer-events: none;
             color: #b388ff;
             font-size: 12px;
         }
@@ -685,15 +774,15 @@
         body.day-theme .file-input-label {
             background: #b2ebf2;
             color: #00838f;
-            border-color: #00838f;        }
+            border-color: #00838f;
+        }
 
         .file-input-label:hover {
             background: #6a1b9a;
         }
 
         body.day-theme .file-input-label:hover {
-            background: #80deea;
-        }
+            background: #80deea;        }
 
         .file-input-label.has-file {
             background: #7c4dff;
@@ -742,9 +831,17 @@
         .btn-warning {
             background: #ff9800;
         }
-
         .btn-warning:hover {
             background: #f57c00;
+        }
+
+        .btn-danger {
+            background: #e53935;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c62828;
         }
 
         .quiz-container {
@@ -832,8 +929,7 @@
             color: #9575cd;
             margin-bottom: 10px;
         }
-        body.day-theme .quiz-label {
-            color: #00838f;
+        body.day-theme .quiz-label {            color: #00838f;
         }
 
         .quiz-options {
@@ -881,8 +977,8 @@
             animation: pulseGreen 0.5s;
         }
 
-        .quiz-option.wrong {            background: #c62828 !important;
-            border-color: #f44336 !important;
+        .quiz-option.wrong {
+            background: #c62828 !important;            border-color: #f44336 !important;
             color: white !important;
             animation: shake 0.5s;
         }
@@ -931,8 +1027,7 @@
             margin-top: 20px;
             flex-wrap: wrap;
         }
-        .quiz-buttons .btn-primary {
-            flex: 1;
+        .quiz-buttons .btn-primary {            flex: 1;
             min-width: 140px;
             margin-top: 0;
         }
@@ -979,9 +1074,9 @@
         }
 
         .results-stat {
-            background: #2d1b4e;            padding: 16px;
-            border-radius: 12px;
-            flex: 1;
+            background: #2d1b4e;
+            padding: 16px;
+            border-radius: 12px;            flex: 1;
         }
 
         body.day-theme .results-stat {
@@ -1028,9 +1123,9 @@
             padding: 10px 12px;
             border-bottom: 1px solid #4a148c;
             color: #e0e0e0;
-            display: flex;            justify-content: space-between;
-            align-items: center;
-        }
+            display: flex;
+            justify-content: space-between;
+            align-items: center;        }
 
         body.day-theme .wrong-word-item {
             border-bottom-color: #80deea;
@@ -1077,9 +1172,9 @@
         }
 
         .perfect-text {
-            color: #4caf50;            font-size: 20px;
-            font-weight: 600;
-        }
+            color: #4caf50;
+            font-size: 20px;
+            font-weight: 600;        }
 
         .dict-switch-item {
             padding: 16px;
@@ -1126,8 +1221,8 @@
         }
 
         .settings-modal .modal-content {
-            max-height: 85vh;        }
-
+            max-height: 85vh;
+        }
         .settings-section {
             margin-bottom: 28px;
             padding-bottom: 28px;
@@ -1177,8 +1272,7 @@
             margin-bottom: 4px;
         }
         body.day-theme .dict-manage-name {
-            color: #006064;
-        }
+            color: #006064;        }
 
         .dict-manage-count {
             font-size: 14px;
@@ -1228,7 +1322,6 @@
         .icon-btn-small:hover {
             transform: scale(1.1);
         }
-
         .new-dict-form {
             display: flex;
             gap: 10px;
@@ -1263,17 +1356,9 @@
             background: #006064;
         }
 
-        .btn-danger {
-            background: #e53935;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #c62828;
-        }
-
         .theme-toggle-row {
-            display: flex;            justify-content: space-between;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
             padding: 12px 0;
         }
@@ -1285,8 +1370,7 @@
         }
 
         body.day-theme .theme-toggle-label {
-            color: #006064;
-        }
+            color: #006064;        }
 
         .switch {
             position: relative;
@@ -1322,7 +1406,8 @@
             content: "";
             height: 22px;
             width: 22px;
-            left: 3px;            bottom: 3px;
+            left: 3px;
+            bottom: 3px;
             background-color: white;
             transition: .3s;
             border-radius: 50%;
@@ -1335,7 +1420,6 @@
         body.day-theme input:checked + .slider {
             background-color: #00838f;
         }
-
         input:checked + .slider:before {
             transform: translateX(24px);
         }
@@ -1371,7 +1455,8 @@
             position: fixed;
             bottom: 8px;
             left: 12px;
-            font-size: 11px;            color: #b388ff;
+            font-size: 11px;
+            color: #b388ff;
             opacity: 0.6;
             font-style: italic;
             pointer-events: none;
@@ -1383,8 +1468,7 @@
         }
 
         .hidden {
-            display: none !important;
-        }
+            display: none !important;        }
 
         @media (max-width: 600px) {
             .container {
@@ -1420,7 +1504,8 @@
     </style>
 </head>
 <body>
-    <div class="container">        <div class="header">
+    <div class="container">
+        <div class="header">
             <div class="header-left">
                 <span class="header-icon">📖</span>
                 <h1>Личный словарь</h1>
@@ -1433,7 +1518,6 @@
                 <button class="icon-btn-header" onclick="openSettings()" title="Настройки">⚙</button>
             </div>
         </div>
-
         <div class="stats-bar">
             <div class="stat-card">
                 <div class="stat-value" id="totalWords">0</div>
@@ -1464,6 +1548,12 @@
             <button class="category-chip active" onclick="filterCategory('all')">Все</button>
         </div>
 
+        <!-- Переключатель вида -->
+        <div class="view-toggle">
+            <button class="view-toggle-btn active" id="viewCardsBtn" onclick="setViewMode('cards')">📋 Карточки</button>
+            <button class="view-toggle-btn" id="viewCompactBtn" onclick="setViewMode('compact')">📃 Общий список</button>
+        </div>
+
         <div class="search-container">
             <div class="search-wrapper">
                 <span class="search-icon"></span>
@@ -1476,8 +1566,7 @@
 
     <button class="fab" onclick="openAddModal()">+</button>
 
-    <div class="modal" id="wordModal">
-        <div class="modal-content">
+    <div class="modal" id="wordModal">        <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title" id="modalTitle">Добавить слово</h2>
                 <button class="modal-close" onclick="closeWordModal()">✕</button>
@@ -1514,18 +1603,19 @@
             </div>
 
             <button class="btn-primary" onclick="saveWord()">💾 Сохранить</button>
+            <button class="btn-primary btn-danger hidden" id="deleteWordBtn" onclick="deleteWordFromEdit()" style="margin-top: 10px;">🗑️ Удалить слово</button>
         </div>
     </div>
 
     <div class="modal" id="quizModal">
-        <div class="modal-content">            <div class="modal-header">
+        <div class="modal-content">
+            <div class="modal-header">
                 <h2 class="modal-title">🎯 Режим изучения</h2>
                 <button class="modal-close" onclick="closeQuiz()">✕</button>
             </div>
             
             <div id="quizStartScreen" class="quiz-container">
-                <div class="quiz-direction">
-                    <button class="quiz-direction-btn active" id="dirWordToMeaning" onclick="setQuizDirection('wordToMeaning')">
+                <div class="quiz-direction">                    <button class="quiz-direction-btn active" id="dirWordToMeaning" onclick="setQuizDirection('wordToMeaning')">
                         Слово → Перевод
                     </button>
                     <button class="quiz-direction-btn" id="dirMeaningToWord" onclick="setQuizDirection('meaningToWord')">
@@ -1567,14 +1657,14 @@
                 <h2 class="modal-title">📚 Выбор словаря</h2>
                 <button class="modal-close" onclick="closeDictSwitch()">✕</button>
             </div>
-            <div id="dictSwitchList"></div>        </div>
+            <div id="dictSwitchList"></div>
+        </div>
     </div>
 
     <div class="modal settings-modal" id="settingsModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">⚙ Настройки</h2>
-                <button class="modal-close" onclick="closeSettings()">✕</button>
+                <h2 class="modal-title">⚙ Настройки</h2>                <button class="modal-close" onclick="closeSettings()">✕</button>
             </div>
 
             <div class="settings-section">
@@ -1616,14 +1706,14 @@
     </div>
 
     <div class="modal" id="wordDetailModal">
-        <div class="modal-content">            <div class="modal-header">
+        <div class="modal-content">
+            <div class="modal-header">
                 <h2 class="modal-title">📝 Слово</h2>
                 <button class="modal-close" onclick="closeWordDetail()">✕</button>
             </div>
             <div id="wordDetailContent"></div>
         </div>
     </div>
-
     <div class="author-signature">Мухаммад абу Абдульмалик</div>
 
     <script>
@@ -1632,6 +1722,7 @@
         let editingWordId = null;
         let isEditing = false;
         let currentCategory = 'all';
+        let currentViewMode = 'cards'; // 'cards' или 'compact'
         let quizData = { 
             correct: 0, 
             wrong: 0, 
@@ -1671,8 +1762,7 @@
             };
         }
 
-        function saveData() {
-            try {
+        function saveData() {            try {
                 localStorage.setItem('myDictionaryData', JSON.stringify(data));
                 updateStats();
             } catch (e) {
@@ -1721,8 +1811,7 @@
             if (size === 'small') {
                 wordTexts.forEach(el => el.style.fontSize = '19px');
                 wordMeanings.forEach(el => el.style.fontSize = '15px');
-            } else if (size === 'large') {
-                wordTexts.forEach(el => el.style.fontSize = '26px');
+            } else if (size === 'large') {                wordTexts.forEach(el => el.style.fontSize = '26px');
                 wordMeanings.forEach(el => el.style.fontSize = '22px');
             } else {
                 wordTexts.forEach(el => el.style.fontSize = '22px');
@@ -1763,15 +1852,15 @@
             renderDictionarySelect();
             displayWords();
             updateStats();
-            updateCategories();            setTimeout(changeFontSize, 100);
+            updateCategories();
+            setTimeout(changeFontSize, 100);
         } catch (e) {
             console.error('Error initializing:', e);
         }
 
         document.getElementById('imageInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
-            const label = document.getElementById('fileInputLabel');
-            if (file) {
+            const label = document.getElementById('fileInputLabel');            if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     currentImageBase64 = e.target.result;
@@ -1812,8 +1901,15 @@
             });
             displayWords();
         }
-        function openDictSwitch() {
-            renderDictSwitchList();
+
+        function setViewMode(mode) {
+            currentViewMode = mode;
+            document.getElementById('viewCardsBtn').classList.toggle('active', mode === 'cards');
+            document.getElementById('viewCompactBtn').classList.toggle('active', mode === 'compact');
+            displayWords();
+        }
+
+        function openDictSwitch() {            renderDictSwitchList();
             document.getElementById('dictSwitchModal').classList.add('active');
         }
 
@@ -1862,8 +1958,7 @@
             updateStats();
         }
         function renameDictionary(oldName) {
-            const newName = prompt('Новое название словаря:', oldName);
-            if (!newName || newName.trim() === '' || newName.trim() === oldName) return;
+            const newName = prompt('Новое название словаря:', oldName);            if (!newName || newName.trim() === '' || newName.trim() === oldName) return;
             
             const trimmed = newName.trim();
             if (data.dictionaries[trimmed]) {
@@ -1910,9 +2005,9 @@
             saveData();
             renderDictionarySelect();
             renderDictionariesList();
-            displayWords();            updateStats();
+            displayWords();
+            updateStats();
         }
-
         function switchToDictionary(name) {
             data.currentDictionary = name;
             saveData();
@@ -1959,9 +2054,11 @@
             document.getElementById('notesInput').value = '';
             document.getElementById('imageInput').value = '';
             document.getElementById('imagePreview').style.display = 'none';
-                        const label = document.getElementById('fileInputLabel');
+            const label = document.getElementById('fileInputLabel');
             label.textContent = '📷 Выбрать картинку';
-            label.classList.remove('has-file');
+            label.classList.remove('has-file');            
+            // Скрываем кнопку удаления при добавлении нового слова
+            document.getElementById('deleteWordBtn').classList.add('hidden');
             
             document.getElementById('wordModal').classList.add('active');
         }
@@ -1995,6 +2092,9 @@
                 label.classList.remove('has-file');
             }
 
+            // Показываем кнопку удаления при редактировании
+            document.getElementById('deleteWordBtn').classList.remove('hidden');
+            
             document.getElementById('wordModal').classList.add('active');
         }
 
@@ -2005,14 +2105,25 @@
         function saveWord() {
             const word = document.getElementById('wordInput').value.trim();
             const meaning = document.getElementById('meaningInput').value.trim();
-            const category = document.getElementById('categoryInput').value.trim() || 'Общее';
-            const notes = document.getElementById('notesInput').value.trim();
+            const category = document.getElementById('categoryInput').value.trim() || 'Общее';            const notes = document.getElementById('notesInput').value.trim();
 
-            if (!word || !meaning) {                alert('Заполните оба поля');
+            if (!word || !meaning) {
+                alert('Заполните оба поля');
                 return;
             }
 
             const words = getCurrentWords();
+
+            // Проверка на дубликаты: ищем слово с таким же названием (без учёта регистра)
+            const duplicateWord = words.find(w => 
+                w.word.toLowerCase().trim() === word.toLowerCase().trim() && 
+                (!isEditing || w.id !== editingWordId)
+            );
+            
+            if (duplicateWord) {
+                alert('Слово "' + word + '" уже существует в словаре');
+                return;
+            }
 
             if (isEditing) {
                 const index = words.findIndex(w => w.id === editingWordId);
@@ -2044,6 +2155,18 @@
             updateCategories();
             setTimeout(changeFontSize, 50);
         }
+        function deleteWordFromEdit() {
+            if (!editingWordId) return;
+            if (!confirm('Удалить это слово из словаря?')) return;
+            
+            let words = getCurrentWords();
+            words = words.filter(w => w.id !== editingWordId);
+            setCurrentWords(words);
+            closeWordModal();
+            displayWords();
+            updateStats();
+            updateCategories();
+        }
 
         function showWordDetail(wordId) {
             const words = getCurrentWords();
@@ -2057,7 +2180,8 @@
                     <h2 style="color: #ea80fc; margin-bottom: 12px; font-size: 32px;">${word.word}</h2>
                     <p style="color: #ffab91; font-size: 22px; margin-bottom: 16px;"><strong>Значение:</strong> ${word.meaning}</p>
                     <p style="color: #9575cd; margin-bottom: 8px;"><strong>Категория:</strong> ${word.category}</p>
-                    ${word.notes ? `<p style="color: #e0e0e0;"><strong>Заметки:</strong> ${word.notes}</p>` : ''}                    <p style="color: #9575cd; font-size: 12px; margin-top: 20px;">
+                    ${word.notes ? `<p style="color: #e0e0e0;"><strong>Заметки:</strong> ${word.notes}</p>` : ''}
+                    <p style="color: #9575cd; font-size: 12px; margin-top: 20px;">
                         Добавлено: ${new Date(word.createdAt).toLocaleDateString('ru-RU')}
                     </p>
                 </div>
@@ -2079,8 +2203,7 @@
             setCurrentWords(words);
             displayWords();
             updateStats();
-            updateCategories();
-        }
+            updateCategories();        }
 
         function displayWords() {
             const wordsList = document.getElementById('wordsList');
@@ -2106,25 +2229,38 @@
 
             if (words.length === 0) {
                 if (searchQuery || currentCategory !== 'all') {
-                    wordsList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔍</div>Ничего не найдено</div>';                } else {
+                    wordsList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔍</div>Ничего не найдено</div>';
+                } else {
                     wordsList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📝</div>В словаре пока нет слов<br>Нажмите + чтобы добавить</div>';
                 }
                 return;
             }
 
-            wordsList.innerHTML = words.map(item => `
-                <div class="word-card" onclick="showWordDetail(${item.id})">
-                    ${item.image ? 
-                        `<img src="${item.image}" class="word-image" alt="${item.word}">` : 
-                        `<div class="word-image-placeholder">️</div>`
-                    }
-                    <div class="word-info">
-                        <div class="word-text">${item.word}</div>
-                        <div class="word-meaning">${item.meaning}</div>
-                        <div class="word-category">${item.category}</div>
+            if (currentViewMode === 'compact') {
+                // Компактный вид - общий список
+                wordsList.innerHTML = '<div class="compact-list">' + 
+                    words.map(item => `
+                        <div class="compact-item" onclick="showWordDetail(${item.id})">
+                            <div class="compact-word">${escapeHtml(item.word)}</div>
+                            <div class="compact-meaning">${escapeHtml(item.meaning)}</div>
+                        </div>
+                    `).join('') + 
+                '</div>';
+            } else {
+                // Карточный вид
+                wordsList.innerHTML = words.map(item => `
+                    <div class="word-card" onclick="showWordDetail(${item.id})">
+                        ${item.image ? 
+                            `<img src="${item.image}" class="word-image" alt="${item.word}">` : 
+                            `<div class="word-image-placeholder">️</div>`                        }
+                        <div class="word-info">
+                            <div class="word-text">${item.word}</div>
+                            <div class="word-meaning">${item.meaning}</div>
+                            <div class="word-category">${item.category}</div>
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `).join('');
+            }
             
             setTimeout(changeFontSize, 50);
         }
@@ -2134,7 +2270,7 @@
         }
 
         // =====================
-        // QUIZ MODE (ИСПРАВЛЕНО)
+        // QUIZ MODE
         // =====================
 
         function openQuiz() {
@@ -2155,7 +2291,7 @@
             document.getElementById('quizStartScreen').classList.remove('hidden');
             document.getElementById('quizGameScreen').classList.add('hidden');
             document.getElementById('quizResultsScreen').classList.add('hidden');
-                        document.getElementById('quizTotalWords').textContent = getCurrentWords().length;
+            document.getElementById('quizTotalWords').textContent = getCurrentWords().length;
             
             updateQuizScore();
             updateQuizDirectionButtons();
@@ -2165,8 +2301,7 @@
             document.getElementById('quizModal').classList.remove('active');
         }
 
-        function setQuizDirection(direction) {
-            quizData.direction = direction;
+        function setQuizDirection(direction) {            quizData.direction = direction;
             updateQuizDirectionButtons();
         }
 
@@ -2216,7 +2351,6 @@
             const wrongOptions = shuffledOthers.slice(0, 3);
             
             quizData.options = [quizData.currentWord, ...wrongOptions].sort(() => 0.5 - Math.random());
-
             if (direction === 'wordToMeaning') {
                 document.getElementById('quizWord').textContent = quizData.currentWord.word;
                 document.getElementById('quizLabel').textContent = 'Выберите перевод:';
@@ -2241,7 +2375,6 @@
         }
 
         function checkAnswer(selectedIndex) {
-            // ИСПРАВЛЕНИЕ: преобразуем selectedIndex в число
             const selectedIndexNum = parseInt(selectedIndex);
             const correctIndex = quizData.options.findIndex(opt => opt.id === quizData.currentWord.id);
             const isCorrect = selectedIndexNum === correctIndex;
@@ -2253,7 +2386,8 @@
                 if (idx === correctIndex) {
                     btn.classList.add('correct');
                 } else if (idx === selectedIndexNum && !isCorrect) {
-                    btn.classList.add('wrong');                }
+                    btn.classList.add('wrong');
+                }
             });
 
             if (isCorrect) {
@@ -2265,8 +2399,7 @@
 
             updateQuizScore();
 
-            const words = getCurrentWords();
-            const wordIndex = words.findIndex(w => w.id === quizData.currentWord.id);
+            const words = getCurrentWords();            const wordIndex = words.findIndex(w => w.id === quizData.currentWord.id);
             if (wordIndex !== -1) {
                 words[wordIndex].lastReviewed = new Date().toISOString();
                 setCurrentWords(words);
@@ -2302,7 +2435,8 @@
                 message = 'Отличный результат!';
             } else if (percentage >= 50) {
                 percentClass = 'medium';
-                emoji = '';                message = 'Неплохо, но можно лучше';
+                emoji = '';
+                message = 'Неплохо, но можно лучше';
             }
 
             const resultsHtml = `
@@ -2314,7 +2448,6 @@
                 <div style="color: #9575cd; margin-bottom: 20px; font-size: 16px;">
                     ${emoji} ${message}
                 </div>
-
                 <div class="results-stats">
                     <div class="results-stat">
                         <div class="results-stat-value" style="color: #4caf50;">${quizData.correct}</div>
@@ -2351,7 +2484,8 @@
                     <button class="btn-primary btn-warning" onclick="retryWrongWords()">
                         🔄 Пересдать неправильные (${quizData.wrongWords.length})
                     </button>
-                `;            } else {
+                `;
+            } else {
                 actionsHtml += `
                     <div class="perfect-result">
                         <div class="perfect-emoji"></div>
@@ -2363,8 +2497,7 @@
             actionsHtml += `
                 <button class="btn-primary" onclick="beginQuiz()" style="margin-top: 10px;">
                     🔄 Начать заново (все слова)
-                </button>
-                <button class="btn-primary" onclick="closeQuiz()" style="background: #4a148c; margin-top: 10px;">
+                </button>                <button class="btn-primary" onclick="closeQuiz()" style="background: #4a148c; margin-top: 10px;">
                     ✕ Закрыть
                 </button>
             `;
@@ -2400,7 +2533,8 @@
         // ОСТАЛЬНОЙ КОД
         // =====================
 
-        function openSettings() {            renderDictionariesList();
+        function openSettings() {
+            renderDictionariesList();
             document.getElementById('settingsModal').classList.add('active');
         }
 
@@ -2412,8 +2546,7 @@
             const words = getCurrentWords();
             const exportData = {
                 name: data.currentDictionary,
-                words: words,
-                exportDate: new Date().toISOString()
+                words: words,                exportDate: new Date().toISOString()
             };
             const dataStr = JSON.stringify(exportData, null, 2);
             const suggestedName = `${data.currentDictionary}_${new Date().toISOString().split('T')[0]}.json`;
@@ -2449,7 +2582,8 @@
                     alert('✅ Файл сохранён');
                     return;
                 } catch (err) {
-                    if (err.name === 'AbortError') return;                }
+                    if (err.name === 'AbortError') return;
+                }
             }
             
             const blob = new Blob([content], {type: 'application/json'});
@@ -2461,7 +2595,6 @@
             URL.revokeObjectURL(url);
             alert('✅ Файл сохранён в загрузки');
         }
-
         async function importDictionary() {
             let fileContent = null;
             
@@ -2498,7 +2631,8 @@
             }
             
             if (!fileContent) return;
-                        try {
+            
+            try {
                 const imported = JSON.parse(fileContent);
                 
                 if (imported.allDictionaries && imported.dictionaries) {
@@ -2509,14 +2643,14 @@
                     
                     for (const name of dictNames) {
                         if (data.dictionaries[name]) {
-                            const existingIds = new Set(data.dictionaries[name].map(w => w.id));
-                            for (const word of imported.dictionaries[name]) {
-                                if (!existingIds.has(word.id)) {
+                            const existingWords = new Set(data.dictionaries[name].map(w => w.word.toLowerCase().trim()));
+                            for (const word of imported.dictionaries[name]) {                                if (!existingWords.has(word.word.toLowerCase().trim())) {
                                     data.dictionaries[name].push({
                                         ...word,
                                         category: word.category || 'Общее',
                                         notes: word.notes || ''
                                     });
+                                    existingWords.add(word.word.toLowerCase().trim());
                                 }
                             }
                         } else {
@@ -2546,19 +2680,20 @@
                         data.dictionaries[dictName] = [];
                     }
                     
-                    const existingIds = new Set(data.dictionaries[dictName].map(w => w.id));
-                    let addedCount = 0;                    for (const word of imported.words) {
-                        if (!existingIds.has(word.id)) {
+                    const existingWords = new Set(data.dictionaries[dictName].map(w => w.word.toLowerCase().trim()));
+                    let addedCount = 0;
+                    for (const word of imported.words) {
+                        if (!existingWords.has(word.word.toLowerCase().trim())) {
                             data.dictionaries[dictName].push({
                                 ...word,
                                 category: word.category || 'Общее',
                                 notes: word.notes || ''
                             });
+                            existingWords.add(word.word.toLowerCase().trim());
                             addedCount++;
                         }
                     }
-                    
-                    data.currentDictionary = dictName;
+                                        data.currentDictionary = dictName;
                     saveData();
                     renderDictionarySelect();
                     displayWords();
@@ -2576,15 +2711,16 @@
                         data.dictionaries[dictName] = [];
                     }
                     
-                    const existingIds = new Set(data.dictionaries[dictName].map(w => w.id));
+                    const existingWords = new Set(data.dictionaries[dictName].map(w => w.word.toLowerCase().trim()));
                     let addedCount = 0;
                     for (const word of imported) {
-                        if (!existingIds.has(word.id)) {
+                        if (!existingWords.has(word.word.toLowerCase().trim())) {
                             data.dictionaries[dictName].push({
                                 ...word,
                                 category: word.category || 'Общее',
                                 notes: word.notes || ''
                             });
+                            existingWords.add(word.word.toLowerCase().trim());
                             addedCount++;
                         }
                     }
@@ -2596,7 +2732,8 @@
                     updateStats();
                     updateCategories();
                     alert(`✅ Импортировано ${addedCount} слов`);
-                }            } catch (err) {
+                }
+            } catch (err) {
                 alert('❌ Ошибка: ' + err.message);
             }
         }
@@ -2605,8 +2742,7 @@
             if (!confirm(`Очистить словарь "${data.currentDictionary}"?`)) return;
             if (!confirm('Это нельзя отменить. Продолжить?')) return;
             
-            setCurrentWords([]);
-            displayWords();
+            setCurrentWords([]);            displayWords();
             updateStats();
             updateCategories();
             alert('Словарь очищен');
@@ -2653,4 +2789,4 @@
         });
     </script>
 </body>
-            </html>
+</html>
