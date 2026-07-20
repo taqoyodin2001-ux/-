@@ -1,4 +1,4 @@
-﻿const CACHE_NAME = "my-dictionary-v9"; // ⬅️ ВАЖНО: Версия увеличена с v8 на v9
+const CACHE_NAME = "my-dictionary-v9"; // ⬅️ Версия увеличена с v8 на v9
 const FILES_TO_CACHE = [
     "./",
     "./index.html",
@@ -7,7 +7,6 @@ const FILES_TO_CACHE = [
     "./icon-512.png",
 ];
 
-// 1. Установка: кэшируем файлы
 self.addEventListener("install", (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
@@ -15,11 +14,9 @@ self.addEventListener("install", (event) => {
             return cache.addAll(FILES_TO_CACHE);
         })
     );
-    // Заставляем новый service worker активироваться немедленно
     self.skipWaiting();
 });
 
-// 2. Активация: удаляем старый кэш, чтобы не занимать место и не конфликтовать
 self.addEventListener("activate", (event) => {
     event.waitUntil(
         caches.keys().then((cacheNames) => {
@@ -33,11 +30,9 @@ self.addEventListener("activate", (event) => {
             );
         })
     );
-    // Делаем этот service worker контроллером по умолчанию сразу
     return self.clients.claim();
 });
 
-// 3. Перехват запросов: отдаем из кэша, если есть, иначе загружаем из сети
 self.addEventListener("fetch", (event) => {
     event.respondWith(
         caches.match(event.request).then((response) => {
