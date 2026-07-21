@@ -1,4 +1,4 @@
-const CACHE_NAME = "my-dictionary-v9"; // ⬅️ Версия увеличена с v8 на v9
+const CACHE_NAME = "my-dictionary-v11"; // ⬅️ Версия увеличена, чтобы браузер загрузил новый index.html
 const FILES_TO_CACHE = [
     "./",
     "./index.html",
