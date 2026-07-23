@@ -1,0 +1,2000 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Личный словарь</title>
+    <meta name="theme-color" content="#000000">
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        :root {
+            --ios-bg: #0B0D10;
+            --ios-bg-secondary: #14171C;
+            --ios-bg-tertiary: #1B1F26;
+            --ios-card: #14171C;
+            --ios-separator: rgba(148, 163, 184, 0.16);
+            --ios-label: #F5F7FA;
+            --ios-label-secondary: rgba(226, 232, 240, 0.64);
+            --ios-label-tertiary: rgba(226, 232, 240, 0.34);
+            --ios-blue: #2DD4BF;
+            --ios-green: #4ADE80;
+            --ios-red: #FF6B6B;
+            --ios-orange: #F2A93B;
+            --ios-purple: #9D8CFF;
+            --ios-yellow: #FFD65C;
+            --ios-fill: rgba(148, 163, 184, 0.12);
+            --ios-fill-secondary: rgba(148, 163, 184, 0.08);
+            --ios-shadow: 0 8px 22px rgba(0, 0, 0, 0.32), 0 1px 3px rgba(0, 0, 0, 0.24);
+            --font-display: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            --font-mono: 'IBM Plex Mono', 'SF Mono', Monaco, Consolas, monospace;
+            --accent-contrast: #062420;
+        }
+        
+        body.day-theme {
+            --accent-contrast: #FFFFFF;
+            --ios-bg: #F2F4F6;
+            --ios-bg-secondary: #FFFFFF;
+            --ios-bg-tertiary: #E9ECF1;
+            --ios-card: #FFFFFF;
+            --ios-separator: rgba(20, 30, 45, 0.1);
+            --ios-label: #12151B;
+            --ios-label-secondary: rgba(20, 30, 45, 0.62);
+            --ios-label-tertiary: rgba(20, 30, 45, 0.34);
+            --ios-blue: #0E9C8C;
+            --ios-purple: #7C6CF0;
+            --ios-orange: #D9860F;
+            --ios-fill: rgba(20, 30, 45, 0.06);
+            --ios-fill-secondary: rgba(20, 30, 45, 0.04);
+            --ios-shadow: 0 4px 16px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.06);
+        }
+        
+        body {
+            font-family: var(--font-body);
+            background-color: var(--ios-bg);
+            color: var(--ios-label);
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            -webkit-font-smoothing: antialiased;
+            letter-spacing: -0.01em;
+            position: relative;
+        }
+        body::before {
+            content: ""; position: fixed; top: -120px; left: 50%; transform: translateX(-50%);
+            width: 640px; height: 360px; pointer-events: none; z-index: 0;
+            background: radial-gradient(ellipse at center, rgba(45, 212, 191, 0.16) 0%, rgba(157, 140, 255, 0.08) 45%, transparent 75%);
+            filter: blur(10px);
+        }
+        body.day-theme::before { background: radial-gradient(ellipse at center, rgba(14, 156, 140, 0.10) 0%, rgba(124, 108, 240, 0.06) 45%, transparent 75%); }
+        .container { position: relative; z-index: 1; }
+        
+        .container { max-width: 600px; margin: 0 auto; padding: 16px; padding-bottom: 100px; }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; padding-top: 8px; }
+        .header-left { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+        .header h1 {
+            font-family: var(--font-display);
+            font-size: 32px; font-weight: 800; letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #2DD4BF 0%, #9D8CFF 55%, #F2A93B 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1.15;
+        }
+        body.day-theme .header h1 { background: linear-gradient(135deg, #0E9C8C 0%, #7C6CF0 55%, #D9860F 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .header-controls { display: flex; gap: 8px; padding-top: 8px; }
+        .icon-btn-header {
+            width: 36px; height: 36px; border-radius: 50%; background: var(--ios-fill);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 16px;
+            transition: all 0.2s ease; color: var(--ios-blue);
+        }
+        .icon-btn-header:hover { background: var(--ios-fill-secondary); transform: scale(0.95); }
+        .icon-btn-header:active { transform: scale(0.9); }
+        
+        .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
+        .stat-card { background: var(--ios-card); padding: 14px 12px; border-radius: 14px; text-align: center; transition: transform 0.2s ease; box-shadow: var(--ios-shadow); }
+        .stat-card:hover { transform: translateY(-1px); }
+        .stat-value { font-family: var(--font-mono); font-size: 25px; font-weight: 600; color: var(--ios-blue); margin-bottom: 2px; font-variant-numeric: tabular-nums; }
+        .stat-card:nth-child(2) .stat-value { color: var(--ios-green); }
+        .stat-card:nth-child(3) .stat-value { color: var(--ios-purple); }
+        .stat-label { font-size: 12px; color: var(--ios-label-secondary); font-weight: 500; letter-spacing: 0.01em; }
+        
+        .dict-selector { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .dict-button {
+            flex: 1; background: var(--ios-card); border: none; padding: 14px 16px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: space-between; cursor: pointer;
+            transition: all 0.2s ease; box-shadow: var(--ios-shadow);
+        }
+        .dict-button:hover { background: var(--ios-bg-tertiary); }
+        .dict-button:active { transform: scale(0.98); }
+        .dict-button-left { display: flex; align-items: center; gap: 10px; }
+        .dict-icon { font-size: 20px; color: var(--ios-blue); }
+        .dict-name { font-size: 16px; font-weight: 600; color: var(--ios-label); }
+        .dict-arrow { color: var(--ios-label-tertiary); font-size: 18px; font-weight: 300; }
+        .word-count {
+            width: 44px; height: 44px; border-radius: 14px; background: var(--ios-blue); color: #0B0D10;
+            display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-weight: 700; font-size: 16px; flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(45, 212, 191, 0.3);
+        }
+        
+        .category-filter { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+        .category-filter::-webkit-scrollbar { display: none; }
+        .category-chip {
+            padding: 8px 14px; background: var(--ios-fill); border: none; border-radius: 20px; color: var(--ios-label);
+            cursor: pointer; white-space: nowrap; transition: all 0.2s ease; font-size: 14px; font-weight: 500;
+            display: inline-flex; align-items: center; gap: 6px;
+        }
+        .category-chip:hover { background: var(--ios-fill-secondary); }
+        .category-chip.active { background: var(--ios-blue); color: var(--accent-contrast); }
+        .category-chip-count {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 600;
+            opacity: 0.7;
+            padding: 1px 6px;
+            border-radius: 8px;
+            background: rgba(0,0,0,0.12);
+        }
+        .category-chip.active .category-chip-count {
+            background: rgba(255,255,255,0.2);
+            opacity: 0.9;
+        }
+        body.day-theme .category-chip-count { background: rgba(0,0,0,0.06); }
+        body.day-theme .category-chip.active .category-chip-count { background: rgba(255,255,255,0.3); }
+        
+        .view-toggle { display: flex; gap: 0; margin-bottom: 16px; background: var(--ios-fill); border-radius: 10px; padding: 2px; }
+        .view-toggle-btn {
+            flex: 1; padding: 8px 12px; background: transparent; border: 0.5px solid var(--ios-separator);
+            border-radius: 8px; color: var(--ios-label); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s ease;
+        }
+        .view-toggle-btn:first-child { border-right: none; border-radius: 8px 0 0 8px; }
+        .view-toggle-btn:last-child { border-left: none; border-radius: 0 8px 8px 0; }
+        .view-toggle-btn.active {
+            background: var(--ios-bg-secondary); border-color: var(--ios-separator);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08); z-index: 1; position: relative;
+        }
+        
+        .search-container { margin-bottom: 16px; }
+        .search-input {
+            width: 100%; background: var(--ios-fill); border: none; padding: 10px 12px 10px 36px;
+            border-radius: 10px; font-size: 16px; transition: all 0.2s ease; color: var(--ios-label);
+        }
+        .search-input::placeholder { color: var(--ios-label-tertiary); }
+        .search-input:focus { outline: none; background: var(--ios-fill-secondary); }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--ios-label-tertiary); font-size: 15px; }
+        .search-wrapper { position: relative; }
+        .words-list { display: flex; flex-direction: column; gap: 0; }
+        
+        .word-card {
+            background: var(--ios-card); border-radius: 16px; padding: 14px; display: flex; align-items: center; gap: 12px;
+            box-shadow: var(--ios-shadow); transition: all 0.2s ease; cursor: pointer; position: relative;
+            border: 1px solid var(--ios-separator); margin-bottom: 8px; overflow: hidden;
+        }
+        .word-card::after {
+            content: ""; position: absolute; top: 0; right: 0; width: 16px; height: 16px;
+            background: linear-gradient(135deg, transparent 50%, var(--ios-bg) 50%); opacity: 0.5; pointer-events: none;
+        }
+        .word-card:hover { transform: translateY(-2px); }
+        .word-card:active { transform: scale(0.99); }
+        .word-card.has-errors { background: var(--ios-card); border-left: 3px solid var(--ios-red); }
+        .error-badge {
+            position: absolute; top: 10px; right: 10px; background: var(--ios-red); color: white;
+            font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 10px; display: flex; align-items: center; gap: 3px;
+        }
+        .word-image { width: 56px; height: 56px; border-radius: 12px; object-fit: cover; flex-shrink: 0; }
+        .word-image-placeholder {
+            width: 56px; height: 56px; border-radius: 12px; background: var(--ios-fill);
+            display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; color: var(--ios-blue);
+        }
+        .word-info { flex: 1; min-width: 0; }
+        .word-text { font-family: var(--font-display); font-size: 19px; font-weight: 700; color: var(--ios-label); margin-bottom: 3px; word-break: break-word; line-height: 1.25; }
+        .word-meaning { font-size: 15px; color: var(--ios-label-secondary); word-break: break-word; line-height: 1.35; margin-bottom: 3px; font-weight: 400; }
+        .word-category { font-size: 11px; color: var(--ios-blue); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
+        
+        .compact-list { display: flex; flex-direction: column; background: var(--ios-card); border-radius: 14px; overflow: hidden; box-shadow: var(--ios-shadow); }
+        .compact-item {
+            display: flex; justify-content: space-between; align-items: center; padding: 12px 16px;
+            border-bottom: 0.5px solid var(--ios-separator); cursor: pointer; transition: background 0.15s ease; position: relative;
+        }
+        .compact-item:last-child { border-bottom: none; }
+        .compact-item:hover { background: var(--ios-fill-secondary); }
+        .compact-item:active { background: var(--ios-fill); }
+        .compact-item.has-errors { background: rgba(255, 69, 58, 0.08); }
+        body.day-theme .compact-item.has-errors { background: rgba(255, 69, 58, 0.06); }
+        .compact-word { font-size: 15px; font-weight: 500; color: var(--ios-label); flex: 1; padding-right: 10px; display: flex; align-items: center; gap: 8px; }
+        .compact-error-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ios-red); flex-shrink: 0; }
+        .compact-meaning { font-size: 15px; color: var(--ios-label-secondary); text-align: right; flex: 1; }
+        
+        .fab {
+            position: fixed; bottom: 30px; right: 30px; width: 56px; height: 56px; border-radius: 50%;
+            background: var(--ios-blue); border: none; color: var(--accent-contrast); font-size: 28px; font-weight: 300; cursor: pointer;
+            box-shadow: 0 8px 20px rgba(45, 212, 191, 0.35); transition: all 0.2s ease;
+            display: flex; align-items: center; justify-content: center; z-index: 100;
+        }
+        body.day-theme .fab { box-shadow: 0 8px 20px rgba(14, 156, 140, 0.28); }
+        .fab:hover { transform: scale(1.05); }
+        .fab:active { transform: scale(0.95); }
+        
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.4); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        }
+        body.day-theme .modal { background-color: rgba(0,0,0,0.3); }
+        .modal.active { display: flex !important; justify-content: center; align-items: flex-end; }
+        @media (min-width: 600px) { .modal.active { align-items: center; } }
+        .modal-content {
+            background: var(--ios-bg-secondary); width: 100%; max-width: 600px; border-radius: 14px 14px 0 0;
+            padding: 20px; animation: slideUp 0.35s cubic-bezier(0.32, 0.72, 0, 1); max-height: 90vh; overflow-y: auto;
+        }
+        @media (min-width: 600px) { .modal-content { border-radius: 14px; margin: 20px; } }
+        @keyframes slideUp { from { transform: translateY(100%); opacity: 0.5; } to { transform: translateY(0); opacity: 1; } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--ios-label); letter-spacing: -0.01em; }
+        .modal-close {
+            width: 30px; height: 30px; border-radius: 50%; background: var(--ios-fill); border: none; cursor: pointer;
+            font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
+            color: var(--ios-label-secondary); font-weight: 500;
+        }
+        .modal-close:hover { background: var(--ios-fill-secondary); }
+        .modal-close:active { transform: scale(0.9); }
+        
+        .form-group { margin-bottom: 16px; }
+        .form-label { display: block; margin-bottom: 6px; font-weight: 500; color: var(--ios-label-secondary); font-size: 13px; text-transform: uppercase; letter-spacing: 0.02em; }
+        .form-input, .form-textarea {
+            width: 100%; background: var(--ios-fill); border: none; padding: 12px 14px; border-radius: 10px;
+            font-size: 16px; font-family: inherit; transition: all 0.2s ease; color: var(--ios-label);
+        }
+        .form-input:focus, .form-textarea:focus { outline: none; background: var(--ios-fill-secondary); box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.22); }
+        .form-textarea { resize: vertical; min-height: 90px; }
+        .form-select-wrapper { position: relative; width: 150px; }
+        .form-select {
+            width: 100%; background: var(--ios-fill); border: none; padding: 10px 36px 10px 14px; border-radius: 10px;
+            font-size: 15px; font-family: inherit; color: var(--ios-label); cursor: pointer;
+            appearance: none; -webkit-appearance: none; -moz-appearance: none;
+        }
+        .form-select:focus { outline: none; }
+        .select-arrow { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--ios-label-tertiary); font-size: 12px; }
+        .file-input-wrapper { position: relative; display: inline-block; width: 100%; }
+        .file-input-wrapper input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+        .file-input-label {
+            display: block; background: var(--ios-fill); color: var(--ios-blue); padding: 14px 16px; border-radius: 10px;
+            text-align: center; cursor: pointer; transition: all 0.2s ease; font-weight: 500; border: 1px dashed var(--ios-blue); font-size: 15px;
+        }
+        .file-input-label:hover { background: var(--ios-fill-secondary); }
+        .file-input-label.has-file { background: var(--ios-blue); color: white; border-style: solid; border-color: var(--ios-blue); }
+        .preview-image { max-width: 100%; max-height: 150px; border-radius: 10px; margin-top: 10px; display: none; }
+        
+        .btn-primary {
+            width: 100%; background: var(--ios-blue); color: var(--accent-contrast); border: none; padding: 14px; border-radius: 12px;
+            font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; margin-top: 8px; letter-spacing: -0.01em;
+        }
+        .btn-primary:hover { opacity: 0.9; }
+        .btn-primary:active { transform: scale(0.98); }
+        .btn-warning { background: var(--ios-orange); }
+        .btn-danger { background: var(--ios-red); color: white; }
+        
+        .quiz-container { text-align: center; padding: 10px; }
+        .quiz-progress { font-size: 14px; color: var(--ios-label-secondary); margin-bottom: 12px; font-weight: 500; }
+        .quiz-direction { display: flex; gap: 8px; margin-bottom: 16px; justify-content: center; flex-wrap: wrap; }
+        .quiz-direction-btn {
+            padding: 9px 14px; background: var(--ios-fill); border: none; border-radius: 10px; color: var(--ios-label);
+            cursor: pointer; transition: all 0.2s ease; font-size: 13px; font-weight: 500;
+        }
+        .quiz-direction-btn:hover { background: var(--ios-fill-secondary); }
+        .quiz-direction-btn.active { background: var(--ios-blue); color: var(--accent-contrast); }
+        .quiz-word {
+            font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--ios-label); margin: 16px 0; padding: 28px 20px;
+            background: var(--ios-card); border-radius: 18px; min-height: 110px; display: flex; align-items: center;
+            justify-content: center; box-shadow: var(--ios-shadow); letter-spacing: -0.01em; position: relative; overflow: hidden;
+            border: 1px solid var(--ios-separator);
+        }
+        .quiz-word::after {
+            content: ""; position: absolute; top: 0; right: 0; width: 22px; height: 22px;
+            background: linear-gradient(135deg, transparent 50%, var(--ios-bg) 50%); opacity: 0.5; pointer-events: none;
+        }
+        .quiz-label { font-size: 14px; color: var(--ios-label-secondary); margin-bottom: 8px; font-weight: 500; }
+        .quiz-options { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+        .quiz-option {
+            padding: 14px 16px; background: var(--ios-card); border: none; border-radius: 12px; cursor: pointer;
+            transition: all 0.2s ease; font-size: 15px; color: var(--ios-label); font-weight: 500; box-shadow: var(--ios-shadow); text-align: left;
+        }
+        .quiz-option:hover:not(:disabled) { background: var(--ios-bg-tertiary); }
+        .quiz-option:active:not(:disabled) { transform: scale(0.98); }
+        .quiz-option:disabled { cursor: not-allowed; }
+        .quiz-option.correct { background: var(--ios-green) !important; color: white !important; animation: pulseGreen 0.4s; }
+        .quiz-option.wrong { background: var(--ios-red) !important; color: white !important; animation: shake 0.4s; }
+        @keyframes pulseGreen { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+        
+        .quiz-score { display: flex; justify-content: center; gap: 18px; font-size: 15px; margin-bottom: 12px; flex-wrap: wrap; }
+        .quiz-score-correct { color: var(--ios-green); font-weight: 600; }
+        .quiz-score-wrong { color: var(--ios-red); font-weight: 600; }
+        .quiz-score-remaining { color: var(--ios-label-secondary); }
+        .quiz-buttons { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+        .quiz-buttons .btn-primary { flex: 1; min-width: 130px; margin-top: 0; }
+        
+        .results-container { text-align: center; padding: 10px; }
+        .results-title { font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--ios-label); margin-bottom: 16px; letter-spacing: -0.01em; }
+        .results-percentage { font-family: var(--font-mono); font-size: 54px; font-weight: 700; margin: 16px 0; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+        .results-percentage.good { color: var(--ios-green); }
+        .results-percentage.medium { color: var(--ios-orange); }
+        .results-percentage.bad { color: var(--ios-red); }
+        .results-stats { display: flex; justify-content: space-around; margin: 16px 0; gap: 8px; }
+        .results-stat { background: var(--ios-card); padding: 14px 10px; border-radius: 14px; flex: 1; box-shadow: var(--ios-shadow); }
+        .results-stat-value { font-family: var(--font-mono); font-size: 24px; font-weight: 600; margin-bottom: 2px; font-variant-numeric: tabular-nums; }
+        .results-stat-label { font-size: 12px; color: var(--ios-label-secondary); font-weight: 500; }
+        
+        .wrong-words-list { background: var(--ios-card); border-radius: 14px; padding: 14px; margin: 16px 0; max-height: 240px; overflow-y: auto; text-align: left; box-shadow: var(--ios-shadow); }
+        .wrong-words-title { color: var(--ios-red); font-weight: 600; margin-bottom: 10px; font-size: 15px; }
+        .wrong-word-item { padding: 10px 12px; border-bottom: 0.5px solid var(--ios-separator); color: var(--ios-label); display: flex; justify-content: space-between; align-items: center; }
+        .wrong-word-item:last-child { border-bottom: none; }
+        .wrong-word-text { font-weight: 600; color: var(--ios-label); }
+        .wrong-word-meaning { color: var(--ios-label-secondary); font-size: 13px; }
+        
+        .perfect-result { background: var(--ios-card); border-radius: 16px; padding: 28px 20px; margin: 16px 0; text-align: center; box-shadow: var(--ios-shadow); }
+        .perfect-emoji { font-size: 56px; margin-bottom: 8px; }
+        .perfect-text { color: var(--ios-green); font-size: 18px; font-weight: 600; }
+        .final-congrats {
+            background: linear-gradient(135deg, var(--ios-green), #248A3D); border-radius: 16px; padding: 28px 20px;
+            margin: 16px 0; text-align: center; color: white; box-shadow: 0 4px 20px rgba(48, 209, 88, 0.3);
+        }
+        body.day-theme .final-congrats { background: linear-gradient(135deg, var(--ios-blue), #0B6E62); box-shadow: 0 4px 20px rgba(14, 156, 140, 0.3); }
+        .final-emoji { font-size: 56px; margin-bottom: 8px; }
+        .final-title { font-family: var(--font-display); font-size: 24px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.01em; }
+        .final-text { font-size: 15px; opacity: 0.95; }
+        .final-report { background: var(--ios-card); border-radius: 14px; padding: 16px; margin: 16px 0; text-align: left; box-shadow: var(--ios-shadow); }
+        .final-report-title { color: var(--ios-orange); font-size: 16px; font-weight: 600; margin-bottom: 12px; text-align: center; }
+        .final-report-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-bottom: 0.5px solid var(--ios-separator); }
+        .final-report-item:last-child { border-bottom: none; }
+        .final-report-word { flex: 1; }
+        .final-report-word-text { font-weight: 600; color: var(--ios-label); font-size: 15px; }
+        .final-report-word-meaning { color: var(--ios-label-secondary); font-size: 12px; margin-top: 2px; }
+        .final-report-errors { background: var(--ios-red); color: white; padding: 3px 9px; border-radius: 10px; font-size: 12px; font-weight: 600; margin-left: 10px; }
+        
+        .dict-switch-item {
+            padding: 14px 16px; background: var(--ios-card); border-radius: 12px; margin-bottom: 8px; cursor: pointer;
+            transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--ios-shadow);
+        }
+        .dict-switch-item:hover { background: var(--ios-bg-tertiary); }
+        .dict-switch-item:active { transform: scale(0.98); }
+        .dict-switch-item.active { background: var(--ios-blue); color: var(--accent-contrast); }
+        .dict-switch-item.active .dict-switch-count { color: var(--accent-contrast); opacity: 0.75; }
+        .dict-switch-name { font-weight: 600; font-size: 15px; }
+        .dict-switch-count { font-size: 13px; color: var(--ios-label-secondary); }
+        
+        .settings-modal .modal-content { max-height: 85vh; }
+        .settings-section { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 0.5px solid var(--ios-separator); }
+        .settings-section:last-child { border-bottom: none; }
+        .settings-section h3 { font-size: 13px; font-weight: 600; color: var(--ios-label-secondary); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.02em; }
+        .dict-manage-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: var(--ios-card); border-radius: 12px; margin-bottom: 8px; box-shadow: var(--ios-shadow); }
+        .dict-manage-info { flex: 1; }
+        .dict-manage-name { font-weight: 600; color: var(--ios-label); margin-bottom: 2px; font-size: 15px; }
+        .dict-manage-count { font-size: 13px; color: var(--ios-label-secondary); }
+        .dict-manage-actions { display: flex; gap: 8px; }
+        .icon-btn-small { width: 34px; height: 34px; border-radius: 10px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 15px; transition: all 0.2s ease; }
+        .icon-btn-small.edit { background: var(--ios-fill); color: var(--ios-blue); }
+        .icon-btn-small.delete { background: rgba(255, 69, 58, 0.15); color: var(--ios-red); }
+        .icon-btn-small:hover { transform: scale(1.05); }
+        .icon-btn-small:active { transform: scale(0.95); }
+        .new-dict-form { display: flex; gap: 8px; margin-bottom: 12px; }
+        .new-dict-form input { flex: 1; }
+        .btn-secondary {
+            background: var(--ios-blue); color: var(--accent-contrast); border: none; padding: 11px 18px; border-radius: 10px;
+            cursor: pointer; font-weight: 600; transition: all 0.2s ease; white-space: nowrap; font-size: 14px;
+        }
+        .btn-secondary:hover { opacity: 0.9; }
+        .btn-secondary:active { transform: scale(0.97); }
+        .theme-toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; }
+        .theme-toggle-label { color: var(--ios-label); font-size: 15px; font-weight: 500; }
+        .switch { position: relative; display: inline-block; width: 51px; height: 31px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--ios-fill); transition: .3s; border-radius: 31px; }
+        .slider:before { position: absolute; content: ""; height: 27px; width: 27px; left: 2px; bottom: 2px; background-color: white; transition: .3s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        input:checked + .slider { background-color: var(--ios-green); }
+        input:checked + .slider:before { transform: translateX(20px); }
+        
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--ios-label-secondary); }
+        .empty-state-icon { font-size: 56px; margin-bottom: 14px; opacity: 0.5; }
+        .info-text { font-size: 13px; color: var(--ios-label-secondary); margin-top: 6px; }
+        .author-signature { position: fixed; bottom: 8px; left: 12px; font-size: 11px; color: var(--ios-label-tertiary); font-style: italic; pointer-events: none; z-index: 100; }
+        .hidden { display: none !important; }
+        
+        .quiz-settings-section { margin-bottom: 18px; text-align: left; }
+        .quiz-settings-title { color: var(--ios-label-secondary); font-size: 13px; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.02em; }
+        .quiz-mode-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
+        .quiz-mode-btn {
+            flex: 1; min-width: 90px; padding: 9px 12px; background: var(--ios-fill); border: none; border-radius: 10px;
+            color: var(--ios-label); cursor: pointer; transition: all 0.2s ease; font-size: 13px; font-weight: 500;
+        }
+        .quiz-mode-btn:hover { background: var(--ios-fill-secondary); }
+        .quiz-mode-btn.active { background: var(--ios-blue); color: var(--accent-contrast); }
+        .quiz-category-select { width: 100%; background: var(--ios-fill); border: none; padding: 11px 14px; border-radius: 10px; font-size: 15px; color: var(--ios-label); cursor: pointer; margin-top: 8px; font-family: inherit; }
+        .quiz-counter { text-align: center; color: var(--ios-label-secondary); font-size: 13px; margin-top: 12px; font-weight: 500; }
+        .quiz-continue-btn { background: var(--ios-green) !important; margin-top: 8px; }
+        .quiz-stats-block { background: var(--ios-card); border-radius: 16px; padding: 14px; margin-bottom: 16px; text-align: center; box-shadow: var(--ios-shadow); }
+        .quiz-stats-title { color: var(--ios-label-secondary); font-size: 13px; font-weight: 600; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.02em; }
+        .quiz-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+        .quiz-stat-item { padding: 14px 6px; border-radius: 12px; background: var(--ios-fill-secondary); cursor: pointer; transition: all 0.2s ease; }
+        .quiz-stat-item:hover { transform: scale(1.03); background: var(--ios-fill); }
+        .quiz-stat-value { font-family: var(--font-mono); font-size: 26px; font-weight: 600; margin-bottom: 4px; font-variant-numeric: tabular-nums; }
+        .quiz-stat-item.learned .quiz-stat-value { color: var(--ios-green); }
+        .quiz-stat-item.weak .quiz-stat-value { color: var(--ios-red); }
+        .quiz-stat-item.new .quiz-stat-value { color: var(--ios-label-secondary); }
+        .quiz-stat-label { font-size: 12px; color: var(--ios-label-secondary); font-weight: 500; }
+        
+        .quiz-stats-buttons-row { display: flex; gap: 6px; flex-wrap: nowrap; }
+        .quiz-stats-buttons-row .btn-reset-stats { flex: 1; min-width: 0; margin-top: 0; font-size: 11px; padding: 7px 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+        .btn-reset-stats {
+            background: transparent; border: 1px solid var(--ios-red); color: var(--ios-red); padding: 8px 14px;
+            border-radius: 10px; cursor: pointer; font-size: 13px; transition: all 0.2s ease; width: 100%; font-weight: 500;
+        }
+        .btn-reset-stats:hover { background: rgba(255, 69, 58, 0.1); }
+        .btn-reset-stats:active { transform: scale(0.98); }
+        
+        .words-modal-list { max-height: 400px; overflow-y: auto; }
+        .words-modal-item { padding: 12px 14px; border-bottom: 0.5px solid var(--ios-separator); display: flex; justify-content: space-between; align-items: center; }
+        .words-modal-item:last-child { border-bottom: none; }
+        .words-modal-word { font-weight: 600; color: var(--ios-label); }
+        .words-modal-meaning { color: var(--ios-label-secondary); font-size: 13px; text-align: right; }
+        .words-modal-stats { font-size: 12px; color: var(--ios-label-tertiary); margin-top: 3px; }
+        .btn-test-from-list {
+            background: var(--ios-blue); color: white; border: none; padding: 13px; border-radius: 12px; font-size: 15px;
+            font-weight: 600; cursor: pointer; width: 100%; margin-top: 14px; transition: all 0.2s ease; box-shadow: 0 4px 14px rgba(45, 212, 191, 0.3);
+        }
+        .btn-test-from-list:hover { opacity: 0.9; }
+        .btn-test-from-list:active { transform: scale(0.98); }
+        
+        .direction-picker-btn {
+            width: 100%; padding: 16px; background: var(--ios-card); border: 1px solid var(--ios-separator);
+            border-radius: 12px; color: var(--ios-label); cursor: pointer; transition: all 0.2s ease;
+            font-size: 15px; font-weight: 600; margin-bottom: 10px; display: flex; align-items: center;
+            justify-content: space-between; box-shadow: var(--ios-shadow);
+        }
+        .direction-picker-btn:hover { background: var(--ios-bg-tertiary); transform: translateY(-1px); }
+        .direction-picker-btn:active { transform: scale(0.98); }
+        .direction-picker-btn-icon { font-size: 22px; }
+        .direction-picker-btn-text { flex: 1; text-align: left; margin-left: 12px; }
+        .direction-picker-btn-title { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+        .direction-picker-btn-desc { font-size: 12px; color: var(--ios-label-secondary); font-weight: 400; }
+        .direction-picker-btn-arrow { color: var(--ios-label-tertiary); font-size: 18px; }
+        
+        .matching-grid { display: flex; gap: 12px; margin-top: 16px; justify-content: center; }
+        .matching-column { display: flex; flex-direction: column; gap: 6px; flex: 1; max-width: 45%; }
+        .matching-item {
+            padding: 12px 10px; background: var(--ios-card); border: none; border-radius: 12px; cursor: pointer;
+            transition: all 0.2s ease; font-size: 14px; color: var(--ios-label); font-weight: 500; text-align: center;
+            min-height: 46px; display: flex; align-items: center; justify-content: center; word-break: break-word; box-shadow: var(--ios-shadow);
+        }
+        .matching-item:hover:not(.matched):not(.disabled) { background: var(--ios-bg-tertiary); }
+        .matching-item.selected { background: var(--ios-blue) !important; color: white !important; transform: scale(1.03); box-shadow: 0 4px 12px rgba(45, 212, 191, 0.4); }
+        .matching-item.matched { background: var(--ios-green) !important; color: white !important; opacity: 0.7; cursor: default; pointer-events: none; }
+        .matching-item.wrong { background: var(--ios-red) !important; color: white !important; animation: shake 0.4s; }
+        .matching-item.disabled { pointer-events: none; opacity: 0.5; }
+        
+        .bulk-import-textarea {
+            width: 100%;
+            min-height: 200px;
+            background: var(--ios-fill);
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: 'SF Mono', Monaco, Consolas, monospace;
+            color: var(--ios-label);
+            resize: vertical;
+            line-height: 1.5;
+        }
+        .bulk-import-textarea:focus {
+            outline: none;
+            background: var(--ios-fill-secondary);
+            box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.2);
+        }
+        .bulk-import-hint {
+            font-size: 12px;
+            color: var(--ios-label-tertiary);
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+        .bulk-import-preview {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 12px 0;
+            border-radius: 10px;
+            background: var(--ios-fill-secondary);
+        }
+        .bulk-import-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            border-bottom: 0.5px solid var(--ios-separator);
+            font-size: 14px;
+            gap: 10px;
+        }
+        .bulk-import-item:last-child { border-bottom: none; }
+        .bulk-import-item.status-new { background: rgba(48, 209, 88, 0.1); }
+        .bulk-import-item.status-duplicate { background: rgba(255, 214, 10, 0.1); }
+        .bulk-import-item.status-invalid { background: rgba(255, 69, 58, 0.1); }
+        .bulk-import-status { flex-shrink: 0; font-size: 14px; width: 20px; text-align: center; }
+        .bulk-import-content { flex: 1; min-width: 0; }
+        .bulk-import-word { font-weight: 600; color: var(--ios-label); word-break: break-word; }
+        .bulk-import-meaning { color: var(--ios-label-secondary); font-size: 13px; word-break: break-word; margin-top: 2px; }
+        .bulk-import-summary { display: flex; gap: 10px; margin: 12px 0; flex-wrap: wrap; }
+        .bulk-import-summary-item { flex: 1; min-width: 80px; padding: 10px; border-radius: 10px; text-align: center; font-size: 13px; font-weight: 600; }
+        .bulk-import-summary-item.new-count { background: rgba(48, 209, 88, 0.15); color: var(--ios-green); }
+        .bulk-import-summary-item.duplicate-count { background: rgba(255, 214, 10, 0.15); color: var(--ios-yellow); }
+        .bulk-import-summary-item.invalid-count { background: rgba(255, 69, 58, 0.15); color: var(--ios-red); }
+        
+        .bulk-import-category-input {
+            margin-top: 4px;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid var(--ios-separator);
+            background: var(--ios-bg-secondary);
+            color: var(--ios-blue);
+            font-weight: 500;
+            width: 100%;
+            max-width: 180px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        .bulk-import-category-input:focus {
+            border-color: var(--ios-blue);
+            box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.3);
+        }
+        .bulk-import-category-input::placeholder {
+            color: var(--ios-label-tertiary);
+        }
+        
+        @media (max-width: 600px) {
+            .container { padding: 14px; padding-bottom: 100px; }
+            .fab { bottom: 24px; right: 24px; }
+            .stats-bar { grid-template-columns: repeat(3, 1fr); }
+            .quiz-direction, .quiz-buttons, .quiz-mode-buttons { flex-direction: column; }
+            .quiz-direction-btn, .quiz-buttons .btn-primary, .quiz-mode-btn { width: 100%; }
+            .matching-grid { gap: 6px; }
+            .matching-column { max-width: 48%; }
+            .matching-item { font-size: 13px; padding: 10px 6px; min-height: 42px; }
+            .header h1 { font-size: 30px; }
+            .quiz-stats-buttons-row .btn-reset-stats { font-size: 10px; padding: 6px 4px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <h1>Личный словарь</h1>
+            </div>
+            <div class="header-controls">
+                <button class="icon-btn-header" onclick="toggleTheme()" title="Сменить тему"><span id="themeIcon">☀️</span></button>
+                <button class="icon-btn-header" onclick="openQuiz()" title="Режим изучения">🎯</button>
+                <button class="icon-btn-header" onclick="openSettings()" title="Настройки">⚙️</button>
+            </div>
+        </div>
+        <div class="stats-bar">
+            <div class="stat-card"><div class="stat-value" id="totalWords">0</div><div class="stat-label">Всего слов</div></div>
+            <div class="stat-card"><div class="stat-value" id="todayWords">0</div><div class="stat-label">Сегодня</div></div>
+            <div class="stat-card"><div class="stat-value" id="weekWords">0</div><div class="stat-label">За неделю</div></div>
+        </div>
+        <div class="dict-selector">
+            <button class="dict-button" onclick="openDictSwitch()">
+                <div class="dict-button-left"><span class="dict-icon">📚</span><span class="dict-name" id="currentDictName">Мой словарь</span></div>
+                <span class="dict-arrow">›</span>
+            </button>
+            <div class="word-count" id="wordCount">0</div>
+        </div>
+        <div class="category-filter" id="categoryFilter">
+            <button class="category-chip active" onclick="filterCategory('all')">Все</button>
+        </div>
+        <div class="view-toggle">
+            <button class="view-toggle-btn active" id="viewCompactBtn" onclick="setViewMode('compact')">📃 Список</button>
+            <button class="view-toggle-btn" id="viewCardsBtn" onclick="setViewMode('cards')">🗂️ Карточки</button>
+        </div>
+        <div class="search-container">
+            <div class="search-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" id="searchInput" placeholder="Поиск" oninput="searchWords()">
+            </div>
+        </div>
+        <div class="words-list" id="wordsList"></div>
+    </div>
+    <button class="fab" onclick="openAddModal()">+</button>
+    
+    <div class="modal" id="wordModal">
+        <div class="modal-content">
+            <div class="modal-header"><h2 class="modal-title" id="modalTitle">Добавить слово</h2><button class="modal-close" onclick="closeWordModal()">✕</button></div>
+            <div class="form-group"><label class="form-label">Слово</label><input type="text" class="form-input" id="wordInput" placeholder="например: home"></div>
+            <div class="form-group"><label class="form-label">Значение / Перевод</label><textarea class="form-textarea" id="meaningInput" placeholder="например: дом"></textarea></div>
+            <div class="form-group"><label class="form-label">Категория</label><input type="text" class="form-input" id="categoryInput" list="categoriesList" placeholder="например: Еда"><datalist id="categoriesList"></datalist></div>
+            <div class="form-group"><label class="form-label">Заметки</label><textarea class="form-textarea" id="notesInput" placeholder="Примеры использования..."></textarea></div>
+            <div class="form-group">
+                <label class="form-label">Картинка</label>
+                <div class="file-input-wrapper">
+                    <div class="file-input-label" id="fileInputLabel">📷 Выбрать картинку</div>
+                    <input type="file" id="imageInput" accept="image/*">
+                </div>
+                <img id="imagePreview" class="preview-image" alt="Preview">
+            </div>
+            <button class="btn-primary" onclick="saveWord()">💾 Сохранить</button>
+            <button class="btn-primary btn-danger hidden" id="deleteWordBtn" onclick="deleteWordFromEdit()" style="margin-top: 10px;">🗑️ Удалить слово</button>
+        </div>
+    </div>
+
+    <div class="modal" id="quizModal">
+        <div class="modal-content">
+            <div class="modal-header"><h2 class="modal-title">🎯 Режим изучения</h2><button class="modal-close" onclick="closeQuiz()">✕</button></div>
+            <div id="quizStartScreen" class="quiz-container">
+                <div class="quiz-stats-block">
+                    <div class="quiz-stats-title">📊 Статистика словаря</div>
+                    <div class="quiz-stats-grid">
+                        <div class="quiz-stat-item learned" onclick="showWordsByStatus('learned')"><div class="quiz-stat-value" id="statLearned">0</div><div class="quiz-stat-label">🟢 Изучено</div></div>
+                        <div class="quiz-stat-item weak" onclick="showWordsByStatus('weak')"><div class="quiz-stat-value" id="statWeak">0</div><div class="quiz-stat-label">🔴 Ошибки</div></div>
+                        <div class="quiz-stat-item new" onclick="showWordsByStatus('new')"><div class="quiz-stat-value" id="statNew">0</div><div class="quiz-stat-label">⚪ Новых</div></div>
+                    </div>
+                    <div class="quiz-stats-buttons-row">
+                        <button class="btn-reset-stats" onclick="resetQuizStats()">🔄 весь рейтинг</button>
+                        <button class="btn-reset-stats" onclick="resetLearnedToNew()" style="border-color: var(--ios-orange); color: var(--ios-orange);">🔄 Изученные → Новые</button>
+                    </div>
+                </div>
+                <div class="quiz-settings-section">
+                    <div class="quiz-settings-title">📚 Режим теста</div>
+                    <div class="quiz-mode-buttons">
+                        <button class="quiz-mode-btn active" data-mode="all" onclick="setQuizMode('all')">Все слова</button>
+                        <button class="quiz-mode-btn" data-mode="category" onclick="setQuizMode('category')">По разделам</button>
+                        <button class="quiz-mode-btn" data-mode="matching" onclick="setQuizMode('matching')">🧩 Сопоставление</button>
+                    </div>
+                    <select id="quizCategorySelect" class="quiz-category-select hidden" onchange="updateQuizCounter()"><option value="">Все категории</option></select>
+                </div>
+                <div class="quiz-settings-section" id="quantitySection">
+                    <div class="quiz-settings-title">🔢 Количество слов:</div>
+                    <div class="quiz-mode-buttons">
+                        <button class="quiz-mode-btn active" data-count="50" onclick="setQuizCount(50)">50</button>
+                        <button class="quiz-mode-btn" data-count="100" onclick="setQuizCount(100)">100</button>
+                        <button class="quiz-mode-btn" data-count="all" onclick="setQuizCount('all')">Все</button>
+                    </div>
+                </div>
+                <div class="quiz-settings-section" id="directionSection">
+                    <div class="quiz-settings-title">🎲 Тип теста:</div>
+                    <div class="quiz-direction">
+                        <button class="quiz-direction-btn active" id="dirWordToMeaning" onclick="setQuizDirection('wordToMeaning')">Слово → Перевод</button>
+                        <button class="quiz-direction-btn" id="dirMeaningToWord" onclick="setQuizDirection('meaningToWord')">Перевод → Слово</button>
+                        <button class="quiz-direction-btn" id="dirMixed" onclick="setQuizDirection('mixed')">Смешанный</button>
+                    </div>
+                </div>
+                <div class="quiz-counter" id="quizCounter">📊 Будет выбрано слов: 50</div>
+                <button class="btn-primary" onclick="beginQuiz()" style="margin-top: 16px;">▶️ Начать тест</button>
+            </div>
+            <div id="quizDirectionPickerScreen" class="quiz-container hidden">
+                <div class="quiz-stats-title" style="font-size: 16px; margin-bottom: 6px;">🎲 Выберите тип теста</div>
+                <div style="color: var(--ios-label-secondary); margin-bottom: 18px; font-size: 14px;">
+                    Для <strong id="pickerWordCount" style="color: var(--ios-blue);">0</strong> слов
+                </div>
+                <button class="direction-picker-btn" onclick="startTestWithDirection('wordToMeaning')">
+                    <span class="direction-picker-btn-icon">🔤</span>
+                    <div class="direction-picker-btn-text">
+                        <div class="direction-picker-btn-title">Слово → Перевод</div>
+                        <div class="direction-picker-btn-desc">Показываем слово, выбираете перевод</div>
+                    </div>
+                    <span class="direction-picker-btn-arrow">›</span>
+                </button>
+                <button class="direction-picker-btn" onclick="startTestWithDirection('meaningToWord')">
+                    <span class="direction-picker-btn-icon">🔄</span>
+                    <div class="direction-picker-btn-text">
+                        <div class="direction-picker-btn-title">Перевод → Слово</div>
+                        <div class="direction-picker-btn-desc">Показываем перевод, выбираете слово</div>
+                    </div>
+                    <span class="direction-picker-btn-arrow">›</span>
+                </button>
+                <button class="direction-picker-btn" onclick="startTestWithDirection('mixed')">
+                    <span class="direction-picker-btn-icon">🎲</span>
+                    <div class="direction-picker-btn-text">
+                        <div class="direction-picker-btn-title">Смешанный</div>
+                        <div class="direction-picker-btn-desc">Случайное чередование направлений</div>
+                    </div>
+                    <span class="direction-picker-btn-arrow">›</span>
+                </button>
+                <button class="btn-primary" onclick="backToWordsList()" style="background: var(--ios-fill); color: var(--ios-label); margin-top: 16px;">← Назад к списку</button>
+            </div>
+            <div id="quizGameScreen" class="quiz-container hidden">
+                <div class="quiz-progress" id="quizProgress">Вопрос 1 из 10</div>
+                <div class="quiz-score">
+                    <span class="quiz-score-correct">✓ <span id="correctCount">0</span></span>
+                    <span class="quiz-score-wrong">✗ <span id="wrongCount">0</span></span>
+                    <span class="quiz-score-remaining">Осталось: <span id="remainingCount">0</span></span>
+                </div>
+                <div class="quiz-label" id="quizLabel">Выберите перевод:</div>
+                <div class="quiz-word" id="quizWord">—</div>
+                <div class="quiz-options" id="quizOptions"></div>
+                <div class="quiz-buttons"><button class="btn-primary btn-warning" onclick="finishQuizEarly()">⏹ Завершить</button></div>
+            </div>
+            <div id="quizMatchingScreen" class="quiz-container hidden">
+                <div class="quiz-progress" id="matchingProgress">Найдите пары: 0 / 10</div>
+                <div class="quiz-score">
+                    <span class="quiz-score-remaining">⏱️ <span id="matchingTime">00:00</span></span>
+                    <span class="quiz-score-wrong">Ошибок: <span id="matchingMistakes">0</span></span>
+                </div>
+                <div class="matching-grid" id="matchingGrid">
+                    <div class="matching-column" id="matchingLeft"></div>
+                    <div class="matching-column" id="matchingRight"></div>
+                </div>
+                <div class="quiz-buttons"><button class="btn-primary btn-warning" onclick="finishQuizEarly()">⏹ Завершить</button></div>
+            </div>
+            <div id="quizResultsScreen" class="results-container hidden"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="wordsListModal">
+        <div class="modal-content">
+            <div class="modal-header"><h2 class="modal-title" id="wordsListModalTitle">Список слов</h2><button class="modal-close" onclick="closeWordsListModal()">✕</button></div>
+            <div id="wordsListModalContent" class="words-modal-list"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="dictSwitchModal">
+        <div class="modal-content">
+            <div class="modal-header"><h2 class="modal-title">📚 Выбор словаря</h2><button class="modal-close" onclick="closeDictSwitch()">✕</button></div>
+            <div id="dictSwitchList"></div>
+        </div>
+    </div>
+
+    <div class="modal settings-modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header"><h2 class="modal-title">⚙️ Настройки</h2><button class="modal-close" onclick="closeSettings()">✕</button></div>
+            <div class="settings-section">
+                <h3>📚 Управление словарями</h3>
+                <div class="new-dict-form">
+                    <input type="text" class="form-input" id="newDictName" placeholder="Название нового словаря...">
+                    <button class="btn-secondary" onclick="createDictionary()">➕</button>
+                </div>
+                <div id="dictionariesList"></div>
+            </div>
+            <div class="settings-section">
+                <h3>📥 Массовый импорт</h3>
+                <button class="btn-secondary" onclick="openBulkImport()" style="width: 100%; background: var(--ios-green);">📥 Массовый импорт из текста</button>
+            </div>
+            <div class="settings-section">
+                <h3>🎨 Оформление</h3>
+                <div class="theme-toggle-row">
+                    <span class="theme-toggle-label">Размер шрифта</span>
+                    <div class="form-select-wrapper">
+                        <select class="form-select" id="fontSizeSelect" onchange="changeFontSize()">
+                            <option value="small">Мелкий</option>
+                            <option value="medium" selected>Средний</option>
+                            <option value="large">Крупный</option>
+                        </select>
+                        <span class="select-arrow">▼</span>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3>💾 Резервное копирование</h3>
+                <button class="btn-secondary" onclick="exportDictionary()" style="margin-right: 8px; margin-bottom: 8px;">📤 Экспорт</button>
+                <button class="btn-secondary" onclick="exportAllDictionaries()" style="margin-right: 8px; margin-bottom: 8px;">📦 Все словари</button>
+                <button class="btn-secondary" onclick="importDictionary()" style="margin-bottom: 8px;">📥 Импорт</button>
+            </div>
+            <div class="settings-section">
+                <h3>⚠️ Опасная зона</h3>
+                <button class="btn-secondary btn-danger" onclick="clearAllWords()">🗑️ Очистить словарь</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="bulkImportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">📥 Массовый импорт</h2>
+                <button class="modal-close" onclick="closeBulkImport()">✕</button>
+            </div>
+            
+            <div id="bulkImportStep1">
+                <div class="form-group">
+                    <label class="form-label">📚 Словарь для импорта</label>
+                    <select class="form-select" id="bulkImportDictionary" style="width: 100%; padding: 12px 14px; border-radius: 10px; font-size: 16px;">
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Категория по умолчанию (необязательно)</label>
+                    <input type="text" class="form-input" id="bulkImportCategory" list="categoriesList" placeholder="например: Турецкий">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Список слов</label>
+                    <textarea class="bulk-import-textarea" id="bulkImportText" placeholder="Вставьте список слов в формате:&#10;слово — перевод&#10;слово - перевод&#10;слово: перевод&#10;&#10;Категории можно указывать индивидуально:&#10;[Время] öğleden sonra — после обеда&#10;açık — открытый [Прилагательные]&#10;genellikle — обычно"></textarea>
+                    <div class="bulk-import-hint">
+                        💡 Поддерживаются разделители: <strong>—</strong> (тире), <strong>-</strong> (дефис), <strong>:</strong> (двоеточие), <strong>→</strong> (стрелка), <strong>⇒</strong> (двойная стрелка).<br>
+                        📂 Категории можно указывать в скобках: <strong>[Категория]</strong> в начале или в конце строки.<br>
+                        Каждая строка — одно слово.
+                    </div>
+                </div>
+                
+                <button class="btn-primary" onclick="previewBulkImport()" style="background: var(--ios-orange);">👁️ Предпросмотр</button>
+            </div>
+            
+            <div id="bulkImportStep2" class="hidden">
+                <div id="bulkImportSummary"></div>
+                <div class="bulk-import-preview" id="bulkImportPreview"></div>
+                
+                <button class="btn-primary" onclick="confirmBulkImport()" style="background: var(--ios-green);">✅ Добавить новые слова</button>
+                <button class="btn-primary" onclick="backToBulkImportStep1()" style="background: var(--ios-fill); color: var(--ios-label); margin-top: 8px;">← Назад к редактированию</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="wordDetailModal">
+        <div class="modal-content">
+            <div class="modal-header"><h2 class="modal-title">📝 Слово</h2><button class="modal-close" onclick="closeWordDetail()">✕</button></div>
+            <div id="wordDetailContent"></div>
+        </div>
+    </div>
+    <div class="author-signature">Мухаммад абу Абдульмалик</div>
+
+    <script>
+        let data = loadData();
+        let currentImageBase64 = null;
+        let editingWordId = null;
+        let isEditing = false;
+        let currentCategory = 'all';
+        let currentViewMode = 'compact';
+        let quizMode = 'all';
+        let quizCount = 50;
+        let quizCategory = '';
+        let sessionWordIds = [];
+        let customTestPool = null;
+        let lastStatusForPicker = null;
+        let quizData = { correct: 0, wrong: 0, currentWord: null, options: [], direction: 'wordToMeaning', wordQueue: [], wrongWords: [], isRetryMode: false, isFinished: false };
+        let matchingData = { pairs: [], leftItems: [], rightItems: [], selectedLeft: null, selectedRight: null, matchedCount: 0, mistakes: 0, startTime: null, timerInterval: null, isLocked: false };
+        let bulkImportParsedData = [];
+
+        function isNewWord(word) { return word.score === null || word.score === undefined; }
+        function isLearnedWord(word) { return word.score === 1; }
+        function isWeakWord(word) { return typeof word.score === 'number' && word.score < 0; }
+        function getScoreDisplay(word) { return isNewWord(word) ? '-' : word.score; }
+        function getScoreLabel(word) { return isNewWord(word) ? '⚪ Новое' : (isLearnedWord(word) ? '🟢 Изучено' : '🔴 Ошибки'); }
+        function getScoreColor(word) { return isNewWord(word) ? 'var(--ios-label-secondary)' : (isLearnedWord(word) ? 'var(--ios-green)' : 'var(--ios-red)'); }
+
+        function getSessionKey() {
+            let modeKey = quizMode;
+            if (quizMode === 'category' && quizCategory) modeKey = `category_${quizCategory}`;
+            return `sessionWordIds_${data.currentDictionary}_${modeKey}`;
+        }
+        function saveSessionWordIds() { try { localStorage.setItem(getSessionKey(), JSON.stringify(sessionWordIds)); } catch (e) { console.error(e); } }
+        function loadSessionWordIds() { try { sessionWordIds = JSON.parse(localStorage.getItem(getSessionKey())) || []; } catch (e) { sessionWordIds = []; } }
+        function resetSessionWordIds() { sessionWordIds = []; saveSessionWordIds(); }
+
+        function getAllPoolWords() {
+            if (customTestPool) return customTestPool;
+            let pool = [...getCurrentWords()];
+            if (quizMode === 'weak') pool = pool.filter(w => isWeakWord(w));
+            else if (quizMode === 'category' && quizCategory) pool = pool.filter(w => w.category === quizCategory);
+            return pool;
+        }
+
+        function loadData() {
+            try {
+                const saved = localStorage.getItem('myDictionaryData');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.dictionaries && parsed.currentDictionary) {
+                        for (let dictName in parsed.dictionaries) {
+                            parsed.dictionaries[dictName] = parsed.dictionaries[dictName].map(word => {
+                                let newScore = null;
+                                if (word.score !== undefined && word.score !== null) {
+                                    if (word.score === 1) newScore = 1;
+                                    else if (word.score < 0) newScore = word.score;
+                                    else if (word.score > 1) newScore = 1;
+                                    else newScore = null;
+                                } else if (word.errors !== undefined || word.success !== undefined) {
+                                    const errors = word.errors || 0;
+                                    const success = word.success || 0;
+                                    if (errors > 0) newScore = -errors;
+                                    else if (success > 0) newScore = 1;
+                                    else newScore = null;
+                                }
+                                return {
+                                    ...word, 
+                                    category: word.category || 'Общее', 
+                                    notes: word.notes || '',
+                                    createdAt: word.createdAt || new Date().toISOString(), 
+                                    lastReviewed: word.lastReviewed || null,
+                                    score: newScore,
+                                    errors: undefined,
+                                    success: undefined
+                                };
+                            });
+                        }
+                        return parsed;
+                    }
+                }
+            } catch (e) { console.error(e); }
+            return { dictionaries: { "Мой словарь": [] }, currentDictionary: "Мой словарь" };
+        }
+
+        function saveData() { try { localStorage.setItem('myDictionaryData', JSON.stringify(data)); updateStats(); } catch (e) { console.error(e); } }
+        function getCurrentWords() { return data.dictionaries[data.currentDictionary] || []; }
+        function setCurrentWords(words) { data.dictionaries[data.currentDictionary] = words; saveData(); }
+
+        function updateThemeIcon() {
+            const isDay = document.body.classList.contains('day-theme');
+            document.getElementById('themeIcon').textContent = isDay ? '🌙' : '☀️';
+        }
+
+        try {
+            if (localStorage.getItem('theme') === 'day') {
+                document.body.classList.add('day-theme');
+            }
+        } catch (e) {}
+        updateThemeIcon();
+
+        function toggleTheme() {
+            document.body.classList.toggle('day-theme');
+            try { localStorage.setItem('theme', document.body.classList.contains('day-theme') ? 'day' : 'night'); } catch (e) {}
+            updateThemeIcon();
+        }
+
+        function changeFontSize() {
+            const size = document.getElementById('fontSizeSelect').value;
+            try { localStorage.setItem('fontSize', size); } catch (e) {}
+            const wordTexts = document.querySelectorAll('.word-text');
+            const wordMeanings = document.querySelectorAll('.word-meaning');
+            if (size === 'small') { wordTexts.forEach(el => el.style.fontSize = '17px'); wordMeanings.forEach(el => el.style.fontSize = '13px'); }
+            else if (size === 'large') { wordTexts.forEach(el => el.style.fontSize = '22px'); wordMeanings.forEach(el => el.style.fontSize = '17px'); }
+            else { wordTexts.forEach(el => el.style.fontSize = '19px'); wordMeanings.forEach(el => el.style.fontSize = '15px'); }
+        }
+        try { const savedSize = localStorage.getItem('fontSize'); if (savedSize) document.getElementById('fontSizeSelect').value = savedSize; } catch (e) {}
+
+        function updateStats() {
+            const words = getCurrentWords();
+            const today = new Date().toDateString();
+            const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate() - 7);
+            document.getElementById('totalWords').textContent = words.length;
+            document.getElementById('todayWords').textContent = words.filter(w => new Date(w.createdAt).toDateString() === today).length;
+            document.getElementById('weekWords').textContent = words.filter(w => new Date(w.createdAt) >= weekAgo).length;
+            document.getElementById('wordCount').textContent = words.length;
+        }
+
+        try { renderDictionarySelect(); displayWords(); updateStats(); updateCategories(); setTimeout(changeFontSize, 100); } catch (e) { console.error(e); }
+
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const label = document.getElementById('fileInputLabel');
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentImageBase64 = e.target.result;
+                    document.getElementById('imagePreview').src = currentImageBase64;
+                    document.getElementById('imagePreview').style.display = 'block';
+                    label.textContent = '✅ ' + file.name;
+                    label.classList.add('has-file');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function renderDictionarySelect() { document.getElementById('currentDictName').textContent = data.currentDictionary; }
+        
+        // === ОБНОВЛЁННАЯ ФУНКЦИЯ: теперь показывает количество слов в каждой категории ===
+        function updateCategories() {
+            const words = getCurrentWords();
+            const totalCount = words.length;
+            
+            // Считаем количество слов в каждой категории
+            const categoryCounts = {};
+            words.forEach(w => {
+                const cat = w.category || 'Общее';
+                categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+            });
+            
+            const categories = Object.keys(categoryCounts);
+            
+            // Формируем чип "Все" с общим количеством
+            let html = `<button class="category-chip ${currentCategory === 'all' ? 'active' : ''}" onclick="filterCategory('all')">
+                Все <span class="category-chip-count">${totalCount}</span>
+            </button>`;
+            
+            // Формируем чипы категорий с их количеством
+            html += categories.map(cat => {
+                const count = categoryCounts[cat];
+                const isActive = currentCategory === cat;
+                return `<button class="category-chip ${isActive ? 'active' : ''}" onclick="filterCategory('${cat.replace(/'/g, "\\'")}')">
+                    ${escapeHtml(cat)} <span class="category-chip-count">${count}</span>
+                </button>`;
+            }).join('');
+            
+            document.getElementById('categoryFilter').innerHTML = html;
+            document.getElementById('categoriesList').innerHTML = categories.map(cat => `<option value="${escapeHtml(cat)}">`).join('');
+        }
+        
+        function filterCategory(category) {
+            currentCategory = category;
+            // Перерисовываем категории, чтобы обновить активное состояние
+            updateCategories();
+            displayWords();
+        }
+        function setViewMode(mode) {
+            currentViewMode = mode;
+            document.getElementById('viewCardsBtn').classList.toggle('active', mode === 'cards');
+            document.getElementById('viewCompactBtn').classList.toggle('active', mode === 'compact');
+            displayWords();
+        }
+        function openDictSwitch() { renderDictSwitchList(); document.getElementById('dictSwitchModal').classList.add('active'); }
+        function closeDictSwitch() { document.getElementById('dictSwitchModal').classList.remove('active'); }
+        function renderDictSwitchList() {
+            document.getElementById('dictSwitchList').innerHTML = Object.keys(data.dictionaries).map(name => {
+                const count = data.dictionaries[name].length;
+                const isActive = name === data.currentDictionary;
+                return `<div class="dict-switch-item ${isActive ? 'active' : ''}" onclick="switchToDictionary('${name.replace(/'/g, "\\'")}')">
+                    <div class="dict-switch-name">${name} ${isActive ? '✓' : ''}</div><div class="dict-switch-count">${count} слов</div></div>`;
+            }).join('');
+        }
+        function createDictionary() {
+            const name = document.getElementById('newDictName').value.trim();
+            if (!name) return alert('Введите название');
+            if (data.dictionaries[name]) return alert('Такой словарь уже есть');
+            data.dictionaries[name] = []; data.currentDictionary = name; saveData();
+            document.getElementById('newDictName').value = '';
+            renderDictionarySelect(); displayWords(); renderDictionariesList(); updateStats();
+        }
+        function renameDictionary(oldName) {
+            const newName = prompt('Новое название:', oldName)?.trim();
+            if (!newName || newName === oldName) return;
+            if (data.dictionaries[newName]) return alert('Такое имя уже занято');
+            const newDicts = {};
+            for (const key of Object.keys(data.dictionaries)) newDicts[key === oldName ? newName : key] = data.dictionaries[key];
+            data.dictionaries = newDicts;
+            if (data.currentDictionary === oldName) data.currentDictionary = newName;
+            saveData(); renderDictionarySelect(); renderDictionariesList(); displayWords(); updateStats();
+        }
+        function deleteDictionary(name) {
+            if (Object.keys(data.dictionaries).length === 1) return alert('Нельзя удалить последний словарь');
+            if (!confirm(`Удалить "${name}"?`)) return;
+            delete data.dictionaries[name];
+            if (data.currentDictionary === name) data.currentDictionary = Object.keys(data.dictionaries)[0];
+            saveData(); renderDictionarySelect(); renderDictionariesList(); displayWords(); updateStats();
+        }
+        function switchToDictionary(name) {
+            data.currentDictionary = name; saveData(); loadSessionWordIds();
+            renderDictionarySelect(); renderDictionariesList(); renderDictSwitchList();
+            displayWords(); updateStats(); updateCategories(); closeDictSwitch();
+        }
+        function renderDictionariesList() {
+            document.getElementById('dictionariesList').innerHTML = Object.keys(data.dictionaries).map(name => {
+                const count = data.dictionaries[name].length;
+                const isActive = name === data.currentDictionary;
+                return `<div class="dict-manage-item">
+                    <div class="dict-manage-info"><div class="dict-manage-name">${name} ${isActive ? '(текущий)' : ''}</div><div class="dict-manage-count">${count} слов</div></div>
+                    <div class="dict-manage-actions">
+                        <button class="icon-btn-small edit" onclick="renameDictionary('${name.replace(/'/g, "\\'")}')">✏️</button>
+                        <button class="icon-btn-small delete" onclick="deleteDictionary('${name.replace(/'/g, "\\'")}')">🗑️</button>
+                    </div></div>`;
+            }).join('');
+        }
+        function openAddModal() {
+            isEditing = false; editingWordId = null; currentImageBase64 = null;
+            document.getElementById('modalTitle').textContent = 'Добавить слово';
+            document.getElementById('wordInput').value = ''; document.getElementById('meaningInput').value = '';
+            document.getElementById('categoryInput').value = 'Общее'; document.getElementById('notesInput').value = '';
+            document.getElementById('imageInput').value = ''; document.getElementById('imagePreview').style.display = 'none';
+            const label = document.getElementById('fileInputLabel'); label.textContent = '📷 Выбрать картинку'; label.classList.remove('has-file');
+            document.getElementById('deleteWordBtn').classList.add('hidden');
+            document.getElementById('wordModal').classList.add('active');
+        }
+        function openEditModal(wordId) {
+            const word = getCurrentWords().find(w => w.id === wordId);
+            if (!word) return;
+            isEditing = true; editingWordId = wordId; currentImageBase64 = word.image || null;
+            document.getElementById('modalTitle').textContent = 'Редактировать слово';
+            document.getElementById('wordInput').value = word.word; document.getElementById('meaningInput').value = word.meaning;
+            document.getElementById('categoryInput').value = word.category || 'Общее'; document.getElementById('notesInput').value = word.notes || '';
+            const preview = document.getElementById('imagePreview'); const label = document.getElementById('fileInputLabel');
+            if (word.image) { preview.src = word.image; preview.style.display = 'block'; label.textContent = '✅ Картинка добавлена'; label.classList.add('has-file'); }
+            else { preview.style.display = 'none'; label.textContent = '📷 Выбрать картинку'; label.classList.remove('has-file'); }
+            document.getElementById('deleteWordBtn').classList.remove('hidden');
+            document.getElementById('wordModal').classList.add('active');
+        }
+        function closeWordModal() { document.getElementById('wordModal').classList.remove('active'); }
+        function saveWord() {
+            const word = document.getElementById('wordInput').value.trim();
+            const meaning = document.getElementById('meaningInput').value.trim();
+            const category = document.getElementById('categoryInput').value.trim() || 'Общее';
+            const notes = document.getElementById('notesInput').value.trim();
+            if (!word || !meaning) return alert('Заполните слово и значение');
+            const words = getCurrentWords();
+            if (words.find(w => w.word.toLowerCase().trim() === word.toLowerCase().trim() && (!isEditing || w.id !== editingWordId))) {
+                return alert('Слово уже существует');
+            }
+            if (isEditing) {
+                const idx = words.findIndex(w => w.id === editingWordId);
+                if (idx !== -1) { Object.assign(words[idx], { word, meaning, category, notes, image: currentImageBase64, updatedAt: new Date().toISOString() }); }
+            } else {
+                words.push({ id: Date.now(), word, meaning, category, notes, image: currentImageBase64, createdAt: new Date().toISOString(), lastReviewed: null, score: null });
+            }
+            setCurrentWords(words); closeWordModal(); displayWords(); updateStats(); updateCategories(); setTimeout(changeFontSize, 50);
+        }
+        function deleteWordFromEdit() {
+            if (!editingWordId || !confirm('Удалить это слово?')) return;
+            let words = getCurrentWords().filter(w => w.id !== editingWordId);
+            setCurrentWords(words); sessionWordIds = sessionWordIds.filter(id => id !== editingWordId); saveSessionWordIds();
+            closeWordModal(); displayWords(); updateStats(); updateCategories();
+        }
+        function showWordDetail(wordId) {
+            const word = getCurrentWords().find(w => w.id === wordId);
+            if (!word) return;
+            const scoreDisplay = getScoreDisplay(word);
+            const scoreColor = getScoreColor(word);
+            const scoreLabel = getScoreLabel(word);
+            
+            document.getElementById('wordDetailContent').innerHTML = `
+                <div style="padding: 16px;">
+                    ${word.image ? `<img src="${word.image}" style="max-width: 100%; border-radius: 14px; margin-bottom: 14px;">` : ''}
+                    <h2 style="color: var(--ios-label); margin-bottom: 10px; font-size: 28px; font-weight: 700; letter-spacing: -0.01em;">${word.word}</h2>
+                    <p style="color: var(--ios-label-secondary); font-size: 18px; margin-bottom: 14px; line-height: 1.4;"><strong style="color: var(--ios-blue);">Значение:</strong> ${word.meaning}</p>
+                    <p style="color: var(--ios-label-secondary); margin-bottom: 6px; font-size: 14px;"><strong style="color: var(--ios-purple);">Категория:</strong> ${word.category}</p>
+                    ${word.notes ? `<p style="color: var(--ios-label-secondary); margin-top: 8px; font-size: 14px; line-height: 1.4;"><strong style="color: var(--ios-orange);">Заметки:</strong> ${word.notes}</p>` : ''}
+                    <div style="display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; align-items: center;">
+                        <span style="color: ${scoreColor}; font-weight: 700; font-size: 16px; background: var(--ios-fill); padding: 6px 12px; border-radius: 8px;">📊 Рейтинг: ${scoreDisplay} (${scoreLabel})</span>
+                    </div>
+                    <p style="color: var(--ios-label-tertiary); font-size: 12px; margin-top: 16px;">Добавлено: ${new Date(word.createdAt).toLocaleDateString('ru-RU')}</p>
+                </div>
+                <button class="btn-primary" onclick="closeWordDetail(); openEditModal(${word.id})" style="margin-top: 12px;">✏️ Редактировать</button>`;
+            document.getElementById('wordDetailModal').classList.add('active');
+        }
+        function closeWordDetail() { document.getElementById('wordDetailModal').classList.remove('active'); }
+        function deleteWord(id) {
+            if (!confirm('Удалить это слово?')) return;
+            let words = getCurrentWords().filter(w => w.id !== id);
+            setCurrentWords(words); sessionWordIds = sessionWordIds.filter(sid => sid !== id); saveSessionWordIds();
+            displayWords(); updateStats(); updateCategories();
+        }
+        function displayWords() {
+            const wordsList = document.getElementById('wordsList');
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            let words = getCurrentWords();
+            if (currentCategory !== 'all') words = words.filter(w => w.category === currentCategory);
+            if (searchQuery) words = words.filter(w => w.word.toLowerCase().includes(searchQuery) || w.meaning.toLowerCase().includes(searchQuery) || (w.notes && w.notes.toLowerCase().includes(searchQuery)));
+            words = [...words].sort((a, b) => a.word.toLowerCase().localeCompare(b.word.toLowerCase(), 'ru'));
+            
+            if (words.length === 0) {
+                wordsList.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔍</div>${searchQuery || currentCategory !== 'all' ? 'Ничего не найдено' : 'В словаре пока нет слов<br>Нажмите + чтобы добавить'}</div>`;
+                return;
+            }
+            
+            if (currentViewMode === 'compact') {
+                wordsList.innerHTML = '<div class="compact-list">' + words.map(item => {
+                    const hasErrors = isWeakWord(item);
+                    return `<div class="compact-item ${hasErrors ? 'has-errors' : ''}" onclick="showWordDetail(${item.id})">
+                        <div class="compact-word">${hasErrors ? '<div class="compact-error-dot"></div>' : ''}${escapeHtml(item.word)}</div>
+                        <div class="compact-meaning">${escapeHtml(item.meaning)}</div></div>`;
+                }).join('') + '</div>';
+            } else {
+                wordsList.innerHTML = words.map(item => {
+                    const hasErrors = isWeakWord(item);
+                    return `<div class="word-card ${hasErrors ? 'has-errors' : ''}" onclick="showWordDetail(${item.id})">
+                        ${item.image ? `<img src="${item.image}" class="word-image" alt="${item.word}">` : `<div class="word-image-placeholder">📖</div>`}
+                        <div class="word-info"><div class="word-text">${item.word}</div><div class="word-meaning">${item.meaning}</div><div class="word-category">${item.category}</div></div>
+                        ${hasErrors ? `<div class="error-badge">⚠️</div>` : ''}</div>`;
+                }).join('');
+            }
+            setTimeout(changeFontSize, 50);
+        }
+        function searchWords() { displayWords(); }
+
+        function openQuiz() {
+            document.getElementById('quizModal').classList.add('active');
+            quizData = { correct: 0, wrong: 0, currentWord: null, options: [], direction: 'wordToMeaning', wordQueue: [], wrongWords: [], isRetryMode: false, isFinished: false };
+            customTestPool = null; lastStatusForPicker = null; loadSessionWordIds();
+            document.getElementById('quizStartScreen').classList.remove('hidden');
+            document.getElementById('quizDirectionPickerScreen').classList.add('hidden');
+            document.getElementById('quizGameScreen').classList.add('hidden');
+            document.getElementById('quizMatchingScreen').classList.add('hidden');
+            document.getElementById('quizResultsScreen').classList.add('hidden');
+            fillQuizCategorySelect(); updateQuizCounter(); updateQuizDirectionButtons(); updateQuizStats();
+            setQuizMode(quizMode);
+        }
+        function closeQuiz() { 
+            document.getElementById('quizModal').classList.remove('active'); 
+            customTestPool = null; 
+            lastStatusForPicker = null;
+            if (matchingData.timerInterval) clearInterval(matchingData.timerInterval); 
+        }
+        function setQuizMode(mode) {
+            quizMode = mode;
+            document.querySelectorAll('.quiz-mode-btn[data-mode]').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
+            document.getElementById('quizCategorySelect').classList.toggle('hidden', mode !== 'category');
+            document.getElementById('directionSection').classList.toggle('hidden', mode === 'matching');
+            document.getElementById('quantitySection').classList.toggle('hidden', mode === 'matching');
+            loadSessionWordIds(); updateQuizCounter();
+        }
+        function setQuizCount(count) {
+            quizCount = count === 'all' ? Infinity : count;
+            document.querySelectorAll('.quiz-mode-btn[data-count]').forEach(btn => btn.classList.toggle('active', btn.dataset.count === String(count)));
+            updateQuizCounter();
+        }
+        function setQuizDirection(direction) { quizData.direction = direction; updateQuizDirectionButtons(); }
+        function updateQuizDirectionButtons() {
+            document.getElementById('dirWordToMeaning').classList.toggle('active', quizData.direction === 'wordToMeaning');
+            document.getElementById('dirMeaningToWord').classList.toggle('active', quizData.direction === 'meaningToWord');
+            document.getElementById('dirMixed').classList.toggle('active', quizData.direction === 'mixed');
+        }
+        function fillQuizCategorySelect() {
+            const select = document.getElementById('quizCategorySelect');
+            const categories = [...new Set(getCurrentWords().map(w => w.category || 'Общее'))];
+            select.innerHTML = '<option value="">Все категории</option>' + categories.map(cat => `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`).join('');
+        }
+        function getWordsForQuiz() {
+            if (customTestPool) return [...customTestPool].sort(() => 0.5 - Math.random());
+            let pool = getCurrentWords().filter(w => !sessionWordIds.includes(w.id));
+            if (quizMode === 'weak') pool = pool.filter(w => isWeakWord(w)).sort((a, b) => (a.score || 0) - (b.score || 0));
+            else if (quizMode === 'category' && quizCategory) pool = pool.filter(w => w.category === quizCategory);
+            return pool.sort(() => 0.5 - Math.random()).slice(0, quizCount);
+        }
+        function updateQuizCounter() {
+            quizCategory = document.getElementById('quizCategorySelect').value;
+            const counter = document.getElementById('quizCounter');
+            if (quizMode === 'matching') {
+                let pool = getCurrentWords();
+                if (quizMode === 'weak') pool = pool.filter(w => isWeakWord(w));
+                if (quizMode === 'category' && quizCategory) pool = pool.filter(w => w.category === quizCategory);
+                const pairsCount = Math.min(pool.length, 15);
+                counter.textContent = `🧩 Будет выбрано пар: ${pairsCount} (максимум 15)`;
+                return;
+            }
+            const available = getWordsForQuiz();
+            const allPool = getAllPoolWords();
+            const remaining = allPool.length - allPool.filter(w => sessionWordIds.includes(w.id)).length;
+            if (available.length === 0) counter.textContent = allPool.length === 0 ? '❌ Нет подходящих слов' : `✅ Все слова уже пройдены! (${allPool.length})`;
+            else counter.textContent = `📊 Будет выбрано: ${Math.min(quizCount === Infinity ? available.length : quizCount, available.length)} (осталось: ${remaining})`;
+        }
+        
+        function updateQuizStats() {
+            const words = getCurrentWords();
+            let learned = 0, weak = 0, newWords = 0;
+            words.forEach(w => {
+                if (isLearnedWord(w)) learned++;
+                else if (isWeakWord(w)) weak++;
+                else newWords++;
+            });
+            document.getElementById('statLearned').textContent = learned;
+            document.getElementById('statWeak').textContent = weak;
+            document.getElementById('statNew').textContent = newWords;
+        }
+
+        function resetQuizStats() {
+            if (!confirm('Сбросить ВЕСЬ рейтинг слов и прогресс сессии? Все слова станут "Новыми" (рейтинг "-"). Это нельзя отменить.')) return;
+            getCurrentWords().forEach(w => { w.score = null; });
+            setCurrentWords(getCurrentWords()); resetSessionWordIds();
+            updateQuizStats(); updateQuizCounter(); displayWords();
+            alert('✅ Статистика успешно сброшена!');
+        }
+
+        function resetLearnedToNew() {
+            if (!confirm('Перенести все слова из раздела "Изученные" в "Новые"? Их рейтинг станет "-".')) return;
+            const words = getCurrentWords();
+            let count = 0;
+            words.forEach(w => {
+                if (isLearnedWord(w)) {
+                    w.score = null;
+                    count++;
+                }
+            });
+            if (count > 0) {
+                setCurrentWords(words);
+                updateQuizStats();
+                displayWords();
+                alert(`✅ ${count} слов перенесено в раздел "Новые"`);
+            } else {
+                alert('В разделе "Изученные" нет слов.');
+            }
+        }
+
+        function showWordsByStatus(status) {
+            const words = getCurrentWords();
+            let filteredWords = [], title = '';
+            if (status === 'learned') { filteredWords = words.filter(w => isLearnedWord(w)); title = '🟢 Изученные слова'; }
+            else if (status === 'weak') { filteredWords = words.filter(w => isWeakWord(w)); title = '🔴 Слова с ошибками'; }
+            else { filteredWords = words.filter(w => isNewWord(w)); title = '⚪ Новые слова'; }
+            
+            if (filteredWords.length === 0) return alert('В этой категории нет слов');
+            
+            let html = filteredWords.map(w => `<div class="words-modal-item">
+                <div style="flex: 1;"><div class="words-modal-word">${escapeHtml(w.word)}</div><div class="words-modal-meaning">${escapeHtml(w.meaning)}</div>
+                <div class="words-modal-stats" style="color: ${getScoreColor(w)}">📊 Рейтинг: ${getScoreDisplay(w)}</div></div></div>`).join('');
+            
+            if (filteredWords.length >= 4) html += `<button class="btn-test-from-list" onclick="startTestFromStatus('${status}')">🎯 Протестировать эти слова (${filteredWords.length})</button>`;
+            else html += `<div style="text-align: center; color: var(--ios-label-secondary); font-size: 13px; margin-top: 14px; padding: 10px;">ℹ️ Для теста нужно минимум 4 слова. Сейчас: ${filteredWords.length}</div>`;
+            
+            document.getElementById('wordsListModalContent').innerHTML = html;
+            document.getElementById('wordsListModalTitle').textContent = `${title} (${filteredWords.length})`;
+            document.getElementById('wordsListModal').classList.add('active');
+        }
+        
+        function startTestFromStatus(status) {
+            let filteredWords = [];
+            const words = getCurrentWords();
+            if (status === 'learned') filteredWords = words.filter(w => isLearnedWord(w));
+            else if (status === 'weak') filteredWords = words.filter(w => isWeakWord(w));
+            else filteredWords = words.filter(w => isNewWord(w));
+            
+            if (filteredWords.length < 4) return alert(`Нужно минимум 4 слова. Доступно: ${filteredWords.length}`);
+            
+            customTestPool = filteredWords;
+            lastStatusForPicker = status;
+            
+            closeWordsListModal();
+            
+            document.getElementById('pickerWordCount').textContent = filteredWords.length;
+            document.getElementById('quizStartScreen').classList.add('hidden');
+            document.getElementById('quizDirectionPickerScreen').classList.remove('hidden');
+            document.getElementById('quizGameScreen').classList.add('hidden');
+            document.getElementById('quizResultsScreen').classList.add('hidden');
+        }
+        
+        function startTestWithDirection(direction) {
+            if (!customTestPool || customTestPool.length < 4) return alert('Недостаточно слов');
+            
+            quizData = { 
+                correct: 0, wrong: 0, currentWord: null, options: [], 
+                direction: direction, 
+                wordQueue: [...customTestPool].sort(() => 0.5 - Math.random()), 
+                wrongWords: [], isRetryMode: false, isFinished: false 
+            };
+            
+            document.getElementById('quizDirectionPickerScreen').classList.add('hidden');
+            document.getElementById('quizGameScreen').classList.remove('hidden');
+            updateQuizScore();
+            showNextWord();
+        }
+        
+        function backToWordsList() {
+            document.getElementById('quizDirectionPickerScreen').classList.add('hidden');
+            document.getElementById('quizModal').classList.remove('active');
+            if (lastStatusForPicker) {
+                showWordsByStatus(lastStatusForPicker);
+            }
+        }
+        
+        function closeWordsListModal() { document.getElementById('wordsListModal').classList.remove('active'); }
+        
+        function beginQuiz() {
+            if (quizMode === 'matching') { startMatchingQuiz(); return; }
+            const words = getWordsForQuiz();
+            if (words.length === 0) {
+                const allPool = getAllPoolWords();
+                if (allPool.length > 0 && confirm('✅ Все слова уже пройдены!\n\nСбросить список и начать заново?')) { resetSessionWordIds(); updateQuizCounter(); beginQuiz(); }
+                else alert('❌ Нет слов для теста');
+                return;
+            }
+            if (words.length < 4) return alert(`Нужно минимум 4 слова. Доступно: ${words.length}`);
+            quizData.wordQueue = words; quizData.correct = 0; quizData.wrong = 0; quizData.wrongWords = []; quizData.isRetryMode = false; quizData.isFinished = false;
+            document.getElementById('quizStartScreen').classList.add('hidden');
+            document.getElementById('quizResultsScreen').classList.add('hidden');
+            document.getElementById('quizGameScreen').classList.remove('hidden');
+            updateQuizScore(); showNextWord();
+        }
+        function showNextWord() {
+            if (quizData.wordQueue.length === 0) { showResults(); return; }
+            quizData.currentWord = quizData.wordQueue.shift();
+            let direction = quizData.direction === 'mixed' ? (Math.random() > 0.5 ? 'wordToMeaning' : 'meaningToWord') : quizData.direction;
+            const allWords = getCurrentWords();
+            const wrongOptions = allWords.filter(w => w.id !== quizData.currentWord.id).sort(() => 0.5 - Math.random()).slice(0, 3);
+            quizData.options = [quizData.currentWord, ...wrongOptions].sort(() => 0.5 - Math.random());
+            
+            if (direction === 'wordToMeaning') {
+                document.getElementById('quizWord').textContent = quizData.currentWord.word;
+                document.getElementById('quizLabel').textContent = 'Выберите перевод:';
+                document.getElementById('quizOptions').innerHTML = quizData.options.map((opt, idx) => `<button class="quiz-option" onclick="checkAnswer(${idx})">${escapeHtml(opt.meaning)}</button>`).join('');
+            } else {
+                document.getElementById('quizWord').textContent = quizData.currentWord.meaning;
+                document.getElementById('quizLabel').textContent = 'Выберите слово:';
+                document.getElementById('quizOptions').innerHTML = quizData.options.map((opt, idx) => `<button class="quiz-option" onclick="checkAnswer(${idx})">${escapeHtml(opt.word)}</button>`).join('');
+            }
+            document.getElementById('quizProgress').textContent = `Вопрос ${quizData.correct + quizData.wrong + 1} из ${quizData.wordQueue.length + quizData.correct + quizData.wrong + 1}`;
+            document.getElementById('remainingCount').textContent = quizData.wordQueue.length;
+        }
+        
+        function checkAnswer(selectedIndex) {
+            const selectedIndexNum = parseInt(selectedIndex);
+            const correctIndex = quizData.options.findIndex(opt => opt.id === quizData.currentWord.id);
+            const isCorrect = selectedIndexNum === correctIndex;
+            const buttons = document.querySelectorAll('.quiz-option');
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === correctIndex) btn.classList.add('correct');
+                else if (idx === selectedIndexNum && !isCorrect) btn.classList.add('wrong');
+            });
+            if (!sessionWordIds.includes(quizData.currentWord.id)) { sessionWordIds.push(quizData.currentWord.id); saveSessionWordIds(); }
+            
+            const words = getCurrentWords();
+            const wordIndex = words.findIndex(w => w.id === quizData.currentWord.id);
+            
+            if (isCorrect) {
+                quizData.correct++;
+                if (wordIndex !== -1 && !quizData.isRetryMode) {
+                    const currentScore = words[wordIndex].score;
+                    if (currentScore === null || currentScore === undefined) {
+                        words[wordIndex].score = 1;
+                    } else if (currentScore < 0) {
+                        const newScore = currentScore + 1;
+                        words[wordIndex].score = newScore >= 0 ? 1 : newScore;
+                    } else {
+                        words[wordIndex].score = 1;
+                    }
+                    words[wordIndex].lastReviewed = new Date().toISOString();
+                    setCurrentWords(words);
+                }
+            } else {
+                quizData.wrong++;
+                quizData.wrongWords.push(quizData.currentWord);
+                if (wordIndex !== -1) {
+                    const currentScore = words[wordIndex].score;
+                    if (currentScore === null || currentScore === undefined) {
+                        words[wordIndex].score = -1;
+                    } else {
+                        words[wordIndex].score = currentScore - 1;
+                    }
+                    words[wordIndex].lastReviewed = new Date().toISOString();
+                    setCurrentWords(words);
+                }
+            }
+            updateQuizScore();
+            setTimeout(() => { showNextWord(); }, 1500);
+        }
+        function updateQuizScore() {
+            document.getElementById('correctCount').textContent = quizData.correct;
+            document.getElementById('wrongCount').textContent = quizData.wrong;
+        }
+        function finishQuizEarly() {
+            if (!confirm('Завершить тест досрочно?')) return;
+            if (quizMode === 'matching' && !document.getElementById('quizMatchingScreen').classList.contains('hidden')) finishMatchingQuiz();
+            else showResults();
+        }
+        function showResults() {
+            quizData.isFinished = true;
+            const total = quizData.correct + quizData.wrong;
+            const percentage = total > 0 ? Math.round(quizData.correct / total * 100) : 0;
+            let percentClass = 'bad', emoji = '', message = 'Нужно потренироваться';
+            if (percentage >= 80) { percentClass = 'good'; emoji = '🎉'; message = 'Отличный результат!'; }
+            else if (percentage >= 50) { percentClass = 'medium'; message = 'Неплохо, но можно лучше'; }
+            
+            const allPoolWords = getAllPoolWords();
+            const completedCount = allPoolWords.filter(w => sessionWordIds.includes(w.id)).length;
+            const allCompleted = allPoolWords.length > 0 && completedCount === allPoolWords.length;
+            
+            let resultsHtml = `<div class="results-title">📊 Результаты теста</div>
+                <div class="results-percentage ${percentClass}">${percentage}%</div>
+                <div style="color: var(--ios-label-secondary); margin-bottom: 16px; font-size: 15px; font-weight: 500;">${emoji} ${message}</div>
+                <div class="results-stats">
+                    <div class="results-stat"><div class="results-stat-value" style="color: var(--ios-green);">${quizData.correct}</div><div class="results-stat-label">Правильно</div></div>
+                    <div class="results-stat"><div class="results-stat-value" style="color: var(--ios-red);">${quizData.wrong}</div><div class="results-stat-label">Ошибок</div></div>
+                    <div class="results-stat"><div class="results-stat-value" style="color: var(--ios-blue);">${total}</div><div class="results-stat-label">В этой партии</div></div>
+                </div>
+                <div style="color: var(--ios-label-secondary); margin: 12px 0; font-size: 13px; font-weight: 500;">Всего пройдено в этом режиме: <strong>${completedCount}</strong> из ${allPoolWords.length}</div>`;
+            
+            let actionsHtml = '';
+            if (allCompleted) {
+                const wordsWithErrors = allPoolWords.filter(w => isWeakWord(w)).sort((a, b) => (a.score || 0) - (b.score || 0)).slice(0, 20);
+                if (wordsWithErrors.length > 0) {
+                    actionsHtml += `<div class="final-report"><div class="final-report-title">⚠️ Слова, требующие внимания</div>` +
+                        wordsWithErrors.map(w => `<div class="final-report-item"><div class="final-report-word"><div class="final-report-word-text">${escapeHtml(w.word)}</div><div class="final-report-word-meaning">${escapeHtml(w.meaning)}</div></div><div class="final-report-errors">📉 ${w.score}</div></div>`).join('') + `</div>`;
+                }
+            }
+            if (quizData.wrongWords.length > 0) {
+                actionsHtml += `<div class="wrong-words-list"><div class="wrong-words-title">❌ Неправильные в этой партии (${quizData.wrongWords.length}):</div>` +
+                    quizData.wrongWords.map(w => `<div class="wrong-word-item"><div><div class="wrong-word-text">${escapeHtml(w.word)}</div><div class="wrong-word-meaning">${escapeHtml(w.meaning)}</div></div></div>`).join('') + `</div>
+                    <button class="btn-primary btn-warning" onclick="retryWrongWords()">🔄 Пересдать неправильные (${quizData.wrongWords.length})</button>`;
+            } else if (total > 0 && !allCompleted) {
+                actionsHtml += `<div class="perfect-result"><div class="perfect-emoji">🏆</div><div class="perfect-text">Идеально! Все ответы правильные!</div></div>`;
+            }
+            
+            if (allCompleted) {
+                actionsHtml += `<div class="final-congrats"><div class="final-emoji">🎊</div><div class="final-title">Поздравляем!</div><div class="final-text">Вы прошли все слова в этом режиме!</div></div>
+                    <button class="btn-primary" onclick="resetAndStartOver()">🔄 Сбросить список и начать заново</button>`;
+            } else {
+                actionsHtml += `<div style="color: var(--ios-label-secondary); margin: 12px 0; font-size: 13px; font-weight: 500;">Осталось слов: <strong>${allPoolWords.length - completedCount}</strong></div>
+                    <button class="btn-primary quiz-continue-btn" onclick="startNextBatch()">▶️ Следующая партия</button>
+                    <button class="btn-primary" onclick="resetAndStartOver()" style="background: var(--ios-fill); color: var(--ios-label); margin-top: 8px;">🔄 Сбросить список и начать заново</button>`;
+            }
+            actionsHtml += `<button class="btn-primary" onclick="closeQuiz()" style="background: var(--ios-fill); color: var(--ios-label); margin-top: 8px;">✕ Закрыть</button>`;
+            
+            document.getElementById('quizResultsScreen').innerHTML = resultsHtml + actionsHtml;
+            document.getElementById('quizStartScreen').classList.add('hidden');
+            document.getElementById('quizDirectionPickerScreen').classList.add('hidden');
+            document.getElementById('quizGameScreen').classList.add('hidden');
+            document.getElementById('quizResultsScreen').classList.remove('hidden');
+            if (customTestPool) customTestPool = null;
+        }
+        function startNextBatch() {
+            const words = getWordsForQuiz();
+            if (words.length < 4) return alert(`Недостаточно слов. Доступно: ${words.length}`);
+            quizData.wordQueue = words; quizData.correct = 0; quizData.wrong = 0; quizData.wrongWords = []; quizData.isRetryMode = false; quizData.isFinished = false;
+            document.getElementById('quizResultsScreen').classList.add('hidden');
+            document.getElementById('quizGameScreen').classList.remove('hidden');
+            updateQuizScore(); showNextWord();
+        }
+        function resetAndStartOver() {
+            if (!confirm('Сбросить список пройденных слов и начать заново?')) return;
+            resetSessionWordIds(); updateQuizStats(); updateQuizCounter(); beginQuiz();
+        }
+        function retryWrongWords() {
+            if (quizData.wrongWords.length === 0) return alert('Нет неправильных ответов!');
+            quizData.wordQueue = [...quizData.wrongWords].sort(() => 0.5 - Math.random());
+            quizData.correct = 0; quizData.wrong = 0; quizData.wrongWords = []; quizData.isRetryMode = true; quizData.isFinished = false;
+            document.getElementById('quizResultsScreen').classList.add('hidden');
+            document.getElementById('quizGameScreen').classList.remove('hidden');
+            updateQuizScore(); showNextWord();
+        }
+        function startMatchingQuiz() {
+            let pool = getCurrentWords();
+            if (quizMode === 'weak') pool = pool.filter(w => isWeakWord(w));
+            if (quizMode === 'category' && quizCategory) pool = pool.filter(w => w.category === quizCategory);
+            pool = pool.sort(() => 0.5 - Math.random());
+            const count = Math.min(pool.length, 15);
+            if (count < 4) return alert(`Нужно минимум 4 слова. Доступно: ${pool.length}`);
+            
+            const selectedPairs = pool.slice(0, count);
+            selectedPairs.forEach(w => { if (!sessionWordIds.includes(w.id)) sessionWordIds.push(w.id); });
+            saveSessionWordIds();
+            
+            matchingData = {
+                pairs: selectedPairs,
+                leftItems: selectedPairs.map(w => ({ id: w.id, text: w.word, type: 'left' })).sort(() => 0.5 - Math.random()),
+                rightItems: selectedPairs.map(w => ({ id: w.id, text: w.meaning, type: 'right' })).sort(() => 0.5 - Math.random()),
+                selectedLeft: null, selectedRight: null, matchedCount: 0, mistakes: 0, startTime: Date.now(), timerInterval: null, isLocked: false
+            };
+            document.getElementById('quizStartScreen').classList.add('hidden');
+            document.getElementById('quizGameScreen').classList.add('hidden');
+            document.getElementById('quizResultsScreen').classList.add('hidden');
+            document.getElementById('quizMatchingScreen').classList.remove('hidden');
+            renderMatchingGrid(); startMatchingTimer();
+        }
+        function renderMatchingGrid() {
+            document.getElementById('matchingLeft').innerHTML = matchingData.leftItems.map(item => `<div class="matching-item" data-id="${item.id}" data-type="left" onclick="selectMatchingItem(this)">${escapeHtml(item.text)}</div>`).join('');
+            document.getElementById('matchingRight').innerHTML = matchingData.rightItems.map(item => `<div class="matching-item" data-id="${item.id}" data-type="right" onclick="selectMatchingItem(this)">${escapeHtml(item.text)}</div>`).join('');
+            updateMatchingProgress();
+        }
+        function selectMatchingItem(el) {
+            if (matchingData.isLocked || el.classList.contains('matched') || el.classList.contains('disabled')) return;
+            const type = el.dataset.type;
+            if (type === 'left' && matchingData.selectedLeft === el) { el.classList.remove('selected'); matchingData.selectedLeft = null; return; }
+            if (type === 'right' && matchingData.selectedRight === el) { el.classList.remove('selected'); matchingData.selectedRight = null; return; }
+            if (type === 'left') { if (matchingData.selectedLeft) matchingData.selectedLeft.classList.remove('selected'); matchingData.selectedLeft = el; el.classList.add('selected'); }
+            else { if (matchingData.selectedRight) matchingData.selectedRight.classList.remove('selected'); matchingData.selectedRight = el; el.classList.add('selected'); }
+            if (matchingData.selectedLeft && matchingData.selectedRight) checkMatchingPair();
+        }
+        function checkMatchingPair() {
+            matchingData.isLocked = true;
+            const leftId = matchingData.selectedLeft.dataset.id;
+            const rightId = matchingData.selectedRight.dataset.id;
+            if (leftId === rightId) {
+                matchingData.selectedLeft.classList.remove('selected'); matchingData.selectedRight.classList.remove('selected');
+                matchingData.selectedLeft.classList.add('matched'); matchingData.selectedRight.classList.add('matched');
+                matchingData.matchedCount++; updateMatchingProgress();
+                const words = getCurrentWords(); const wordIndex = words.findIndex(w => w.id == leftId);
+                if (wordIndex !== -1) {
+                    const currentScore = words[wordIndex].score;
+                    if (currentScore === null || currentScore === undefined) {
+                        words[wordIndex].score = 1;
+                    } else if (currentScore < 0) {
+                        const newScore = currentScore + 1;
+                        words[wordIndex].score = newScore >= 0 ? 1 : newScore;
+                    } else {
+                        words[wordIndex].score = 1;
+                    }
+                    words[wordIndex].lastReviewed = new Date().toISOString();
+                    setCurrentWords(words);
+                }
+                matchingData.selectedLeft = null; matchingData.selectedRight = null; matchingData.isLocked = false;
+                if (matchingData.matchedCount === matchingData.pairs.length) setTimeout(finishMatchingQuiz, 500);
+            } else {
+                matchingData.selectedLeft.classList.add('wrong'); matchingData.selectedRight.classList.add('wrong');
+                matchingData.mistakes++; document.getElementById('matchingMistakes').textContent = matchingData.mistakes;
+                const words = getCurrentWords();
+                const leftWordIndex = words.findIndex(w => w.id == leftId);
+                if (leftWordIndex !== -1) { 
+                    const currentScore = words[leftWordIndex].score;
+                    words[leftWordIndex].score = (currentScore === null || currentScore === undefined) ? -1 : currentScore - 1;
+                    words[leftWordIndex].lastReviewed = new Date().toISOString(); 
+                }
+                const rightWordIndex = words.findIndex(w => w.id == rightId);
+                if (rightWordIndex !== -1 && rightWordIndex !== leftWordIndex) { 
+                    const currentScore = words[rightWordIndex].score;
+                    words[rightWordIndex].score = (currentScore === null || currentScore === undefined) ? -1 : currentScore - 1;
+                    words[rightWordIndex].lastReviewed = new Date().toISOString(); 
+                }
+                setCurrentWords(words);
+                setTimeout(() => {
+                    matchingData.selectedLeft.classList.remove('wrong', 'selected'); matchingData.selectedRight.classList.remove('wrong', 'selected');
+                    matchingData.selectedLeft = null; matchingData.selectedRight = null; matchingData.isLocked = false;
+                }, 800);
+            }
+        }
+        function updateMatchingProgress() { document.getElementById('matchingProgress').textContent = `Найдите пары: ${matchingData.matchedCount} / ${matchingData.pairs.length}`; }
+        function startMatchingTimer() {
+            if (matchingData.timerInterval) clearInterval(matchingData.timerInterval);
+            matchingData.timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - matchingData.startTime) / 1000);
+                document.getElementById('matchingTime').textContent = `${Math.floor(elapsed / 60).toString().padStart(2, '0')}:${(elapsed % 60).toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+        function finishMatchingQuiz() {
+            if (matchingData.timerInterval) clearInterval(matchingData.timerInterval);
+            const timeElapsed = Math.floor((Date.now() - matchingData.startTime) / 1000);
+            const mins = Math.floor(timeElapsed / 60).toString().padStart(2, '0');
+            const secs = (timeElapsed % 60).toString().padStart(2, '0');
+            const percentage = matchingData.mistakes === 0 ? 100 : Math.max(0, 100 - (matchingData.mistakes * 10));
+            let percentClass = 'bad', emoji = '', message = 'Нужно потренироваться';
+            if (percentage >= 80) { percentClass = 'good'; emoji = '🎉'; message = 'Отличный результат!'; }
+            else if (percentage >= 50) { percentClass = 'medium'; message = 'Неплохо, но можно лучше'; }
+            
+            document.getElementById('quizMatchingScreen').classList.add('hidden');
+            document.getElementById('quizResultsScreen').classList.remove('hidden');
+            document.getElementById('quizResultsScreen').innerHTML = `
+                <div class="results-title">🧩 Результаты сопоставления</div>
+                <div class="results-percentage ${percentClass}">${percentage}%</div>
+                <div style="color: var(--ios-label-secondary); margin-bottom: 16px; font-size: 15px; font-weight: 500;">${emoji} ${message}</div>
+                <div class="results-stats">
+                    <div class="results-stat"><div class="results-stat-value" style="color: var(--ios-green);">${matchingData.matchedCount}</div><div class="results-stat-label">Найдено пар</div></div>
+                    <div class="results-stat"><div class="results-stat-value" style="color: var(--ios-red);">${matchingData.mistakes}</div><div class="results-stat-label">Ошибок</div></div>
+                    <div class="results-stat"><div class="results-stat-value" style="color: var(--ios-blue);">${mins}:${secs}</div><div class="results-stat-label">Время</div></div>
+                </div>
+                <button class="btn-primary" onclick="closeQuiz()" style="background: var(--ios-fill); color: var(--ios-label); margin-top: 10px;">✕ Закрыть</button>`;
+        }
+
+        function openBulkImport() {
+            closeSettings();
+            document.getElementById('bulkImportText').value = '';
+            document.getElementById('bulkImportCategory').value = '';
+            
+            const select = document.getElementById('bulkImportDictionary');
+            select.innerHTML = Object.keys(data.dictionaries).map(name => {
+                const count = data.dictionaries[name].length;
+                const isCurrent = name === data.currentDictionary;
+                return `<option value="${escapeHtml(name)}" ${isCurrent ? 'selected' : ''}>${escapeHtml(name)} (${count} слов)${isCurrent ? ' — текущий' : ''}</option>`;
+            }).join('');
+            
+            document.getElementById('bulkImportStep1').classList.remove('hidden');
+            document.getElementById('bulkImportStep2').classList.add('hidden');
+            bulkImportParsedData = [];
+            document.getElementById('bulkImportModal').classList.add('active');
+        }
+        
+        function closeBulkImport() {
+            document.getElementById('bulkImportModal').classList.remove('active');
+        }
+        
+        function backToBulkImportStep1() {
+            document.getElementById('bulkImportStep1').classList.remove('hidden');
+            document.getElementById('bulkImportStep2').classList.add('hidden');
+        }
+        
+        function parseLine(line, defaultCategory) {
+            line = line.trim();
+            if (!line) return null;
+            
+            let category = defaultCategory;
+            let processedLine = line;
+            
+            const categoryAtStart = processedLine.match(/^\[([^\]]+)\]\s*(.+)/);
+            if (categoryAtStart) {
+                category = categoryAtStart[1].trim();
+                processedLine = categoryAtStart[2];
+            }
+            
+            const categoryAtEnd = processedLine.match(/(.+)\s*\[([^\]]+)\]\s*$/);
+            if (categoryAtEnd) {
+                category = categoryAtEnd[2].trim();
+                processedLine = categoryAtEnd[1];
+            }
+            
+            const separators = ['—', '→', '⇒', '-', ':'];
+            
+            for (const sep of separators) {
+                const idx = processedLine.indexOf(sep);
+                if (idx !== -1) {
+                    const word = processedLine.substring(0, idx).trim();
+                    const meaning = processedLine.substring(idx + sep.length).trim();
+                    if (word && meaning) {
+                        return { word, meaning, category };
+                    }
+                }
+            }
+            
+            return null;
+        }
+        
+        function previewBulkImport() {
+            const text = document.getElementById('bulkImportText').value;
+            const targetDictionary = document.getElementById('bulkImportDictionary').value;
+            const defaultCategory = document.getElementById('bulkImportCategory').value.trim() || 'Общее';
+            
+            if (!text.trim()) {
+                alert('Вставьте список слов для импорта');
+                return;
+            }
+            
+            if (!targetDictionary) {
+                alert('Выберите словарь для импорта');
+                return;
+            }
+            
+            const lines = text.split('\n');
+            const existingWords = new Set(data.dictionaries[targetDictionary].map(w => w.word.toLowerCase().trim()));
+            
+            bulkImportParsedData = [];
+            let newCount = 0, duplicateCount = 0, invalidCount = 0;
+            const categoriesUsed = new Set();
+            
+            lines.forEach((line, index) => {
+                const trimmed = line.trim();
+                if (!trimmed) return;
+                
+                const parsed = parseLine(trimmed, defaultCategory);
+                
+                if (parsed) {
+                    const wordKey = parsed.word.toLowerCase().trim();
+                    const isDuplicate = existingWords.has(wordKey);
+                    
+                    bulkImportParsedData.push({
+                        word: parsed.word,
+                        meaning: parsed.meaning,
+                        category: parsed.category,
+                        targetDictionary: targetDictionary,
+                        status: isDuplicate ? 'duplicate' : 'new',
+                        index: index
+                    });
+                    
+                    categoriesUsed.add(parsed.category);
+                    
+                    if (isDuplicate) {
+                        duplicateCount++;
+                        existingWords.add(wordKey);
+                    } else {
+                        newCount++;
+                        existingWords.add(wordKey);
+                    }
+                } else {
+                    bulkImportParsedData.push({
+                        word: trimmed,
+                        meaning: '',
+                        category: defaultCategory,
+                        targetDictionary: targetDictionary,
+                        status: 'invalid',
+                        index: index
+                    });
+                    invalidCount++;
+                }
+            });
+            
+            if (bulkImportParsedData.length === 0) {
+                alert('Не удалось распознать ни одного слова. Проверьте формат.');
+                return;
+            }
+            
+            const categoriesList = Array.from(categoriesUsed).join(', ');
+            
+            const summaryHtml = `
+                <div style="background: var(--ios-fill-secondary); padding: 10px; border-radius: 10px; margin-bottom: 10px; font-size: 13px; color: var(--ios-label-secondary);">
+                    <div style="margin-bottom: 6px;">📚 Словарь: <strong style="color: var(--ios-label);">${escapeHtml(targetDictionary)}</strong></div>
+                    <div>📂 Категории: <strong style="color: var(--ios-label);">${categoriesList || defaultCategory}</strong></div>
+                </div>
+                <div class="bulk-import-summary">
+                    <div class="bulk-import-summary-item new-count">🟢 Новых: ${newCount}</div>
+                    <div class="bulk-import-summary-item duplicate-count">🟡 Дубликатов: ${duplicateCount}</div>
+                    <div class="bulk-import-summary-item invalid-count">🔴 Ошибок: ${invalidCount}</div>
+                </div>
+            `;
+            document.getElementById('bulkImportSummary').innerHTML = summaryHtml;
+            
+            const allCategories = [...new Set([
+                ...Object.values(data.dictionaries).flatMap(dict => dict.map(w => w.category || 'Общее')),
+                ...bulkImportParsedData.map(item => item.category)
+            ])];
+            
+            const datalistId = 'bulkCategoriesList_' + Date.now();
+            const datalistHtml = `<datalist id="${datalistId}">` + 
+                allCategories.map(cat => `<option value="${escapeHtml(cat)}">`).join('') + 
+                `</datalist>`;
+            
+            const previewHtml = bulkImportParsedData.map((item, idx) => {
+                const statusClass = `status-${item.status}`;
+                const statusIcon = item.status === 'new' ? '🟢' : item.status === 'duplicate' ? '🟡' : '🔴';
+                const meaningHtml = item.meaning ? `<div class="bulk-import-meaning">${escapeHtml(item.meaning)}</div>` : '';
+                
+                const categoryInput = `
+                    <input type="text" 
+                           class="bulk-import-category-input" 
+                           data-index="${idx}" 
+                           list="${datalistId}"
+                           value="${escapeHtml(item.category)}" 
+                           placeholder="Категория">
+                `;
+                
+                return `<div class="bulk-import-item ${statusClass}" data-index="${idx}">
+                    <div class="bulk-import-status">${statusIcon}</div>
+                    <div class="bulk-import-content">
+                        <div class="bulk-import-word">${escapeHtml(item.word)}</div>
+                        ${meaningHtml}
+                        ${categoryInput}
+                    </div>
+                </div>`;
+            }).join('') + datalistHtml;
+            
+            document.getElementById('bulkImportPreview').innerHTML = previewHtml;
+            
+            setTimeout(() => {
+                document.querySelectorAll('.bulk-import-category-input').forEach(input => {
+                    input.addEventListener('input', function() {
+                        const index = parseInt(this.dataset.index);
+                        const newCategory = this.value.trim();
+                        if (newCategory && bulkImportParsedData[index]) {
+                            bulkImportParsedData[index].category = newCategory;
+                        }
+                    });
+                    
+                    input.addEventListener('blur', function() {
+                        const index = parseInt(this.dataset.index);
+                        const newCategory = this.value.trim();
+                        if (bulkImportParsedData[index]) {
+                            if (newCategory) {
+                                bulkImportParsedData[index].category = newCategory;
+                            } else {
+                                this.value = bulkImportParsedData[index].category;
+                            }
+                        }
+                    });
+                });
+            }, 100);
+            
+            document.getElementById('bulkImportStep1').classList.add('hidden');
+            document.getElementById('bulkImportStep2').classList.remove('hidden');
+        }
+        
+        function confirmBulkImport() {
+            const newWords = bulkImportParsedData.filter(item => item.status === 'new');
+            
+            if (newWords.length === 0) {
+                alert('Нет новых слов для добавления.');
+                return;
+            }
+            
+            const targetDictionary = newWords[0].targetDictionary;
+            
+            if (!confirm(`Добавить ${newWords.length} новых слов в словарь "${targetDictionary}"?`)) return;
+            
+            if (!data.dictionaries[targetDictionary]) {
+                data.dictionaries[targetDictionary] = [];
+            }
+            
+            const now = new Date().toISOString();
+            
+            newWords.forEach((item, index) => {
+                const finalCategory = item.category.trim() || 'Общее';
+                
+                data.dictionaries[targetDictionary].push({
+                    id: Date.now() + index,
+                    word: item.word,
+                    meaning: item.meaning,
+                    category: finalCategory,
+                    notes: '',
+                    image: null,
+                    createdAt: now,
+                    lastReviewed: null,
+                    score: null
+                });
+            });
+            
+            saveData();
+            
+            const duplicateCount = bulkImportParsedData.filter(item => item.status === 'duplicate').length;
+            const invalidCount = bulkImportParsedData.filter(item => item.status === 'invalid').length;
+            
+            let message = `✅ Добавлено ${newWords.length} слов в словарь "${targetDictionary}".`;
+            if (duplicateCount > 0) message += `\n🟡 Пропущено ${duplicateCount} дубликатов.`;
+            if (invalidCount > 0) message += `\n🔴 Пропущено ${invalidCount} строк с ошибками.`;
+            
+            alert(message);
+            
+            closeBulkImport();
+            displayWords();
+            updateStats();
+            updateCategories();
+        }
+
+        function openSettings() { renderDictionariesList(); document.getElementById('settingsModal').classList.add('active'); }
+        function closeSettings() { document.getElementById('settingsModal').classList.remove('active'); }
+        async function exportDictionary() { await saveToFile(JSON.stringify({ name: data.currentDictionary, words: getCurrentWords(), exportDate: new Date().toISOString() }, null, 2), `${data.currentDictionary}_${new Date().toISOString().split('T')[0]}.json`); }
+        async function exportAllDictionaries() { await saveToFile(JSON.stringify({ allDictionaries: true, dictionaries: data.dictionaries, exportDate: new Date().toISOString() }, null, 2), `all_dictionaries_${new Date().toISOString().split('T')[0]}.json`); }
+        async function saveToFile(content, suggestedName) {
+            if ('showSaveFilePicker' in window) {
+                try {
+                    const handle = await window.showSaveFilePicker({ suggestedName, types: [{ description: 'JSON файл', accept: {'application/json': ['.json']} }] });
+                    const writable = await handle.createWritable(); await writable.write(content); await writable.close();
+                    return alert('✅ Файл сохранён');
+                } catch (err) { if (err.name === 'AbortError') return; }
+            }
+            const blob = new Blob([content], {type: 'application/json'});
+            const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = suggestedName; link.click(); URL.revokeObjectURL(link.href);
+            alert('✅ Файл сохранён в загрузки');
+        }
+        async function importDictionary() {
+            let fileContent = null;
+            if ('showOpenFilePicker' in window) {
+                try { const [handle] = await window.showOpenFilePicker({ types: [{ description: 'JSON файл', accept: {'application/json': ['.json']} }] }); fileContent = await (await handle.getFile()).text(); } catch (err) { if (err.name !== 'AbortError') return; }
+            }
+            if (!fileContent) {
+                fileContent = await new Promise(resolve => {
+                    const input = document.createElement('input'); input.type = 'file'; input.accept = '.json,application/json';
+                    input.onchange = e => { const file = e.target.files[0]; if (!file) { resolve(null); return; } const reader = new FileReader(); reader.onload = ev => resolve(ev.target.result); reader.readAsText(file); };
+                    input.click();
+                });
+            }
+            if (!fileContent) return;
+            try {
+                const imported = JSON.parse(fileContent);
+                const normalizeWord = (w) => {
+                    let newScore = null;
+                    if (w.score !== undefined && w.score !== null) {
+                        if (w.score === 1) newScore = 1;
+                        else if (w.score < 0) newScore = w.score;
+                        else if (w.score > 1) newScore = 1;
+                        else newScore = null;
+                    } else if (w.errors !== undefined || w.success !== undefined) {
+                        const errors = w.errors || 0;
+                        const success = w.success || 0;
+                        if (errors > 0) newScore = -errors;
+                        else if (success > 0) newScore = 1;
+                        else newScore = null;
+                    }
+                    return { ...w, category: w.category || 'Общее', notes: w.notes || '', score: newScore, errors: undefined, success: undefined };
+                };
+                if (imported.allDictionaries && imported.dictionaries) {
+                    if (!confirm(`Импортировать ${Object.keys(imported.dictionaries).length} словарей?`)) return;
+                    for (const name of Object.keys(imported.dictionaries)) {
+                        if (!data.dictionaries[name]) data.dictionaries[name] = [];
+                        const existing = new Set(data.dictionaries[name].map(w => w.word.toLowerCase().trim()));
+                        imported.dictionaries[name].forEach(w => {
+                            if (!existing.has(w.word.toLowerCase().trim())) { data.dictionaries[name].push(normalizeWord(w)); existing.add(w.word.toLowerCase().trim()); }
+                        });
+                    }
+                } else if (imported.name && Array.isArray(imported.words)) {
+                    if (!data.dictionaries[imported.name]) data.dictionaries[imported.name] = [];
+                    const existing = new Set(data.dictionaries[imported.name].map(w => w.word.toLowerCase().trim()));
+                    imported.words.forEach(w => {
+                        if (!existing.has(w.word.toLowerCase().trim())) { data.dictionaries[imported.name].push(normalizeWord(w)); existing.add(w.word.toLowerCase().trim()); }
+                    });
+                    data.currentDictionary = imported.name;
+                } else if (Array.isArray(imported)) {
+                    const dictName = prompt('Название словаря:', 'Импортированный');
+                    if (!dictName) return;
+                    if (!data.dictionaries[dictName]) data.dictionaries[dictName] = [];
+                    const existing = new Set(data.dictionaries[dictName].map(w => w.word.toLowerCase().trim()));
+                    imported.forEach(w => {
+                        if (!existing.has(w.word.toLowerCase().trim())) { data.dictionaries[dictName].push(normalizeWord(w)); existing.add(w.word.toLowerCase().trim()); }
+                    });
+                    data.currentDictionary = dictName;
+                }
+                saveData(); renderDictionarySelect(); displayWords(); updateStats(); updateCategories(); alert('✅ Импорт завершён');
+            } catch (err) { alert('❌ Ошибка: ' + err.message); }
+        }
+        function clearAllWords() {
+            if (!confirm(`Очистить словарь "${data.currentDictionary}"?`) || !confirm('Это нельзя отменить. Продолжить?')) return;
+            setCurrentWords([]); resetSessionWordIds(); displayWords(); updateStats(); updateCategories(); alert('Словарь очищен');
+        }
+        function escapeHtml(text) { if (text === null || text === undefined) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+
+        document.getElementById('dictSwitchModal').addEventListener('click', function(e) { if (e.target === this) closeDictSwitch(); });
+        document.getElementById('settingsModal').addEventListener('click', function(e) { if (e.target === this) closeSettings(); });
+        document.getElementById('wordModal').addEventListener('click', function(e) { if (e.target === this) closeWordModal(); });
+        document.getElementById('quizModal').addEventListener('click', function(e) { if (e.target === this) closeQuiz(); });
+        document.getElementById('wordDetailModal').addEventListener('click', function(e) { if (e.target === this) closeWordDetail(); });
+        document.getElementById('wordsListModal').addEventListener('click', function(e) { if (e.target === this) closeWordsListModal(); });
+        document.getElementById('bulkImportModal').addEventListener('click', function(e) { if (e.target === this) closeBulkImport(); });
+        document.getElementById('newDictName').addEventListener('keypress', function(e) { if (e.key === 'Enter') { e.preventDefault(); createDictionary(); } });
+        document.getElementById('wordInput').addEventListener('keypress', function(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.getElementById('meaningInput').focus(); } });
+    </script>
+</body>
+</html>
