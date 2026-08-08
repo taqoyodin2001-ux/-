@@ -1,4 +1,4 @@
-﻿const CACHE_NAME = "my-dictionary-v15"; // ⬅️ Версия увеличена с v14 на v15
+const CACHE_NAME = "my-dictionary-v15"; // ⬅️ Исправлено на маленькую 'c'
 const FILES_TO_CACHE = [
   "./",
   "./index.html",
