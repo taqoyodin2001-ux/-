@@ -309,9 +309,10 @@
         @keyframes pulseGreen { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
         
-        .quiz-score { display: flex; justify-content: center; gap: 18px; font-size: 15px; margin-bottom: 12px; flex-wrap: wrap; }
+        .quiz-score { display: flex; justify-content: center; gap: 14px; font-size: 15px; margin-bottom: 12px; flex-wrap: wrap; }
         .quiz-score-correct { color: var(--ios-green); font-weight: 600; }
         .quiz-score-wrong { color: var(--ios-red); font-weight: 600; }
+        .quiz-score-learned { color: var(--ios-green); font-weight: 600; }
         .quiz-score-remaining { color: var(--ios-label-secondary); }
         .quiz-buttons { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; justify-content: center; }
         .quiz-buttons .btn-primary { flex: 1; min-width: 130px; margin-top: 0; max-width: 250px;}
@@ -666,12 +667,13 @@
                     <div class="quiz-progress" id="quizProgress" style="margin-bottom: 0;">Вопрос 1 из 10</div>
                     <div style="display: flex; gap: 12px; align-items: center;">
                         <button onclick="toggleQuizSound()" id="quizSoundToggleBtn" style="background: none; border: none; font-size: 20px; cursor: pointer; padding: 0;">🔊</button>
-                        <button id="btnUndoQuiz" onclick="undoQuizStep()" style="display: none; background: rgba(45, 212, 191, 0.15); border: none; color: var(--ios-blue); font-size: 13px; cursor: pointer; font-weight: 600; padding: 6px 12px; border-radius: 8px; transition: all 0.2s ease;">↩️ Отменить шаг</button>
+                        <button id="btnUndoQuiz" onclick="undoQuizStep()" style="display: none; background: rgba(45, 212, 191, 0.15); border: none; color: var(--ios-blue); font-size: 15px; cursor: pointer; font-weight: 600; padding: 4px 10px; border-radius: 8px; transition: all 0.2s ease;">↩️</button>
                     </div>
                 </div>
                 <div class="quiz-score">
                     <span class="quiz-score-correct">✓ <span id="correctCount">0</span></span>
                     <span class="quiz-score-wrong">✗ <span id="wrongCount">0</span></span>
+                    <span class="quiz-score-learned">🟢 <span id="sessionLearnedCount">0</span></span>
                     <span class="quiz-score-remaining">Осталось: <span id="remainingCount">0</span></span>
                 </div>
                 <div class="quiz-label" id="quizLabel">Выберите перевод:</div>
@@ -864,7 +866,7 @@
         let sessionWordIds = [];
         let customTestPool = null;
         let lastStatusForPicker = null;
-        let quizData = { correct: 0, wrong: 0, currentWord: null, options: [], direction: 'wordToMeaning', wordQueue: [], wrongWords: [], isRetryMode: false, isFinished: false, lastState: null, nextTimeout: null };
+        let quizData = { correct: 0, wrong: 0, learnedCount: 0, currentWord: null, options: [], direction: 'wordToMeaning', wordQueue: [], wrongWords: [], isRetryMode: false, isFinished: false, lastState: null, nextTimeout: null };
         let matchingData = { pairs: [], leftItems: [], rightItems: [], selectedLeft: null, selectedRight: null, matchedCount: 0, mistakes: 0, startTime: null, timerInterval: null, isLocked: false };
         let bulkImportParsedData = [];
 
@@ -1269,7 +1271,7 @@
 
         function openQuiz() {
             document.getElementById('quizModal').classList.add('active');
-            quizData = { correct: 0, wrong: 0, currentWord: null, options: [], direction: 'wordToMeaning', wordQueue: [], wrongWords: [], isRetryMode: false, isFinished: false, lastState: null, nextTimeout: null };
+            quizData = { correct: 0, wrong: 0, learnedCount: 0, currentWord: null, options: [], direction: 'wordToMeaning', wordQueue: [], wrongWords: [], isRetryMode: false, isFinished: false, lastState: null, nextTimeout: null };
             customTestPool = null; lastStatusForPicker = null; loadSessionWordIds();
             document.getElementById('quizStartScreen').classList.remove('hidden');
             document.getElementById('quizDirectionPickerScreen').classList.add('hidden');
@@ -1313,7 +1315,6 @@
             select.innerHTML = '<option value="">Все категории</option>' + categories.map(cat => `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`).join('');
         }
         
-        // ВОССТАНОВЛЕННЫЙ ОРИГИНАЛЬНЫЙ АЛГОРИТМ ВЫБОРА СЛОВ
         function getWordsForQuiz() {
             if (customTestPool) return [...customTestPool].sort(() => 0.5 - Math.random());
             let pool = getCurrentWords().filter(w => !sessionWordIds.includes(w.id));
@@ -1427,7 +1428,7 @@
             if (!customTestPool || customTestPool.length < 4) return alert('Недостаточно слов');
             
             quizData = { 
-                correct: 0, wrong: 0, currentWord: null, options: [], 
+                correct: 0, wrong: 0, learnedCount: 0, currentWord: null, options: [], 
                 direction: direction, 
                 wordQueue: [...customTestPool].sort(() => 0.5 - Math.random()), 
                 wrongWords: [], isRetryMode: false, isFinished: false, lastState: null, nextTimeout: null
@@ -1459,7 +1460,7 @@
                 return;
             }
             if (words.length < 4) return alert(`Нужно минимум 4 слова. Доступно: ${words.length}`);
-            quizData.wordQueue = words; quizData.correct = 0; quizData.wrong = 0; quizData.wrongWords = []; quizData.isRetryMode = false; quizData.isFinished = false;
+            quizData.wordQueue = words; quizData.correct = 0; quizData.wrong = 0; quizData.learnedCount = 0; quizData.wrongWords = []; quizData.isRetryMode = false; quizData.isFinished = false;
             quizData.lastState = null;
             document.getElementById('quizStartScreen').classList.add('hidden');
             document.getElementById('quizResultsScreen').classList.add('hidden');
@@ -1470,29 +1471,37 @@
         function showNextWord() {
             if (quizData.wordQueue.length === 0) { showResults(); return; }
             
-            // Если есть прошлое слово (зафиксированное в lastState), показываем кнопку возврата
             document.getElementById('btnUndoQuiz').style.display = quizData.lastState ? 'block' : 'none';
 
             quizData.currentWord = quizData.wordQueue.shift();
+            
+            // Получаем свежие данные о текущем слове из списка
+            const freshWord = getCurrentWords().find(w => w.id === quizData.currentWord.id);
+            if (freshWord) quizData.currentWord = freshWord;
+
             let direction = quizData.direction === 'mixed' ? (Math.random() > 0.5 ? 'wordToMeaning' : 'meaningToWord') : quizData.direction;
-            quizData.currentDirection = direction; // Сохраняем направление для отмены
+            quizData.currentDirection = direction;
             
             const allWords = getCurrentWords();
             const wrongOptions = allWords.filter(w => w.id !== quizData.currentWord.id).sort(() => 0.5 - Math.random()).slice(0, 3);
             quizData.options = [quizData.currentWord, ...wrongOptions].sort(() => 0.5 - Math.random());
             
+            const scoreDisplay = getScoreDisplay(quizData.currentWord);
+            const scoreColor = getScoreColor(quizData.currentWord);
+            const scoreBadge = `<span style="position: absolute; top: 12px; left: 14px; font-size: 13px; font-weight: 700; color: ${scoreColor}; background: var(--ios-fill); padding: 3px 8px; border-radius: 8px;">📊 ${scoreDisplay}</span>`;
+
             if (direction === 'listening') {
-                document.getElementById('quizWord').innerHTML = `<span style="font-size: 56px; cursor: pointer; display: block; text-align: center;" onclick="speakWord('${escapeHtml(quizData.currentWord.word)}')">🔊</span>`;
+                document.getElementById('quizWord').innerHTML = `${scoreBadge}<span style="font-size: 56px; cursor: pointer; display: block; text-align: center;" onclick="speakWord('${escapeHtml(quizData.currentWord.word)}')">🔊</span>`;
                 document.getElementById('quizLabel').textContent = 'Прослушайте и выберите перевод:';
                 document.getElementById('quizOptions').innerHTML = quizData.options.map((opt, idx) => `<button class="quiz-option" onclick="checkAnswer(${idx})">${escapeHtml(opt.meaning)}</button>`).join('');
                 if (autoTts) speakWord(quizData.currentWord.word);
             } else if (direction === 'wordToMeaning') {
-                document.getElementById('quizWord').innerHTML = `${escapeHtml(quizData.currentWord.word)} <span style="font-size: 24px; cursor: pointer; position: absolute; right: 15px; top: 15px;" onclick="speakWord('${escapeHtml(quizData.currentWord.word)}')">🔊</span>`;
+                document.getElementById('quizWord').innerHTML = `${scoreBadge}${escapeHtml(quizData.currentWord.word)} <span style="font-size: 24px; cursor: pointer; position: absolute; right: 15px; top: 15px;" onclick="speakWord('${escapeHtml(quizData.currentWord.word)}')">🔊</span>`;
                 document.getElementById('quizLabel').textContent = 'Выберите перевод:';
                 document.getElementById('quizOptions').innerHTML = quizData.options.map((opt, idx) => `<button class="quiz-option" onclick="checkAnswer(${idx})">${escapeHtml(opt.meaning)}</button>`).join('');
                 if (autoTts) speakWord(quizData.currentWord.word);
             } else {
-                document.getElementById('quizWord').innerHTML = escapeHtml(quizData.currentWord.meaning);
+                document.getElementById('quizWord').innerHTML = `${scoreBadge}${escapeHtml(quizData.currentWord.meaning)}`;
                 document.getElementById('quizLabel').textContent = 'Выберите слово:';
                 document.getElementById('quizOptions').innerHTML = quizData.options.map((opt, idx) => `<button class="quiz-option" onclick="checkAnswer(${idx})">${escapeHtml(opt.word)}</button>`).join('');
             }
@@ -1508,6 +1517,8 @@
             const words = getCurrentWords();
             const wordIndex = words.findIndex(w => w.id === quizData.currentWord.id);
             
+            let newlyLearned = false;
+
             // Сохраняем состояние ДО изменений для кнопки Отмены
             quizData.lastState = {
                 word: quizData.currentWord,
@@ -1515,6 +1526,7 @@
                 direction: quizData.currentDirection,
                 correct: quizData.correct,
                 wrong: quizData.wrong,
+                learnedCount: quizData.learnedCount,
                 wrongWords: [...quizData.wrongWords],
                 wordScore: wordIndex !== -1 ? words[wordIndex].score : null,
                 wordLastReviewed: wordIndex !== -1 ? words[wordIndex].lastReviewed : null,
@@ -1529,16 +1541,17 @@
             });
             if (!sessionWordIds.includes(quizData.currentWord.id)) { sessionWordIds.push(quizData.currentWord.id); saveSessionWordIds(); }
             
-            // ВОССТАНОВЛЕННАЯ ОРИГИНАЛЬНАЯ ЛОГИКА НАЧИСЛЕНИЯ ОЧКОВ
             if (isCorrect) {
                 quizData.correct++;
                 if (wordIndex !== -1 && !quizData.isRetryMode) {
                     const currentScore = words[wordIndex].score;
                     if (currentScore === null || currentScore === undefined) {
                         words[wordIndex].score = 1;
+                        newlyLearned = true;
                     } else if (currentScore < 0) {
                         const newScore = currentScore + 1;
                         words[wordIndex].score = newScore >= 0 ? 1 : newScore;
+                        if (words[wordIndex].score === 1) newlyLearned = true;
                     } else {
                         words[wordIndex].score = 1;
                     }
@@ -1559,9 +1572,13 @@
                     setCurrentWords(words);
                 }
             }
+
+            if (newlyLearned) {
+                quizData.learnedCount++;
+            }
+
             updateQuizScore();
             
-            // Мгновенный переход (100мс, чтобы успела моргнуть подсветка кнопки)
             quizData.nextTimeout = setTimeout(() => { showNextWord(); }, 100);
         }
 
@@ -1570,23 +1587,20 @@
             
             if (quizData.nextTimeout) clearTimeout(quizData.nextTimeout);
             
-            // Если мы уже на новом слове (сработало showNextWord), возвращаем его в очередь
             if (quizData.currentWord && quizData.currentWord.id !== quizData.lastState.word.id) {
                 quizData.wordQueue.unshift(quizData.currentWord);
             }
             
-            // Откатываем статистику
             quizData.correct = quizData.lastState.correct;
             quizData.wrong = quizData.lastState.wrong;
+            quizData.learnedCount = quizData.lastState.learnedCount;
             quizData.wrongWords = quizData.lastState.wrongWords;
             
-            // Откатываем статус сессии
             if (quizData.lastState.sessionAdded) {
                 sessionWordIds = sessionWordIds.filter(id => id !== quizData.lastState.word.id);
                 saveSessionWordIds();
             }
             
-            // Откатываем изменения в БД
             const words = getCurrentWords();
             const wordIndex = words.findIndex(w => w.id === quizData.lastState.word.id);
             if (wordIndex !== -1) {
@@ -1597,22 +1611,24 @@
             
             updateQuizScore();
             
-            // Восстанавливаем предыдущий вопрос
             quizData.currentWord = quizData.lastState.word;
             quizData.options = quizData.lastState.options;
             const direction = quizData.lastState.direction;
             
-            // Отрисовываем отмененный вопрос
+            const scoreDisplay = getScoreDisplay(quizData.currentWord);
+            const scoreColor = getScoreColor(quizData.currentWord);
+            const scoreBadge = `<span style="position: absolute; top: 12px; left: 14px; font-size: 13px; font-weight: 700; color: ${scoreColor}; background: var(--ios-fill); padding: 3px 8px; border-radius: 8px;">📊 ${scoreDisplay}</span>`;
+
             if (direction === 'listening') {
-                document.getElementById('quizWord').innerHTML = `<span style="font-size: 56px; cursor: pointer; display: block; text-align: center;" onclick="speakWord('${escapeHtml(quizData.currentWord.word)}')">🔊</span>`;
+                document.getElementById('quizWord').innerHTML = `${scoreBadge}<span style="font-size: 56px; cursor: pointer; display: block; text-align: center;" onclick="speakWord('${escapeHtml(quizData.currentWord.word)}')">🔊</span>`;
                 document.getElementById('quizLabel').textContent = 'Прослушайте и выберите перевод:';
                 document.getElementById('quizOptions').innerHTML = quizData.options.map((opt, idx) => `<button class="quiz-option" onclick="checkAnswer(${idx})">${escapeHtml(opt.meaning)}</button>`).join('');
             } else if (direction === 'wordToMeaning') {
-                document.getElementById('quizWord').innerHTML = `${escapeHtml(quizData.currentWord.word)} <span style="font-size: 24px; cursor: pointer; position: absolute; right: 15px; top: 15px;" onclick="speakWord('${escapeHtml(quizData.currentWord.word)}')">🔊</span>`;
+                document.getElementById('quizWord').innerHTML = `${scoreBadge}${escapeHtml(quizData.currentWord.word)} <span style="font-size: 24px; cursor: pointer; position: absolute; right: 15px; top: 15px;" onclick="speakWord('${escapeHtml(quizData.currentWord.word)}')">🔊</span>`;
                 document.getElementById('quizLabel').textContent = 'Выберите перевод:';
                 document.getElementById('quizOptions').innerHTML = quizData.options.map((opt, idx) => `<button class="quiz-option" onclick="checkAnswer(${idx})">${escapeHtml(opt.meaning)}</button>`).join('');
             } else {
-                document.getElementById('quizWord').innerHTML = escapeHtml(quizData.currentWord.meaning);
+                document.getElementById('quizWord').innerHTML = `${scoreBadge}${escapeHtml(quizData.currentWord.meaning)}`;
                 document.getElementById('quizLabel').textContent = 'Выберите слово:';
                 document.getElementById('quizOptions').innerHTML = quizData.options.map((opt, idx) => `<button class="quiz-option" onclick="checkAnswer(${idx})">${escapeHtml(opt.word)}</button>`).join('');
             }
@@ -1620,7 +1636,6 @@
             document.getElementById('quizProgress').textContent = `Вопрос ${quizData.correct + quizData.wrong + 1} из ${quizData.wordQueue.length + quizData.correct + quizData.wrong + 1}`;
             document.getElementById('remainingCount').textContent = quizData.wordQueue.length;
             
-            // Прячем кнопку "Отменить шаг", т.к. мы уже вернулись назад
             document.getElementById('btnUndoQuiz').style.display = 'none';
             quizData.lastState = null;
         }
@@ -1628,6 +1643,7 @@
         function updateQuizScore() {
             document.getElementById('correctCount').textContent = quizData.correct;
             document.getElementById('wrongCount').textContent = quizData.wrong;
+            document.getElementById('sessionLearnedCount').textContent = quizData.learnedCount;
         }
         function finishQuizEarly() {
             if (!confirm('Завершить тест досрочно?')) return;
@@ -1653,7 +1669,7 @@
                 <div class="results-stats">
                     <div class="results-stat"><div class="results-stat-value" style="color: var(--ios-green);">${quizData.correct}</div><div class="results-stat-label">Правильно</div></div>
                     <div class="results-stat"><div class="results-stat-value" style="color: var(--ios-red);">${quizData.wrong}</div><div class="results-stat-label">Ошибок</div></div>
-                    <div class="results-stat"><div class="results-stat-value" style="color: var(--ios-blue);">${total}</div><div class="results-stat-label">В этой партии</div></div>
+                    <div class="results-stat"><div class="results-stat-value" style="color: var(--ios-green);">${quizData.learnedCount}</div><div class="results-stat-label">🟢 Изучено</div></div>
                 </div>
                 <div style="color: var(--ios-label-secondary); margin: 12px 0; font-size: 13px; font-weight: 500;">Всего пройдено в этом режиме: <strong>${completedCount}</strong> из ${allPoolWords.length}</div>`;
             
@@ -1693,7 +1709,7 @@
         function startNextBatch() {
             const words = getWordsForQuiz();
             if (words.length < 4) return alert(`Недостаточно слов. Доступно: ${words.length}`);
-            quizData.wordQueue = words; quizData.correct = 0; quizData.wrong = 0; quizData.wrongWords = []; quizData.isRetryMode = false; quizData.isFinished = false;
+            quizData.wordQueue = words; quizData.correct = 0; quizData.wrong = 0; quizData.learnedCount = 0; quizData.wrongWords = []; quizData.isRetryMode = false; quizData.isFinished = false;
             document.getElementById('quizResultsScreen').classList.add('hidden');
             document.getElementById('quizGameScreen').classList.remove('hidden');
             updateQuizScore(); showNextWord();
@@ -1705,7 +1721,7 @@
         function retryWrongWords() {
             if (quizData.wrongWords.length === 0) return alert('Нет неправильных ответов!');
             quizData.wordQueue = [...quizData.wrongWords].sort(() => 0.5 - Math.random());
-            quizData.correct = 0; quizData.wrong = 0; quizData.wrongWords = []; quizData.isRetryMode = true; quizData.isFinished = false;
+            quizData.correct = 0; quizData.wrong = 0; quizData.learnedCount = 0; quizData.wrongWords = []; quizData.isRetryMode = true; quizData.isFinished = false;
             document.getElementById('quizResultsScreen').classList.add('hidden');
             document.getElementById('quizGameScreen').classList.remove('hidden');
             updateQuizScore(); showNextWord();
