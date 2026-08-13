@@ -482,13 +482,15 @@
         .bulk-import-textarea:focus { outline: none; background: var(--ios-fill-secondary); box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.2); }
         .bulk-import-hint { font-size: 12px; color: var(--ios-label-tertiary); margin-top: 8px; line-height: 1.4; }
         .bulk-import-preview { max-height: 300px; overflow-y: auto; margin: 12px 0; border-radius: 10px; background: var(--ios-fill-secondary); }
-        .bulk-import-item { display: flex; align-items: center; padding: 10px 12px; border-bottom: 0.5px solid var(--ios-separator); font-size: 14px; gap: 10px; }
+        .bulk-import-item { display: flex; align-items: center; padding: 10px 12px; border-bottom: 0.5px solid var(--ios-separator); font-size: 14px; gap: 10px; position: relative; }
         .bulk-import-item:last-child { border-bottom: none; }
         .bulk-import-item.status-new { background: rgba(48, 209, 88, 0.1); }
         .bulk-import-item.status-duplicate { background: rgba(255, 214, 10, 0.1); }
         .bulk-import-item.status-invalid { background: rgba(255, 69, 58, 0.1); }
         .bulk-import-status { flex-shrink: 0; font-size: 14px; width: 20px; text-align: center; }
-        .bulk-import-content { flex: 1; min-width: 0; }
+        .bulk-import-content { flex: 1; min-width: 0; padding-right: 28px; }
+        .bulk-import-remove-btn { position: absolute; right: 10px; top: 12px; background: none; border: none; color: var(--ios-label-tertiary); font-size: 16px; cursor: pointer; padding: 4px; line-height: 1; border-radius: 50%; transition: all 0.2s ease; }
+        .bulk-import-remove-btn:hover { color: var(--ios-red); background: rgba(255, 69, 58, 0.15); }
         .bulk-import-word { font-weight: 600; color: var(--ios-label); word-break: break-word; }
         .bulk-import-meaning { color: var(--ios-label-secondary); font-size: 13px; word-break: break-word; margin-top: 2px; }
         .bulk-import-summary { display: flex; gap: 10px; margin: 12px 0; flex-wrap: wrap; }
@@ -850,7 +852,7 @@
             } else if (savedTheme === 'night') {
                 document.body.classList.remove('day-theme');
             } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-                document.body.classList.add('day-theme'); // Если в системе светлая тема, включаем её
+                document.body.classList.add('day-theme');
             }
         } catch (e) {}
 
@@ -893,15 +895,12 @@
             try { localStorage.setItem('autoTts', autoTts); } catch(e){}
             document.getElementById('quizSoundToggleBtn').textContent = autoTts ? '🔊' : '🔇';
             
-            // Синхронизируем с чекбоксом в настройках
             const settingsToggle = document.getElementById('autoTtsToggle');
             if (settingsToggle) settingsToggle.checked = autoTts;
             
-            // Если звук выключили, прерываем речь
             if (!autoTts && 'speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
             } else if (autoTts && quizData.currentWord && !document.getElementById('quizGameScreen').classList.contains('hidden')) {
-                // Если включили, озвучиваем текущее слово
                 speakWord(quizData.currentWord.word);
             }
         }
@@ -941,7 +940,6 @@
         function loadSessionWordIds() { try { sessionWordIds = JSON.parse(localStorage.getItem(getSessionKey())) || []; } catch (e) { sessionWordIds = []; } }
         function resetSessionWordIds() { sessionWordIds = []; saveSessionWordIds(); }
 
-        // Изначальный алгоритм без умных режимов
         function getAllPoolWords() {
             if (customTestPool) return customTestPool;
             let pool = [...getCurrentWords()];
@@ -1475,7 +1473,6 @@
 
             quizData.currentWord = quizData.wordQueue.shift();
             
-            // Получаем свежие данные о текущем слове из списка
             const freshWord = getCurrentWords().find(w => w.id === quizData.currentWord.id);
             if (freshWord) quizData.currentWord = freshWord;
 
@@ -1519,7 +1516,6 @@
             
             let newlyLearned = false;
 
-            // Сохраняем состояние ДО изменений для кнопки Отмены
             quizData.lastState = {
                 word: quizData.currentWord,
                 options: [...quizData.options],
@@ -1924,8 +1920,6 @@
             const existingWords = new Set(data.dictionaries[targetDictionary].map(w => w.word.toLowerCase().trim()));
             
             bulkImportParsedData = [];
-            let newCount = 0, duplicateCount = 0, invalidCount = 0;
-            const categoriesUsed = new Set();
             
             lines.forEach((line, index) => {
                 const trimmed = line.trim();
@@ -1938,33 +1932,24 @@
                     const isDuplicate = existingWords.has(wordKey);
                     
                     bulkImportParsedData.push({
+                        id: Date.now() + index + Math.random(),
                         word: parsed.word,
                         meaning: parsed.meaning,
                         category: parsed.category,
                         targetDictionary: targetDictionary,
-                        status: isDuplicate ? 'duplicate' : 'new',
-                        index: index
+                        status: isDuplicate ? 'duplicate' : 'new'
                     });
                     
-                    categoriesUsed.add(parsed.category);
-                    
-                    if (isDuplicate) {
-                        duplicateCount++;
-                        existingWords.add(wordKey);
-                    } else {
-                        newCount++;
-                        existingWords.add(wordKey);
-                    }
+                    existingWords.add(wordKey);
                 } else {
                     bulkImportParsedData.push({
+                        id: Date.now() + index + Math.random(),
                         word: trimmed,
                         meaning: '',
                         category: defaultCategory,
                         targetDictionary: targetDictionary,
-                        status: 'invalid',
-                        index: index
+                        status: 'invalid'
                     });
-                    invalidCount++;
                 }
             });
             
@@ -1973,8 +1958,38 @@
                 return;
             }
             
-            const categoriesList = Array.from(categoriesUsed).join(', ');
+            renderBulkImportPreview();
             
+            document.getElementById('bulkImportStep1').classList.add('hidden');
+            document.getElementById('bulkImportStep2').classList.remove('hidden');
+        }
+
+        function removeBulkImportItem(id) {
+            bulkImportParsedData = bulkImportParsedData.filter(item => item.id !== id);
+            if (bulkImportParsedData.length === 0) {
+                alert('Список слов пуст');
+                backToBulkImportStep1();
+                return;
+            }
+            renderBulkImportPreview();
+        }
+
+        function renderBulkImportPreview() {
+            const targetDictionary = document.getElementById('bulkImportDictionary').value;
+            const defaultCategory = document.getElementById('bulkImportCategory').value.trim() || 'Общее';
+
+            let newCount = 0, duplicateCount = 0, invalidCount = 0;
+            const categoriesUsed = new Set();
+
+            bulkImportParsedData.forEach(item => {
+                categoriesUsed.add(item.category);
+                if (item.status === 'new') newCount++;
+                else if (item.status === 'duplicate') duplicateCount++;
+                else invalidCount++;
+            });
+
+            const categoriesList = Array.from(categoriesUsed).join(', ');
+
             const summaryHtml = `
                 <div style="background: var(--ios-fill-secondary); padding: 10px; border-radius: 10px; margin-bottom: 10px; font-size: 13px; color: var(--ios-label-secondary);">
                     <div style="margin-bottom: 6px;">📚 Словарь: <strong style="color: var(--ios-label);">${escapeHtml(targetDictionary)}</strong></div>
@@ -1987,69 +2002,69 @@
                 </div>
             `;
             document.getElementById('bulkImportSummary').innerHTML = summaryHtml;
-            
+
             const allCategories = [...new Set([
                 ...Object.values(data.dictionaries).flatMap(dict => dict.map(w => w.category || 'Общее')),
                 ...bulkImportParsedData.map(item => item.category)
             ])];
-            
+
             const datalistId = 'bulkCategoriesList_' + Date.now();
             const datalistHtml = `<datalist id="${datalistId}">` + 
                 allCategories.map(cat => `<option value="${escapeHtml(cat)}">`).join('') + 
                 `</datalist>`;
-            
+
             const previewHtml = bulkImportParsedData.map((item, idx) => {
                 const statusClass = `status-${item.status}`;
                 const statusIcon = item.status === 'new' ? '🟢' : item.status === 'duplicate' ? '🟡' : '🔴';
                 const meaningHtml = item.meaning ? `<div class="bulk-import-meaning">${escapeHtml(item.meaning)}</div>` : '';
-                
+
                 const categoryInput = `
                     <input type="text" 
                            class="bulk-import-category-input" 
-                           data-index="${idx}" 
+                           data-id="${item.id}" 
                            list="${datalistId}"
                            value="${escapeHtml(item.category)}" 
                            placeholder="Категория">
                 `;
-                
-                return `<div class="bulk-import-item ${statusClass}" data-index="${idx}">
+
+                return `<div class="bulk-import-item ${statusClass}">
                     <div class="bulk-import-status">${statusIcon}</div>
                     <div class="bulk-import-content">
                         <div class="bulk-import-word">${escapeHtml(item.word)}</div>
                         ${meaningHtml}
                         ${categoryInput}
                     </div>
+                    <button class="bulk-import-remove-btn" onclick="removeBulkImportItem(${item.id})" title="Удалить слово из импорта">✕</button>
                 </div>`;
             }).join('') + datalistHtml;
-            
+
             document.getElementById('bulkImportPreview').innerHTML = previewHtml;
-            
+
             setTimeout(() => {
                 document.querySelectorAll('.bulk-import-category-input').forEach(input => {
                     input.addEventListener('input', function() {
-                        const index = parseInt(this.dataset.index);
+                        const id = parseFloat(this.dataset.id);
                         const newCategory = this.value.trim();
-                        if (newCategory && bulkImportParsedData[index]) {
-                            bulkImportParsedData[index].category = newCategory;
+                        const item = bulkImportParsedData.find(i => i.id === id);
+                        if (newCategory && item) {
+                            item.category = newCategory;
                         }
                     });
-                    
+
                     input.addEventListener('blur', function() {
-                        const index = parseInt(this.dataset.index);
+                        const id = parseFloat(this.dataset.id);
                         const newCategory = this.value.trim();
-                        if (bulkImportParsedData[index]) {
+                        const item = bulkImportParsedData.find(i => i.id === id);
+                        if (item) {
                             if (newCategory) {
-                                bulkImportParsedData[index].category = newCategory;
+                                item.category = newCategory;
                             } else {
-                                this.value = bulkImportParsedData[index].category;
+                                this.value = item.category;
                             }
                         }
                     });
                 });
             }, 100);
-            
-            document.getElementById('bulkImportStep1').classList.add('hidden');
-            document.getElementById('bulkImportStep2').classList.remove('hidden');
         }
         
         function confirmBulkImport() {
