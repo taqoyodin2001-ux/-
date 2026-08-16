@@ -1170,6 +1170,8 @@
                 <div style="font-size: 11px; font-weight: 700; color: var(--ios-red); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Опасная зона</div>
                 <button class="btn-primary btn-danger" onclick="clearAllWords()" style="margin-top: 0; font-size: 14px;">Очистить текущий словарь</button>
             </div>
+
+            <div style="margin-top: 30px; text-align: center; font-size: 11px; color: var(--ios-text-tertiary); font-style: italic;">Мухаммад абу Абдульмалик</div>
         </section>
 
     </div>
@@ -1401,12 +1403,10 @@
         </div>
     </div>
 
-    <div class="author-signature" style="position: fixed; bottom: 72px; left: 12px; font-size: 11px; color: var(--ios-text-tertiary); font-style: italic; pointer-events: none; z-index: 99;">Мухаммад абу Абдульмалик</div>
-
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker (1).js')
+                navigator.serviceWorker.register('./service-worker.js')
                     .then(reg => console.log('Service Worker:', reg.scope))
                     .catch(err => console.error('Service Worker Error:', err));
             });
