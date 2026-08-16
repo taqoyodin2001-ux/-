@@ -1171,7 +1171,9 @@
                 <button class="btn-primary btn-danger" onclick="clearAllWords()" style="margin-top: 0; font-size: 14px;">Очистить текущий словарь</button>
             </div>
 
-            <div style="margin-top: 30px; text-align: center; font-size: 11px; color: var(--ios-text-tertiary); font-style: italic;">Мухаммад абу Абдульмалик</div>
+            <div style="text-align: center; margin-top: 24px; padding-bottom: 12px; font-size: 12px; color: var(--ios-text-tertiary); font-style: italic;">
+                Мухаммад абу Абдульмалик
+            </div>
         </section>
 
     </div>
@@ -2288,7 +2290,7 @@
 
         async function exportAllDictionaries() {
             const content = JSON.stringify({ allDictionaries: true, dictionaries: data.dictionaries, rules: data.rules || [], exportDate: new Date().toISOString() }, null, 2);
-            const suggestedName = `all_dictionaries_${new Date().toISOString().split('T')[0]}.json`;
+            const suggestedName = `Личный_словарь_${new Date().toISOString().split('T')[0]}.json`;
             const blob = new Blob([content], {type: 'application/json'});
             const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = suggestedName; link.click(); URL.revokeObjectURL(link.href);
             alert('Файл сохранён');
