@@ -9,7 +9,7 @@
     <link rel="apple-touch-icon" href="icon-192.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700;800&family=SF+Pro+Text:wght@400;500;600;700&family=SF+Mono:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         * { 
             margin: 0; 
@@ -46,7 +46,7 @@
             --ios-shadow-glass: 0 12px 32px rgba(0, 0, 0, 0.45);
             --ios-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.25);
             --ios-shadow-glow: 0 8px 24px rgba(10, 132, 255, 0.35);
-            --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+            --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Plus Jakarta Sans", "Helvetica Neue", sans-serif;
             --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
             --font-mono: "SF Mono", "SFProMono-Regular", Menlo, Monaco, Consolas, monospace;
         }
@@ -118,34 +118,65 @@
         .container {
             max-width: 600px;
             margin: 0 auto;
-            padding: 24px 18px 115px;
+            padding: 24px 18px 105px;
             position: relative;
             z-index: 1;
+        }
+
+        .tab-view-section {
+            display: none;
+            animation: fadeIn 0.25s ease;
+        }
+        .tab-view-section.active-tab-page {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 22px;
             padding: 4px 2px;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-logo-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: rgba(var(--ios-blue-rgb), 0.16);
+            border: 1px solid var(--ios-border-bright);
+            color: var(--ios-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--ios-highlight);
         }
 
         .header h1 {
             font-family: var(--font-display);
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 800;
             letter-spacing: -0.04em;
-            background: linear-gradient(180deg, #FFFFFF 20%, rgba(255, 255, 255, 0.72) 100%);
+            background: linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 45%, #38BDF8 80%, #818CF8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+            text-shadow: 0 4px 24px rgba(56, 189, 248, 0.28);
         }
         body.day-theme .header h1 {
-            background: linear-gradient(180deg, #000000 30%, #3A3A3C 100%);
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 40%, #0284C7 85%, #4F46E5 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: none;
+            text-shadow: 0 2px 10px rgba(2, 132, 199, 0.15);
         }
 
         .header-controls {
@@ -180,8 +211,8 @@
         .icon-btn-header:active { transform: scale(0.92); }
 
         .svg-icon {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             fill: none;
             stroke: currentColor;
             stroke-width: 2;
@@ -189,8 +220,8 @@
             stroke-linejoin: round;
         }
         .svg-icon-large {
-            width: 24px;
-            height: 24px;
+            width: 26px;
+            height: 26px;
         }
 
         .stats-bar {
@@ -232,71 +263,6 @@
             font-weight: 600;
             letter-spacing: 0.02em;
             text-transform: uppercase;
-        }
-
-        .dict-selector {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 16px;
-        }
-
-        .dict-button {
-            flex: 1;
-            background: var(--ios-card);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid var(--ios-border);
-            padding: 14px 16px;
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            box-shadow: var(--ios-shadow-card), var(--ios-highlight);
-            transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1);
-        }
-        .dict-button:hover {
-            background: var(--ios-card-hover);
-            border-color: var(--ios-border-bright);
-            transform: translateY(-1px);
-        }
-        .dict-button:active { transform: scale(0.985); }
-        .dict-button-left { display: flex; align-items: center; gap: 12px; }
-        .dict-icon-container {
-            width: 32px;
-            height: 32px;
-            border-radius: 10px;
-            background: rgba(var(--ios-blue-rgb), 0.16);
-            color: var(--ios-blue);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .dict-name { 
-            font-size: 16px; 
-            font-weight: 600; 
-            color: var(--ios-text); 
-            font-family: var(--font-display); 
-            letter-spacing: -0.02em; 
-        }
-        .dict-arrow { color: var(--ios-text-tertiary); display: flex; align-items: center; }
-
-        .word-count {
-            width: 48px;
-            height: 48px;
-            border-radius: 18px;
-            background: linear-gradient(135deg, var(--ios-blue) 0%, #0055D4 100%);
-            color: #FFFFFF;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-mono);
-            font-weight: 700;
-            font-size: 16px;
-            flex-shrink: 0;
-            box-shadow: var(--ios-shadow-glow);
-            border: 1px solid rgba(255, 255, 255, 0.25);
         }
 
         .category-filter {
@@ -515,28 +481,72 @@
         }
         .compact-delete-btn:active { transform: scale(0.9); }
 
-        .fab {
+        /* iOS Нижняя компактная панель навигации (Tab Bar) */
+        .ios-tab-bar {
             position: fixed;
-            bottom: 28px;
-            right: 22px;
-            width: 58px;
-            height: 58px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: rgba(20, 20, 22, 0.82);
+            backdrop-filter: blur(32px) saturate(200%);
+            -webkit-backdrop-filter: blur(32px) saturate(200%);
+            border-top: 1px solid var(--ios-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0 8px 6px;
+            z-index: 100;
+        }
+        body.day-theme .ios-tab-bar {
+            background: rgba(255, 255, 255, 0.88);
+        }
+
+        .tab-item {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            color: var(--ios-text-secondary);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+            height: 100%;
+        }
+        .tab-item:active { transform: scale(0.88); }
+        .tab-item.active { color: var(--ios-blue); }
+
+        .tab-center-btn {
+            position: relative;
+            top: -12px;
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--ios-blue) 0%, #0055D4 100%);
             border: 1px solid rgba(255, 255, 255, 0.35);
             color: #FFFFFF;
             cursor: pointer;
-            box-shadow: var(--ios-shadow-glow), 0 12px 30px rgba(0, 0, 0, 0.4);
+            box-shadow: var(--ios-shadow-glow), 0 8px 20px rgba(0, 0, 0, 0.45);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 100;
             transition: all 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+            flex-shrink: 0;
         }
-        .fab:hover {
-            transform: scale(1.08) translateY(-2px);
+        .tab-center-btn:hover {
+            transform: scale(1.06) translateY(-2px);
         }
-        .fab:active { transform: scale(0.92); }
+        .tab-center-btn:active { transform: scale(0.92); }
+
+        .ios-settings-card {
+            background: var(--ios-card);
+            border-radius: 20px;
+            padding: 18px;
+            border: 1px solid var(--ios-border);
+            box-shadow: var(--ios-shadow-card), var(--ios-highlight);
+            margin-bottom: 16px;
+        }
 
         .modal {
             display: none;
@@ -922,76 +932,270 @@
 <body>
     <div class="ambient-sphere sphere-1"></div>
     <div class="ambient-sphere sphere-2"></div>
-    <div class="container">
-        <div class="header">
-            <div class="header-left">
-                <h1>Личный словарь</h1>
+    <div class="container" id="appScrollContainer">
+        
+        <!-- Вкладка 1: Главная (Список слов и Правила) -->
+        <section class="tab-view-section active-tab-page" id="pageHome">
+            <div class="header">
+                <div class="header-brand">
+                    <div class="header-logo-icon">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                    </div>
+                    <h1 id="homeBrandTitle">Личный словарь</h1>
+                </div>
+                <div class="header-controls">
+                    <button class="icon-btn-header" onclick="toggleTheme()" title="Сменить тему">
+                        <svg class="svg-icon" id="themeIcon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    </button>
+                </div>
             </div>
-            <div class="header-controls">
-                <button class="icon-btn-header" onclick="toggleTheme()" title="Сменить тему">
-                    <svg class="svg-icon" id="themeIcon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <div class="stats-bar">
+                <div class="stat-card"><div class="stat-value" id="totalWords">0</div><div class="stat-label">Всего слов</div></div>
+                <div class="stat-card"><div class="stat-value" id="todayWords">0</div><div class="stat-label">Сегодня</div></div>
+                <div class="stat-card"><div class="stat-value" id="weekWords">0</div><div class="stat-label">За неделю</div></div>
+            </div>
+
+            <div class="category-filter" id="categoryFilter">
+                <button class="category-chip active" onclick="filterCategory('all')">Все</button>
+            </div>
+            <div class="view-toggle">
+                <button class="view-toggle-btn active" id="tabWordsBtn" onclick="switchMainTab('words')">
+                    <svg class="svg-icon" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                    Список
                 </button>
-                <button class="icon-btn-header" onclick="openQuiz()" title="Режим изучения">
-                    <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                <button class="view-toggle-btn" id="tabRulesBtn" onclick="switchMainTab('rules')">
+                    <svg class="svg-icon" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                    Правила
                 </button>
-                <button class="icon-btn-header" onclick="openSettings()" title="Настройки">
-                    <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                <button class="view-toggle-btn" id="toggleDeleteModeBtn" onclick="toggleDeleteMode()" style="flex: 0 0 42px; padding: 0; color: var(--ios-red);" title="Режим удаления">
+                    <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                 </button>
             </div>
-        </div>
-        <div class="stats-bar">
-            <div class="stat-card"><div class="stat-value" id="totalWords">0</div><div class="stat-label">Всего слов</div></div>
-            <div class="stat-card"><div class="stat-value" id="todayWords">0</div><div class="stat-label">Сегодня</div></div>
-            <div class="stat-card"><div class="stat-value" id="weekWords">0</div><div class="stat-label">За неделю</div></div>
-        </div>
-        <div class="dict-selector" id="dictSelectorBlock">
-            <button class="dict-button" onclick="openDictSwitch()">
-                <div class="dict-button-left">
-                    <div class="dict-icon-container">
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <span class="search-icon">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </span>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Поиск" oninput="handleSearchInput()">
+                    <button class="search-add-quick-btn hidden" id="searchAddQuickBtn" onclick="quickAddFromSearch()">
+                        <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        Добавить
+                    </button>
+                </div>
+            </div>
+            <div class="words-list" id="mainContentList"></div>
+        </section>
+
+        <!-- Вкладка 2: Словари (Управление и переключение) -->
+        <section class="tab-view-section" id="pageDicts">
+            <div class="header">
+                <div class="header-brand">
+                    <div class="header-logo-icon">
                         <svg class="svg-icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                     </div>
-                    <span class="dict-name" id="currentDictName">Мой словарь</span>
+                    <h1>Словари</h1>
                 </div>
-                <span class="dict-arrow">
-                    <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </span>
-            </button>
-            <div class="word-count" id="wordCount">0</div>
-        </div>
-        <div class="category-filter" id="categoryFilter">
-            <button class="category-chip active" onclick="filterCategory('all')">Все</button>
-        </div>
-        <div class="view-toggle">
-            <button class="view-toggle-btn active" id="tabWordsBtn" onclick="switchMainTab('words')">
-                <svg class="svg-icon" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-                Список
-            </button>
-            <button class="view-toggle-btn" id="tabRulesBtn" onclick="switchMainTab('rules')">
-                <svg class="svg-icon" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-                Правила
-            </button>
-            <button class="view-toggle-btn" id="toggleDeleteModeBtn" onclick="toggleDeleteMode()" style="flex: 0 0 42px; padding: 0; color: var(--ios-red);" title="Режим удаления">
-                <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-            </button>
-        </div>
-        <div class="search-container">
-            <div class="search-wrapper">
-                <span class="search-icon">
-                    <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                </span>
-                <input type="text" class="search-input" id="searchInput" placeholder="Поиск" oninput="handleSearchInput()">
-                <button class="search-add-quick-btn hidden" id="searchAddQuickBtn" onclick="quickAddFromSearch()">
-                    <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    Добавить
-                </button>
             </div>
-        </div>
-        <div class="words-list" id="mainContentList"></div>
+            <div class="ios-settings-card">
+                <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.05em;">Создать новый словарь</div>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" class="form-input" id="newDictInputPage" placeholder="Название словаря...">
+                    <button class="btn-primary" onclick="createDictFromPage()" style="width: auto; padding: 0 18px; margin-top: 0;">Создать</button>
+                </div>
+            </div>
+            <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin: 18px 4px 8px; letter-spacing: 0.05em;">Ваши словари</div>
+            <div class="compact-list" id="dictsPageList"></div>
+        </section>
+
+        <!-- Вкладка 3: Изучение (Тесты) -->
+        <section class="tab-view-section" id="pageQuiz">
+            <div class="header">
+                <div class="header-brand">
+                    <div class="header-logo-icon">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                    </div>
+                    <h1>Изучение</h1>
+                </div>
+            </div>
+            
+            <div id="quizStartScreen" class="quiz-container">
+                <div class="quiz-stats-block">
+                    <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.05em;">Статистика словаря</div>
+                    <div class="quiz-stats-grid">
+                        <div class="quiz-stat-item learned" onclick="showWordsByStatus('learned')"><div class="quiz-stat-value" id="statLearned">0</div><div class="quiz-stat-label">Изучено</div></div>
+                        <div class="quiz-stat-item weak" onclick="showWordsByStatus('weak')"><div class="quiz-stat-value" id="statWeak">0</div><div class="quiz-stat-label">Ошибки</div></div>
+                        <div class="quiz-stat-item new" onclick="showWordsByStatus('new')"><div class="quiz-stat-value" id="statNew">0</div><div class="quiz-stat-label">Новых</div></div>
+                    </div>
+                    <div class="quiz-stats-buttons-row">
+                        <button class="btn-reset-stats" onclick="resetQuizStats()">Весь рейтинг</button>
+                        <button class="btn-reset-stats" onclick="resetLearnedToNew()" style="border-color: var(--ios-orange); color: var(--ios-orange);">Изученные → Новые</button>
+                    </div>
+                </div>
+                
+                <div style="text-align: left; margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Режим теста</div>
+                <div class="quiz-mode-buttons">
+                    <button class="quiz-mode-btn active" data-mode="all" onclick="setQuizMode('all')">Все слова</button>
+                    <button class="quiz-mode-btn" data-mode="category" onclick="setQuizMode('category')">По разделам</button>
+                    <button class="quiz-mode-btn" data-mode="matching" onclick="setQuizMode('matching')">Сопоставление</button>
+                </div>
+                <select id="quizCategorySelect" class="form-input hidden" style="margin-bottom: 14px;" onchange="updateQuizCounter()"><option value="">Все категории</option></select>
+                
+                <div id="quantitySection">
+                    <div style="text-align: left; margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Количество слов</div>
+                    <div class="quiz-mode-buttons">
+                        <button class="quiz-mode-btn active" data-count="50" onclick="setQuizCount(50)">50</button>
+                        <button class="quiz-mode-btn" data-count="100" onclick="setQuizCount(100)">100</button>
+                        <button class="quiz-mode-btn" data-count="all" onclick="setQuizCount('all')">Все</button>
+                    </div>
+                </div>
+                
+                <div id="directionSection">
+                    <div style="text-align: left; margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Направление</div>
+                    <div class="quiz-direction">
+                        <button class="quiz-direction-btn active" id="dirWordToMeaning" onclick="setQuizDirection('wordToMeaning')">Слово → Перевод</button>
+                        <button class="quiz-direction-btn" id="dirMeaningToWord" onclick="setQuizDirection('meaningToWord')">Перевод → Слово</button>
+                        <button class="quiz-direction-btn" id="dirMixed" onclick="setQuizDirection('mixed')">Смешанный</button>
+                        <button class="quiz-direction-btn" id="dirListening" onclick="setQuizDirection('listening')">На слух</button>
+                    </div>
+                </div>
+                
+                <div id="quizCounter" style="font-size: 13px; color: var(--ios-text-secondary); margin: 14px 0; font-weight: 600;">Будет выбрано слов: 50</div>
+                <button class="btn-primary" onclick="beginQuiz()">Начать тест</button>
+            </div>
+
+            <div id="quizDirectionPickerScreen" class="quiz-container hidden">
+                <div style="font-size: 18px; font-weight: 700; margin-bottom: 4px; font-family: var(--font-display);">Выберите тип теста</div>
+                <div style="color: var(--ios-text-secondary); margin-bottom: 18px; font-size: 14px;">
+                    Для <strong id="pickerWordCount" style="color: var(--ios-blue);">0</strong> слов
+                </div>
+                <button class="direction-picker-btn" onclick="startTestWithDirection('wordToMeaning')"><span>Слово → Перевод</span><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                <button class="direction-picker-btn" onclick="startTestWithDirection('meaningToWord')"><span>Перевод → Слово</span><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                <button class="direction-picker-btn" onclick="startTestWithDirection('mixed')"><span>Смешанный</span><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                <button class="direction-picker-btn" onclick="startTestWithDirection('listening')"><span>На слух</span><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                <button class="btn-primary" onclick="backToWordsList()" style="background: var(--ios-fill); color: var(--ios-text); margin-top: 12px; box-shadow: none;">Назад</button>
+            </div>
+
+            <div id="quizGameScreen" class="quiz-container hidden">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div id="quizProgress" style="font-size: 14px; color: var(--ios-text-secondary); font-weight: 600;">Вопрос 1 из 10</div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <button onclick="toggleQuizSound()" id="quizSoundToggleBtn" class="icon-btn-header" style="width: 32px; height: 32px;">
+                            <svg class="svg-icon" id="audioToggleSvg" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                        </button>
+                        <button id="btnUndoQuiz" onclick="undoQuizStep()" style="display: none; background: rgba(var(--ios-blue-rgb), 0.16); border: none; color: var(--ios-blue); font-size: 14px; cursor: pointer; font-weight: 600; padding: 5px 10px; border-radius: 10px;">↩️</button>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: center; gap: 16px; font-size: 14px; margin-bottom: 12px; font-weight: 700;">
+                    <span style="color: var(--ios-green);">✓ <span id="correctCount">0</span></span>
+                    <span style="color: var(--ios-red);">✗ <span id="wrongCount">0</span></span>
+                    <span style="color: var(--ios-green);">🟢 <span id="sessionLearnedCount">0</span></span>
+                    <span style="color: var(--ios-text-secondary);">Осталось: <span id="remainingCount">0</span></span>
+                </div>
+                <div id="quizLabel" style="font-size: 14px; color: var(--ios-text-secondary); margin-bottom: 6px;">Выберите перевод:</div>
+                <div class="quiz-word" id="quizWord">—</div>
+                <div class="quiz-options" id="quizOptions"></div>
+                <button class="btn-primary btn-warning" onclick="finishQuizEarly()" style="margin-top: 16px;">Завершить</button>
+            </div>
+
+            <div id="quizMatchingScreen" class="quiz-container hidden">
+                <div id="matchingProgress" style="font-size: 14px; color: var(--ios-text-secondary); margin-bottom: 8px;">Найдите пары: 0 / 10</div>
+                <div style="display: flex; justify-content: center; gap: 14px; font-size: 14px; margin-bottom: 12px; font-weight: 700;">
+                    <span style="color: var(--ios-text-secondary);">⏱️ <span id="matchingTime">00:00</span></span>
+                    <span style="color: var(--ios-red);">Ошибок: <span id="matchingMistakes">0</span></span>
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: center;" id="matchingGrid">
+                    <div style="display: flex; flex-direction: column; gap: 8px; flex: 1;" id="matchingLeft"></div>
+                    <div style="display: flex; flex-direction: column; gap: 8px; flex: 1;" id="matchingRight"></div>
+                </div>
+                <button class="btn-primary btn-warning" onclick="finishQuizEarly()" style="margin-top: 16px;">Завершить</button>
+            </div>
+
+            <div id="quizResultsScreen" class="quiz-container hidden"></div>
+        </section>
+
+        <!-- Вкладка 4: Настройки -->
+        <section class="tab-view-section" id="pageSettings">
+            <div class="header">
+                <div class="header-brand">
+                    <div class="header-logo-icon">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    </div>
+                    <h1>Настройки</h1>
+                </div>
+            </div>
+
+            <div class="ios-settings-card">
+                <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Оформление</div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 15px; font-weight: 500;">Размер шрифта</span>
+                    <select class="form-input" id="fontSizeSelect" style="width: 130px; padding: 8px 12px;" onchange="changeFontSize()">
+                        <option value="small">Мелкий</option>
+                        <option value="medium" selected>Средний</option>
+                        <option value="large">Крупный</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="ios-settings-card">
+                <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Озвучка</div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 15px; font-weight: 500;">Язык речи</span>
+                    <select class="form-input" id="ttsLangSelect" style="width: 140px; padding: 8px 12px;" onchange="changeTtsLang()">
+                        <option value="en-US">Английский</option>
+                        <option value="tr-TR">Турецкий</option>
+                        <option value="ru-RU">Русский</option>
+                        <option value="ar-SA">Арабский</option>
+                        <option value="es-ES">Испанский</option>
+                        <option value="de-DE">Немецкий</option>
+                        <option value="fr-FR">Французский</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="ios-settings-card">
+                <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Резервная копия</div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <button class="btn-primary" onclick="exportAllDictionaries()" style="margin-top: 0;">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        В память телефона
+                    </button>
+                    <button class="btn-primary" onclick="importDictionary()" style="margin-top: 0; background: var(--ios-fill); color: var(--ios-text); box-shadow: none;">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        Из памяти телефона
+                    </button>
+                </div>
+            </div>
+
+            <div class="ios-settings-card">
+                <div style="font-size: 11px; font-weight: 700; color: var(--ios-red); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Опасная зона</div>
+                <button class="btn-primary btn-danger" onclick="clearAllWords()" style="margin-top: 0; font-size: 14px;">Очистить текущий словарь</button>
+            </div>
+        </section>
+
     </div>
 
-    <button class="fab" onclick="openFabMenu()">
-        <svg class="svg-icon svg-icon-large" viewBox="0 0 24 24" style="stroke-width: 2.5;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-    </button>
+    <!-- iOS Нижняя панель навигации (4 вкладки + центральный плюсик) -->
+    <div class="ios-tab-bar">
+        <button class="tab-item active" id="tabNavHome" onclick="switchNavTab('home')" title="Главная">
+            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        </button>
+        
+        <button class="tab-item" id="tabNavDicts" onclick="switchNavTab('dicts')" title="Словари">
+            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        </button>
+        
+        <button class="tab-center-btn" onclick="openFabMenu()" title="Добавить">
+            <svg class="svg-icon svg-icon-large" viewBox="0 0 24 24" style="stroke-width: 2.5;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
+        
+        <button class="tab-item" id="tabNavQuiz" onclick="switchNavTab('quiz')" title="Изучение">
+            <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+        </button>
+        
+        <button class="tab-item" id="tabNavSettings" onclick="switchNavTab('settings')" title="Настройки">
+            <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </button>
+    </div>
     
     <!-- FAB Меню (2x2) -->
     <div class="modal" id="fabMenuModal">
@@ -1138,111 +1342,6 @@
         </div>
     </div>
 
-    <!-- Модалка Тестирования -->
-    <div class="modal" id="quizModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Режим изучения</h2>
-                <button class="modal-close" onclick="closeQuiz()">
-                    <svg class="svg-icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-            </div>
-            <div id="quizStartScreen" class="quiz-container">
-                <div class="quiz-stats-block">
-                    <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.05em;">Статистика словаря</div>
-                    <div class="quiz-stats-grid">
-                        <div class="quiz-stat-item learned" onclick="showWordsByStatus('learned')"><div class="quiz-stat-value" id="statLearned">0</div><div class="quiz-stat-label">Изучено</div></div>
-                        <div class="quiz-stat-item weak" onclick="showWordsByStatus('weak')"><div class="quiz-stat-value" id="statWeak">0</div><div class="quiz-stat-label">Ошибки</div></div>
-                        <div class="quiz-stat-item new" onclick="showWordsByStatus('new')"><div class="quiz-stat-value" id="statNew">0</div><div class="quiz-stat-label">Новых</div></div>
-                    </div>
-                    <div class="quiz-stats-buttons-row">
-                        <button class="btn-reset-stats" onclick="resetQuizStats()">Весь рейтинг</button>
-                        <button class="btn-reset-stats" onclick="resetLearnedToNew()" style="border-color: var(--ios-orange); color: var(--ios-orange);">Изученные → Новые</button>
-                    </div>
-                </div>
-                
-                <div style="text-align: left; margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Режим теста</div>
-                <div class="quiz-mode-buttons">
-                    <button class="quiz-mode-btn active" data-mode="all" onclick="setQuizMode('all')">Все слова</button>
-                    <button class="quiz-mode-btn" data-mode="category" onclick="setQuizMode('category')">По разделам</button>
-                    <button class="quiz-mode-btn" data-mode="matching" onclick="setQuizMode('matching')">Сопоставление</button>
-                </div>
-                <select id="quizCategorySelect" class="form-input hidden" style="margin-bottom: 14px;" onchange="updateQuizCounter()"><option value="">Все категории</option></select>
-                
-                <div id="quantitySection">
-                    <div style="text-align: left; margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Количество слов</div>
-                    <div class="quiz-mode-buttons">
-                        <button class="quiz-mode-btn active" data-count="50" onclick="setQuizCount(50)">50</button>
-                        <button class="quiz-mode-btn" data-count="100" onclick="setQuizCount(100)">100</button>
-                        <button class="quiz-mode-btn" data-count="all" onclick="setQuizCount('all')">Все</button>
-                    </div>
-                </div>
-                
-                <div id="directionSection">
-                    <div style="text-align: left; margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Направление</div>
-                    <div class="quiz-direction">
-                        <button class="quiz-direction-btn active" id="dirWordToMeaning" onclick="setQuizDirection('wordToMeaning')">Слово → Перевод</button>
-                        <button class="quiz-direction-btn" id="dirMeaningToWord" onclick="setQuizDirection('meaningToWord')">Перевод → Слово</button>
-                        <button class="quiz-direction-btn" id="dirMixed" onclick="setQuizDirection('mixed')">Смешанный</button>
-                        <button class="quiz-direction-btn" id="dirListening" onclick="setQuizDirection('listening')">На слух</button>
-                    </div>
-                </div>
-                
-                <div id="quizCounter" style="font-size: 13px; color: var(--ios-text-secondary); margin: 14px 0; font-weight: 600;">Будет выбрано слов: 50</div>
-                <button class="btn-primary" onclick="beginQuiz()">Начать тест</button>
-            </div>
-
-            <div id="quizDirectionPickerScreen" class="quiz-container hidden">
-                <div style="font-size: 18px; font-weight: 700; margin-bottom: 4px; font-family: var(--font-display);">Выберите тип теста</div>
-                <div style="color: var(--ios-text-secondary); margin-bottom: 18px; font-size: 14px;">
-                    Для <strong id="pickerWordCount" style="color: var(--ios-blue);">0</strong> слов
-                </div>
-                <button class="direction-picker-btn" onclick="startTestWithDirection('wordToMeaning')"><span>Слово → Перевод</span><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
-                <button class="direction-picker-btn" onclick="startTestWithDirection('meaningToWord')"><span>Перевод → Слово</span><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
-                <button class="direction-picker-btn" onclick="startTestWithDirection('mixed')"><span>Смешанный</span><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
-                <button class="direction-picker-btn" onclick="startTestWithDirection('listening')"><span>На слух</span><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
-                <button class="btn-primary" onclick="backToWordsList()" style="background: var(--ios-fill); color: var(--ios-text); margin-top: 12px; box-shadow: none;">Назад</button>
-            </div>
-
-            <div id="quizGameScreen" class="quiz-container hidden">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <div id="quizProgress" style="font-size: 14px; color: var(--ios-text-secondary); font-weight: 600;">Вопрос 1 из 10</div>
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <button onclick="toggleQuizSound()" id="quizSoundToggleBtn" class="icon-btn-header" style="width: 32px; height: 32px;">
-                            <svg class="svg-icon" id="audioToggleSvg" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-                        </button>
-                        <button id="btnUndoQuiz" onclick="undoQuizStep()" style="display: none; background: rgba(var(--ios-blue-rgb), 0.16); border: none; color: var(--ios-blue); font-size: 14px; cursor: pointer; font-weight: 600; padding: 5px 10px; border-radius: 10px;">↩️</button>
-                    </div>
-                </div>
-                <div style="display: flex; justify-content: center; gap: 16px; font-size: 14px; margin-bottom: 12px; font-weight: 700;">
-                    <span style="color: var(--ios-green);">✓ <span id="correctCount">0</span></span>
-                    <span style="color: var(--ios-red);">✗ <span id="wrongCount">0</span></span>
-                    <span style="color: var(--ios-green);">🟢 <span id="sessionLearnedCount">0</span></span>
-                    <span style="color: var(--ios-text-secondary);">Осталось: <span id="remainingCount">0</span></span>
-                </div>
-                <div id="quizLabel" style="font-size: 14px; color: var(--ios-text-secondary); margin-bottom: 6px;">Выберите перевод:</div>
-                <div class="quiz-word" id="quizWord">—</div>
-                <div class="quiz-options" id="quizOptions"></div>
-                <button class="btn-primary btn-warning" onclick="finishQuizEarly()" style="margin-top: 16px;">Завершить</button>
-            </div>
-
-            <div id="quizMatchingScreen" class="quiz-container hidden">
-                <div id="matchingProgress" style="font-size: 14px; color: var(--ios-text-secondary); margin-bottom: 8px;">Найдите пары: 0 / 10</div>
-                <div style="display: flex; justify-content: center; gap: 14px; font-size: 14px; margin-bottom: 12px; font-weight: 700;">
-                    <span style="color: var(--ios-text-secondary);">⏱️ <span id="matchingTime">00:00</span></span>
-                    <span style="color: var(--ios-red);">Ошибок: <span id="matchingMistakes">0</span></span>
-                </div>
-                <div style="display: flex; gap: 10px; justify-content: center;" id="matchingGrid">
-                    <div style="display: flex; flex-direction: column; gap: 8px; flex: 1;" id="matchingLeft"></div>
-                    <div style="display: flex; flex-direction: column; gap: 8px; flex: 1;" id="matchingRight"></div>
-                </div>
-                <button class="btn-primary btn-warning" onclick="finishQuizEarly()" style="margin-top: 16px;">Завершить</button>
-            </div>
-
-            <div id="quizResultsScreen" class="quiz-container hidden"></div>
-        </div>
-    </div>
-
     <!-- Модалка списка статусов -->
     <div class="modal" id="wordsListModal">
         <div class="modal-content">
@@ -1253,86 +1352,6 @@
                 </button>
             </div>
             <div id="wordsListModalContent" style="max-height: 380px; overflow-y: auto;"></div>
-        </div>
-    </div>
-
-    <!-- Модалка переключения словарей -->
-    <div class="modal" id="dictSwitchModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Словари</h2>
-                <button class="modal-close" onclick="closeDictSwitch()">
-                    <svg class="svg-icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-            </div>
-            <div id="dictSwitchList"></div>
-        </div>
-    </div>
-
-    <!-- Модалка Настроек -->
-    <div class="modal" id="settingsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Настройки</h2>
-                <button class="modal-close" onclick="closeSettings()">
-                    <svg class="svg-icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-            </div>
-            <div style="margin-bottom: 22px;">
-                <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Словари</div>
-                <div style="display: flex; gap: 8px; margin-bottom: 10px;">
-                    <input type="text" class="form-input" id="newDictName" placeholder="Новый словарь...">
-                    <button class="btn-primary" onclick="createDictionary()" style="width: auto; padding: 0 16px; margin-top: 0;">Добавить</button>
-                </div>
-                <div id="dictionariesList"></div>
-            </div>
-            
-            <div style="margin-bottom: 22px;">
-                <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Оформление</div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 15px; font-weight: 500;">Размер шрифта</span>
-                    <select class="form-input" id="fontSizeSelect" style="width: 130px; padding: 8px 12px;" onchange="changeFontSize()">
-                        <option value="small">Мелкий</option>
-                        <option value="medium" selected>Средний</option>
-                        <option value="large">Крупный</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div style="margin-bottom: 22px;">
-                <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Озвучка</div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 15px; font-weight: 500;">Язык речи</span>
-                    <select class="form-input" id="ttsLangSelect" style="width: 140px; padding: 8px 12px;" onchange="changeTtsLang()">
-                        <option value="en-US">Английский</option>
-                        <option value="tr-TR">Турецкий</option>
-                        <option value="ru-RU">Русский</option>
-                        <option value="ar-SA">Арабский</option>
-                        <option value="es-ES">Испанский</option>
-                        <option value="de-DE">Немецкий</option>
-                        <option value="fr-FR">Французский</option>
-                    </select>
-                </div>
-            </div>
-
-            <div style="margin-bottom: 22px;">
-                <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Резервная копия</div>
-                <div style="display: flex; flex-direction: column; gap: 8px;">
-                    <button class="btn-primary" onclick="exportAllDictionaries()" style="margin-top: 0;">
-                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                        В память телефона
-                    </button>
-                    <button class="btn-primary" onclick="importDictionary()" style="margin-top: 0; background: var(--ios-fill); color: var(--ios-text); box-shadow: none;">
-                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                        Из памяти телефона
-                    </button>
-                </div>
-            </div>
-
-            <div>
-                <div style="font-size: 11px; font-weight: 700; color: var(--ios-red); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Опасная зона</div>
-                <button class="btn-primary btn-danger" onclick="clearAllWords()" style="margin-top: 0; font-size: 14px;">Очистить словарь</button>
-            </div>
         </div>
     </div>
 
@@ -1381,7 +1400,8 @@
             <div id="wordDetailContent"></div>
         </div>
     </div>
-    <div class="author-signature" style="position: fixed; bottom: 8px; left: 12px; font-size: 11px; color: var(--ios-text-tertiary); font-style: italic; pointer-events: none; z-index: 100;">Мухаммад абу Абдульмалик</div>
+
+    <div class="author-signature" style="position: fixed; bottom: 72px; left: 12px; font-size: 11px; color: var(--ios-text-tertiary); font-style: italic; pointer-events: none; z-index: 99;">Мухаммад абу Абдульмалик</div>
 
     <script>
         if ('serviceWorker' in navigator) {
@@ -1404,6 +1424,7 @@
         } catch (e) {}
 
         let data = loadData();
+        let currentNavTab = 'home';
         let currentImageBase64 = null;
         let editingWordId = null;
         let isEditing = false;
@@ -1427,6 +1448,47 @@
         try {
             if (localStorage.getItem('ttsLang')) ttsLang = localStorage.getItem('ttsLang');
         } catch(e) {}
+
+        function switchNavTab(tab) {
+            currentNavTab = tab;
+            
+            document.querySelectorAll('.tab-view-section').forEach(sec => sec.classList.remove('active-tab-page'));
+            document.querySelectorAll('.tab-item').forEach(btn => btn.classList.remove('active'));
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (tab === 'home') {
+                document.getElementById('pageHome').classList.add('active-tab-page');
+                document.getElementById('tabNavHome').classList.add('active');
+                renderMainContent();
+            } else if (tab === 'dicts') {
+                document.getElementById('pageDicts').classList.add('active-tab-page');
+                document.getElementById('tabNavDicts').classList.add('active');
+                renderDictsPage();
+            } else if (tab === 'quiz') {
+                document.getElementById('pageQuiz').classList.add('active-tab-page');
+                document.getElementById('tabNavQuiz').classList.add('active');
+                openQuizScreen();
+            } else if (tab === 'settings') {
+                document.getElementById('pageSettings').classList.add('active-tab-page');
+                document.getElementById('tabNavSettings').classList.add('active');
+            }
+        }
+
+        function scrollToTopHome() {
+            if (currentNavTab !== 'home') {
+                switchNavTab('home');
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                document.getElementById('searchInput').value = '';
+                document.getElementById('searchAddQuickBtn').classList.add('hidden');
+                if (currentCategory !== 'all') {
+                    filterCategory('all');
+                } else {
+                    renderMainContent();
+                }
+            }
+        }
 
         function changeTtsLang() {
             ttsLang = document.getElementById('ttsLangSelect').value;
@@ -1575,10 +1637,10 @@
             document.getElementById('totalWords').textContent = words.length;
             document.getElementById('todayWords').textContent = words.filter(w => new Date(w.createdAt).toDateString() === today).length;
             document.getElementById('weekWords').textContent = words.filter(w => new Date(w.createdAt) >= weekAgo).length;
-            document.getElementById('wordCount').textContent = words.length;
+            document.getElementById('homeBrandTitle').textContent = data.currentDictionary || 'Личный словарь';
         }
 
-        try { renderDictionarySelect(); renderMainContent(); updateStats(); updateCategories(); setTimeout(changeFontSize, 100); } catch (e) { console.error(e); }
+        try { renderMainContent(); updateStats(); updateCategories(); setTimeout(changeFontSize, 100); } catch (e) { console.error(e); }
 
         document.getElementById('imageInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
@@ -1594,8 +1656,6 @@
                 reader.readAsDataURL(file);
             }
         });
-
-        function renderDictionarySelect() { document.getElementById('currentDictName').textContent = data.currentDictionary; }
         
         function updateCategories() {
             if (currentTab === 'rules') {
@@ -1747,9 +1807,9 @@
             listEl.innerHTML = '<div class="compact-list">' + rules.map(rule => `
                 <div class="compact-item" onclick="showRuleDetailModal(${rule.id})">
                     <div class="compact-word">
-                        <div class="dict-icon-container" style="width: 28px; height: 28px; border-radius: 8px;">
+                        <span class="compact-audio-btn" style="background: rgba(var(--ios-blue-rgb), 0.12);">
                             <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-                        </div>
+                        </span>
                         ${escapeHtml(rule.title)}
                     </div>
                     <div class="compact-meaning" style="color: var(--ios-blue); font-size: 12px; font-weight: 600; text-transform: uppercase;">${escapeHtml(rule.category || 'Грамматика')}</div>
@@ -1851,24 +1911,43 @@
             renderMainContent();
         }
 
-        function openDictSwitch() { renderDictSwitchList(); document.getElementById('dictSwitchModal').classList.add('active'); }
-        function closeDictSwitch() { document.getElementById('dictSwitchModal').classList.remove('active'); }
-        function renderDictSwitchList() {
-            document.getElementById('dictSwitchList').innerHTML = Object.keys(data.dictionaries).map(name => {
+        /* Управление словарями на отдельной вкладке */
+        function renderDictsPage() {
+            const list = document.getElementById('dictsPageList');
+            list.innerHTML = Object.keys(data.dictionaries).map(name => {
                 const count = data.dictionaries[name].length;
                 const isActive = name === data.currentDictionary;
-                return `<div class="compact-item" style="margin-bottom: 8px; border-radius: 14px; ${isActive ? 'border-color: var(--ios-blue);' : ''}" onclick="switchToDictionary('${name.replace(/'/g, "\\'")}')">
-                    <div style="font-weight: 600;">${name} ${isActive ? '✓' : ''}</div><div style="font-size: 13px; color: var(--ios-text-secondary);">${count} слов</div></div>`;
+                return `<div class="compact-item" onclick="switchToDictionary('${name.replace(/'/g, "\\'")}')">
+                    <div>
+                        <div style="font-weight: 600; color: ${isActive ? 'var(--ios-blue)' : 'var(--ios-text)'};">${escapeHtml(name)} ${isActive ? '✓' : ''}</div>
+                        <div style="font-size: 13px; color: var(--ios-text-secondary);">${count} слов</div>
+                    </div>
+                    <div style="display: flex; gap: 6px;" onclick="event.stopPropagation()">
+                        <button class="compact-delete-btn" style="background: var(--ios-fill); color: var(--ios-blue);" onclick="renameDictionary('${name.replace(/'/g, "\\'")}')">
+                            <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                        </button>
+                        <button class="compact-delete-btn" onclick="deleteDictionary('${name.replace(/'/g, "\\'")}')">
+                            <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        </button>
+                    </div>
+                </div>`;
             }).join('');
         }
-        function createDictionary() {
-            const name = document.getElementById('newDictName').value.trim();
-            if (!name) return alert('Введите название');
+
+        function createDictFromPage() {
+            const input = document.getElementById('newDictInputPage');
+            const name = input.value.trim();
+            if (!name) return alert('Введите название словаря');
             if (data.dictionaries[name]) return alert('Такой словарь уже есть');
-            data.dictionaries[name] = []; data.currentDictionary = name; saveData();
-            document.getElementById('newDictName').value = '';
-            renderDictionarySelect(); renderMainContent(); renderDictionariesList(); updateStats();
+            data.dictionaries[name] = []; 
+            data.currentDictionary = name; 
+            saveData();
+            input.value = '';
+            renderDictsPage();
+            updateStats();
+            updateCategories();
         }
+
         function renameDictionary(oldName) {
             const newName = prompt('Новое название:', oldName)?.trim();
             if (!newName || newName === oldName) return;
@@ -1877,35 +1956,30 @@
             for (const key of Object.keys(data.dictionaries)) newDicts[key === oldName ? newName : key] = data.dictionaries[key];
             data.dictionaries = newDicts;
             if (data.currentDictionary === oldName) data.currentDictionary = newName;
-            saveData(); renderDictionarySelect(); renderDictionariesList(); renderMainContent(); updateStats();
+            saveData();
+            renderDictsPage();
+            updateStats();
         }
+
         function deleteDictionary(name) {
-            if (Object.keys(data.dictionaries).length === 1) return alert('Нельзя удалить последний словарь');
+            if (Object.keys(data.dictionaries).length === 1) return alert('Нельзя удалить единственный словарь');
             if (!confirm(`Удалить "${name}"?`)) return;
             delete data.dictionaries[name];
             if (data.currentDictionary === name) data.currentDictionary = Object.keys(data.dictionaries)[0];
-            saveData(); renderDictionarySelect(); renderDictionariesList(); renderMainContent(); updateStats();
+            saveData();
+            renderDictsPage();
+            updateStats();
+            updateCategories();
         }
+
         function switchToDictionary(name) {
-            data.currentDictionary = name; saveData(); loadSessionWordIds();
-            renderDictionarySelect(); renderDictionariesList(); renderDictSwitchList();
-            renderMainContent(); updateStats(); updateCategories(); closeDictSwitch();
-        }
-        function renderDictionariesList() {
-            document.getElementById('dictionariesList').innerHTML = Object.keys(data.dictionaries).map(name => {
-                const count = data.dictionaries[name].length;
-                const isActive = name === data.currentDictionary;
-                return `<div class="compact-item" style="margin-bottom: 8px; border-radius: 14px;">
-                    <div><div style="font-weight: 600;">${name} ${isActive ? '(текущий)' : ''}</div><div style="font-size: 12px; color: var(--ios-text-secondary);">${count} слов</div></div>
-                    <div style="display: flex; gap: 6px;">
-                        <button class="compact-delete-btn" style="background: var(--ios-fill); color: var(--ios-blue);" onclick="renameDictionary('${name.replace(/'/g, "\\'")}')">
-                            <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                        </button>
-                        <button class="compact-delete-btn" onclick="deleteDictionary('${name.replace(/'/g, "\\'")}')">
-                            <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                        </button>
-                    </div></div>`;
-            }).join('');
+            data.currentDictionary = name; 
+            saveData(); 
+            loadSessionWordIds();
+            renderDictsPage();
+            updateStats(); 
+            updateCategories();
+            switchNavTab('home');
         }
 
         function openFabMenu() { document.getElementById('fabMenuModal').classList.add('active'); }
@@ -2103,7 +2177,6 @@
 
         /* Массовый импорт Слов */
         function openBulkImport() {
-            closeSettings();
             document.getElementById('bulkImportText').value = '';
             document.getElementById('bulkImportCategory').value = '';
             
@@ -2213,8 +2286,6 @@
             renderMainContent();
         }
 
-        function openSettings() { renderDictionariesList(); document.getElementById('settingsModal').classList.add('active'); }
-        function closeSettings() { document.getElementById('settingsModal').classList.remove('active'); }
         async function exportAllDictionaries() {
             const content = JSON.stringify({ allDictionaries: true, dictionaries: data.dictionaries, rules: data.rules || [], exportDate: new Date().toISOString() }, null, 2);
             const suggestedName = `all_dictionaries_${new Date().toISOString().split('T')[0]}.json`;
@@ -2238,7 +2309,11 @@
                             data.dictionaries[imported.name] = imported.words;
                             data.currentDictionary = imported.name;
                         }
-                        saveData(); renderDictionarySelect(); renderMainContent(); updateStats(); updateCategories(); alert('Импорт завершён');
+                        saveData(); 
+                        renderMainContent(); 
+                        updateStats(); 
+                        updateCategories(); 
+                        alert('Импорт завершён');
                     } catch(err) { alert('Ошибка файла'); }
                 };
                 reader.readAsText(file);
@@ -2246,13 +2321,12 @@
             input.click();
         }
         function clearAllWords() {
-            if (!confirm(`Очистить словарь "${data.currentDictionary}"?`)) return;
+            if (!confirm(`Очистить текущий словарь "${data.currentDictionary}"?`)) return;
             setCurrentWords([]); resetSessionWordIds(); renderMainContent(); updateStats(); updateCategories(); alert('Словарь очищен');
         }
         function escapeHtml(text) { if (text === null || text === undefined) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
-        function openQuiz() {
-            document.getElementById('quizModal').classList.add('active');
+        function openQuizScreen() {
             quizData = { correct: 0, wrong: 0, learnedCount: 0, currentWord: null, options: [], direction: 'wordToMeaning', wordQueue: [], wrongWords: [], isRetryMode: false, isFinished: false, lastState: null, nextTimeout: null };
             customTestPool = null; lastStatusForPicker = null; loadSessionWordIds();
             document.getElementById('quizStartScreen').classList.remove('hidden');
@@ -2263,11 +2337,7 @@
             fillQuizCategorySelect(); updateQuizCounter(); updateQuizDirectionButtons(); updateQuizStats();
             setQuizMode(quizMode);
         }
-        function closeQuiz() { 
-            document.getElementById('quizModal').classList.remove('active'); 
-            if (matchingData.timerInterval) clearInterval(matchingData.timerInterval); 
-            if (quizData.nextTimeout) clearTimeout(quizData.nextTimeout);
-        }
+
         function setQuizMode(mode) {
             quizMode = mode;
             document.querySelectorAll('.quiz-mode-btn[data-mode]').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
@@ -2415,7 +2485,7 @@
         
         function backToWordsList() {
             document.getElementById('quizDirectionPickerScreen').classList.add('hidden');
-            document.getElementById('quizModal').classList.remove('active');
+            document.getElementById('quizStartScreen').classList.remove('hidden');
             if (lastStatusForPicker) showWordsByStatus(lastStatusForPicker);
         }
         function closeWordsListModal() { document.getElementById('wordsListModal').classList.remove('active'); }
@@ -2580,7 +2650,7 @@
                     <div class="stat-card" style="flex: 1;"><div class="stat-value" style="color: var(--ios-green);">${quizData.correct}</div><div class="stat-label">Верно</div></div>
                     <div class="stat-card" style="flex: 1;"><div class="stat-value" style="color: var(--ios-red);">${quizData.wrong}</div><div class="stat-label">Ошибок</div></div>
                 </div>
-                <button class="btn-primary" onclick="closeQuiz()">Закрыть</button>`;
+                <button class="btn-primary" onclick="openQuizScreen()">Пройти заново</button>`;
             
             document.getElementById('quizGameScreen').classList.add('hidden');
             document.getElementById('quizResultsScreen').classList.remove('hidden');
@@ -2642,10 +2712,7 @@
             }
         }
 
-        document.getElementById('dictSwitchModal').addEventListener('click', function(e) { if (e.target === this) closeDictSwitch(); });
-        document.getElementById('settingsModal').addEventListener('click', function(e) { if (e.target === this) closeSettings(); });
         document.getElementById('wordModal').addEventListener('click', function(e) { if (e.target === this) closeWordModal(); });
-        document.getElementById('quizModal').addEventListener('click', function(e) { if (e.target === this) closeQuiz(); });
         document.getElementById('wordDetailModal').addEventListener('click', function(e) { if (e.target === this) closeWordDetail(); });
         document.getElementById('wordsListModal').addEventListener('click', function(e) { if (e.target === this) closeWordsListModal(); });
         document.getElementById('bulkImportModal').addEventListener('click', function(e) { if (e.target === this) closeBulkImport(); });
