@@ -2732,17 +2732,39 @@
 
             if (quizMode === 'matching') {
                 let pool = getAllPoolWords();
-                counter.innerHTML = `<span style="color: var(--ios-blue);">Раздел: ${filterName}</span> | Доступно для сопоставления: <strong>${pool.length}</strong>`;
+                counter.innerHTML = `<span style="color: var(--ios-blue);">Раздел: ${filterName}</span> | Доступно: <strong>${pool.length}</strong>`;
                 return;
             }
-            const available = getWordsForQuiz();
-            const allPool = getAllPoolWords();
-            const remaining = allPool.length - allPool.filter(w => sessionWordIds.includes(w.id)).length;
             
+            let available = getWordsForQuiz();
+            const allPool = getAllPoolWords();
+            const remainingInRound = allPool.length - allPool.filter(w => sessionWordIds.includes(w.id)).length;
+            
+            // Если круг завершен (доступных слов < 4, но в пуле они есть)
+            if (available.length < 4 && allPool.length >= 4) {
+                 counter.innerHTML = `
+                    <div style="color: var(--ios-green); font-weight: 700; margin-bottom: 4px; font-size: 14px;">🎉 Круг завершен!</div>
+                    <div style="font-size: 12px; color: var(--ios-text-secondary);">Нажмите «Начать», чтобы запустить эти ${allPool.length} слов по новому кругу.</div>
+                 `;
+                 return;
+            }
+            
+            // Если слов нет вообще
             if (available.length === 0) {
-                counter.innerHTML = allPool.length === 0 ? `<span style="color: var(--ios-orange);">В разделе "${filterName}" нет слов</span>` : `<span style="color: var(--ios-green);">Все слова раздела "${filterName}" пройдены (${allPool.length})</span>`;
+                counter.innerHTML = allPool.length === 0 ? 
+                    `<span style="color: var(--ios-orange);">В разделе "${filterName}" нет слов</span>` : 
+                    `<span style="color: var(--ios-green);">Все слова раздела "${filterName}" пройдены (${allPool.length})</span>`;
             } else {
-                counter.innerHTML = `<span style="color: var(--ios-blue); font-weight: 700;">Раздел: ${filterName}</span> • Будет выбрано: <strong>${Math.min(quizCount === Infinity ? available.length : quizCount, available.length)}</strong> (осталось: ${remaining})`;
+                // Красивый индикатор прогресса круга
+                counter.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 14px;">
+                        <span style="color: var(--ios-blue); font-weight: 700;">${filterName}</span>
+                        <span style="color: var(--ios-purple); font-weight: 700;">Осталось в круге: ${remainingInRound}</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--ios-text-secondary); text-align: left;">
+                        В эту сессию войдет слов: <strong>${Math.min(quizCount === Infinity ? available.length : quizCount, available.length)}</strong>
+                    </div>
+                `;
             }
         }
         
@@ -2878,7 +2900,15 @@
         function beginQuiz() {
             if (quizMode === 'matching') { startMatchingQuiz(); return; }
 
-            const words = getWordsForQuiz();
+            let words = getWordsForQuiz();
+            const allPool = getAllPoolWords();
+
+            // Если круг завершен, сбрасываем кэш сессии и запускаем слова по новому кругу
+            if (words.length < 4 && allPool.length >= 4) {
+                resetSessionWordIds();
+                words = getWordsForQuiz(); 
+            }
+
             if (words.length < 4) return alert(`Нужно минимум 4 слова. Доступно: ${words.length}`);
             
             // Сохраняем очередь слов и сбрасываем прогресс для сессии
@@ -3314,3 +3344,4 @@
     </script>
 </body>
 </html>
+
