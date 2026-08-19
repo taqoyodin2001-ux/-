@@ -735,48 +735,68 @@
             box-shadow: 0 8px 24px rgba(255, 69, 58, 0.35);
         }
 
-        .fab-grid-menu {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 10px;
+        .fab-overlay-modal .modal-content { display: none; }
+        .fab-overlay-modal.active {
+            background-color: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
         }
-        .fab-grid-card {
-            background: var(--ios-card);
-            border: 1px solid var(--ios-border);
-            border-radius: 20px;
-            padding: 20px 16px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+
+        /* Плавающие пункты FAB-меню: полупрозрачные квадратики, одной строкой по бокам от плюсика */
+        .fab-float-wrap {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: calc(78px + env(safe-area-inset-bottom, 0px));
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 68px;
+            pointer-events: none;
+            z-index: 1001;
+        }
+        .fab-float-col {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            pointer-events: auto;
+        }
+        .fab-float-item {
+            width: 60px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 5px;
+            padding: 10px 4px;
+            background: var(--ios-card);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--ios-border);
+            border-radius: 16px;
             box-shadow: var(--ios-shadow-card), var(--ios-highlight);
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(10px) scale(0.9);
+            animation: fabItemIn 0.3s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+            transition: transform 0.15s ease, background 0.15s ease;
         }
-        .fab-grid-card:hover {
-            background: var(--ios-card-hover);
-            border-color: var(--ios-border-bright);
-            transform: translateY(-3px);
-            box-shadow: var(--ios-shadow-glass);
+        .fab-float-item:active { transform: scale(0.92); background: var(--ios-card-hover); }
+        @keyframes fabItemIn {
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        .fab-grid-card:active { transform: scale(0.96); }
-        .fab-icon-box {
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #FFFFFF;
+        .fab-float-icon {
+            width: 22px;
+            height: 22px;
         }
-        .fab-grid-title { 
-            font-size: 14px; 
-            font-weight: 600; 
-            color: var(--ios-text); 
-            font-family: var(--font-display); 
+        .fab-float-label {
+            font-size: 9.5px;
+            line-height: 1.15;
+            font-weight: 600;
+            color: var(--ios-text);
+            font-family: var(--font-display);
+            text-align: center;
         }
 
         .quiz-container { text-align: center; padding: 4px 0; }
@@ -869,6 +889,9 @@
             font-family: var(--font-display);
             transition: all 0.2s ease;
             text-align: center;
+        }
+        .quiz-mode-btn-wide {
+            grid-column: 1 / -1;
         }
         .quiz-mode-btn.active {
             background: var(--ios-blue);
@@ -1149,15 +1172,13 @@
                 <div class="quiz-mode-grid">
                     <button class="quiz-mode-btn active" data-mode="all" onclick="setQuizMode('all')">Все слова</button>
                     <button class="quiz-mode-btn" data-mode="category" onclick="setQuizMode('category')">По темам</button>
-                    <button class="quiz-mode-btn" data-mode="matching" onclick="setQuizMode('matching')">Сопоставление</button>
-                    <button class="quiz-mode-btn" data-mode="flashcards" onclick="setQuizMode('flashcards')">Экспресс повторение</button>
+                    <button class="quiz-mode-btn quiz-mode-btn-wide" data-mode="matching" onclick="setQuizMode('matching')">🧩 Сопоставление</button>
                 </div>
                 <select id="quizCategorySelect" class="form-input hidden" style="margin-bottom: 14px;" onchange="updateQuizCounter()"><option value="">Все категории</option></select>
                 
                 <div id="quantitySection">
                     <div style="text-align: left; margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Количество слов</div>
                     <div style="display: flex; gap: 6px; margin-bottom: 16px;">
-                        <button class="quiz-mode-btn" data-count="20" onclick="setQuizCount(20)" style="flex: 1;">20</button>
                         <button class="quiz-mode-btn active" data-count="50" onclick="setQuizCount(50)" style="flex: 1;">50</button>
                         <button class="quiz-mode-btn" data-count="100" onclick="setQuizCount(100)" style="flex: 1;">100</button>
                         <button class="quiz-mode-btn" data-count="all" onclick="setQuizCount('all')" style="flex: 1;">Все</button>
@@ -1178,6 +1199,35 @@
                 <button class="btn-primary" onclick="beginQuiz()">Начать</button>
             </div>
 
+            <!-- Экран предпросмотра сессии -->
+            <div id="quizSessionPreviewScreen" class="quiz-container hidden">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                    <button class="icon-btn-header" onclick="backToQuizStart()" style="width: 36px; height: 36px; background: var(--ios-fill);" title="Назад">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                    <div style="font-size: 18px; font-weight: 700; font-family: var(--font-display);">Список слов</div>
+                    <div style="width: 36px;"></div>
+                </div>
+                
+                <div style="color: var(--ios-text-secondary); margin-bottom: 14px; font-size: 14px;">
+                    Будет в сессии: <strong id="previewSessionWordCount" style="color: var(--ios-blue);">0</strong>
+                </div>
+
+                <div class="compact-list" id="previewSessionList" style="text-align: left; max-height: 40vh; overflow-y: auto; margin-bottom: 16px;">
+                    <!-- Сюда подгрузятся слова -->
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <button class="btn-primary" onclick="startSessionGame()" style="background: var(--ios-blue);">
+                        Начать сессию
+                    </button>
+                    <button class="btn-primary" onclick="startSessionFlashcards()" style="background: linear-gradient(135deg, var(--ios-purple) 0%, #8930B8 100%);">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                        Экспресс повторение
+                    </button>
+                </div>
+            </div>
+
             <div id="quizDirectionPickerScreen" class="quiz-container hidden">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
                     <button class="icon-btn-header" onclick="backToWordsList()" style="width: 36px; height: 36px; background: var(--ios-fill);" title="Назад">
@@ -1192,7 +1242,6 @@
 
                 <div style="text-align: left; margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Количество слов</div>
                 <div style="display: flex; gap: 6px; margin-bottom: 16px;">
-                    <button class="quiz-mode-btn" id="pickerCount20" onclick="setPickerCount(20)" style="flex: 1;">20</button>
                     <button class="quiz-mode-btn active" id="pickerCount50" onclick="setPickerCount(50)" style="flex: 1;">50</button>
                     <button class="quiz-mode-btn" id="pickerCount100" onclick="setPickerCount(100)" style="flex: 1;">100</button>
                     <button class="quiz-mode-btn" id="pickerCountAll" onclick="setPickerCount('all')" style="flex: 1;">Все</button>
@@ -1373,39 +1422,27 @@
         </button>
     </div>
     
-    <!-- FAB Меню (2x2) -->
-    <div class="modal" id="fabMenuModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Добавление</h2>
-                <button class="modal-close" onclick="closeFabMenu()">
-                    <svg class="svg-icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
+    <!-- FAB Меню (иконки + подписи, парящие по бокам от плюсика) -->
+    <div class="modal fab-overlay-modal" id="fabMenuModal">
+        <div class="fab-float-wrap">
+            <div class="fab-float-col fab-float-left">
+                <div class="fab-float-item" onclick="closeFabMenu(); openAddModal();" style="animation-delay: 0.03s;">
+                    <svg class="fab-float-icon" style="color: #0A84FF;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                    <span class="fab-float-label">Слово</span>
+                </div>
+                <div class="fab-float-item" onclick="closeFabMenu(); openBulkImport();" style="animation-delay: 0.09s;">
+                    <svg class="fab-float-icon" style="color: #30D158;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <span class="fab-float-label">Импорт слов</span>
+                </div>
             </div>
-            <div class="fab-grid-menu">
-                <div class="fab-grid-card" onclick="closeFabMenu(); openAddModal();">
-                    <div class="fab-icon-box" style="background: linear-gradient(135deg, #0A84FF 0%, #0055D4 100%);">
-                        <svg class="svg-icon svg-icon-large" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                    </div>
-                    <span class="fab-grid-title">Слово</span>
+            <div class="fab-float-col fab-float-right">
+                <div class="fab-float-item" onclick="closeFabMenu(); openAddRuleModal();" style="animation-delay: 0.06s;">
+                    <svg class="fab-float-icon" style="color: #BF5AF2;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    <span class="fab-float-label">Правило</span>
                 </div>
-                <div class="fab-grid-card" onclick="closeFabMenu(); openBulkImport();">
-                    <div class="fab-icon-box" style="background: linear-gradient(135deg, #30D158 0%, #248A3D 100%);">
-                        <svg class="svg-icon svg-icon-large" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    </div>
-                    <span class="fab-grid-title">Импорт слов</span>
-                </div>
-                <div class="fab-grid-card" onclick="closeFabMenu(); openAddRuleModal();">
-                    <div class="fab-icon-box" style="background: linear-gradient(135deg, #BF5AF2 0%, #8930B8 100%);">
-                        <svg class="svg-icon svg-icon-large" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                    </div>
-                    <span class="fab-grid-title">Правило</span>
-                </div>
-                <div class="fab-grid-card" onclick="closeFabMenu(); openBulkImportRules();">
-                    <div class="fab-icon-box" style="background: linear-gradient(135deg, #FF9F0A 0%, #C97200 100%);">
-                        <svg class="svg-icon svg-icon-large" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-                    </div>
-                    <span class="fab-grid-title">Импорт правил</span>
+                <div class="fab-float-item" onclick="closeFabMenu(); openBulkImportRules();" style="animation-delay: 0.12s;">
+                    <svg class="fab-float-icon" style="color: #FF9F0A;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                    <span class="fab-float-label">Импорт правил</span>
                 </div>
             </div>
         </div>
@@ -2626,6 +2663,7 @@
             quizData = { correct: 0, wrong: 0, learnedCount: 0, currentWord: null, options: [], direction: 'wordToMeaning', wordQueue: [], wrongWords: [], isRetryMode: false, isFinished: false, lastState: null, nextTimeout: null };
             customTestPool = null; lastStatusForPicker = null; selectedPoolFilter = 'all'; loadSessionWordIds();
             document.getElementById('quizStartScreen').classList.remove('hidden');
+            document.getElementById('quizSessionPreviewScreen').classList.add('hidden');
             document.getElementById('quizDirectionPickerScreen').classList.add('hidden');
             document.getElementById('quizGameScreen').classList.add('hidden');
             document.getElementById('quizMatchingScreen').classList.add('hidden');
@@ -2654,7 +2692,7 @@
             quizMode = mode;
             document.querySelectorAll('.quiz-mode-btn[data-mode]').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
             document.getElementById('quizCategorySelect').classList.toggle('hidden', mode !== 'category');
-            document.getElementById('directionSection').classList.toggle('hidden', mode === 'matching' || mode === 'flashcards');
+            document.getElementById('directionSection').classList.toggle('hidden', mode === 'matching');
             document.getElementById('quantitySection').classList.toggle('hidden', mode === 'matching');
             loadSessionWordIds(); updateQuizCounter();
         }
@@ -2759,7 +2797,6 @@
         
         function setPickerCount(count) {
             pickerCount = count === 'all' ? Infinity : count;
-            document.getElementById('pickerCount20').classList.toggle('active', count === 20);
             document.getElementById('pickerCount50').classList.toggle('active', count === 50);
             document.getElementById('pickerCount100').classList.toggle('active', count === 100);
             document.getElementById('pickerCountAll').classList.toggle('active', count === 'all');
@@ -2816,29 +2853,60 @@
             document.getElementById('quizDirectionPickerScreen').classList.add('hidden');
             document.getElementById('quizStartScreen').classList.remove('hidden');
         }
+
+        function backToQuizStart() {
+            document.getElementById('quizSessionPreviewScreen').classList.add('hidden');
+            document.getElementById('quizStartScreen').classList.remove('hidden');
+        }
+
+        function startSessionGame() {
+            document.getElementById('quizSessionPreviewScreen').classList.add('hidden');
+            document.getElementById('quizGameScreen').classList.remove('hidden');
+            updateQuizScore(); 
+            showNextWord();
+        }
+
+        function startSessionFlashcards() {
+            flashcardsData = { queue: [...quizData.wordQueue], currentIndex: 0, returnToPicker: false };
+            document.getElementById('quizSessionPreviewScreen').classList.add('hidden');
+            document.getElementById('quizFlashcardsScreen').classList.remove('hidden');
+            showFlashcard();
+        }
+
         function closeWordsListModal() { document.getElementById('wordsListModal').classList.remove('active'); }
         
         function beginQuiz() {
             if (quizMode === 'matching') { startMatchingQuiz(); return; }
-            if (quizMode === 'flashcards') { startFlashcards(); return; }
 
             const words = getWordsForQuiz();
             if (words.length < 4) return alert(`Нужно минимум 4 слова. Доступно: ${words.length}`);
-            quizData.wordQueue = words; quizData.correct = 0; quizData.wrong = 0; quizData.learnedCount = 0; quizData.wrongWords = []; quizData.isRetryMode = false; quizData.isFinished = false;
+            
+            // Сохраняем очередь слов и сбрасываем прогресс для сессии
+            quizData.wordQueue = words; 
+            quizData.correct = 0; quizData.wrong = 0; quizData.learnedCount = 0; 
+            quizData.wrongWords = []; quizData.isRetryMode = false; quizData.isFinished = false;
             quizData.lastState = null;
-            document.getElementById('quizStartScreen').classList.add('hidden');
-            document.getElementById('quizGameScreen').classList.remove('hidden');
-            updateQuizScore(); showNextWord();
-        }
 
-        /* Логика Экспресс повторения (Flip Cards) со свайпом */
-        function startFlashcards() {
-            const words = getWordsForQuiz();
-            if (words.length === 0) return alert('Нет слов для изучения');
-            flashcardsData = { queue: words, currentIndex: 0, returnToPicker: false };
+            // Скрываем стартовый экран и показываем экран предпросмотра списка
             document.getElementById('quizStartScreen').classList.add('hidden');
-            document.getElementById('quizFlashcardsScreen').classList.remove('hidden');
-            showFlashcard();
+            document.getElementById('quizSessionPreviewScreen').classList.remove('hidden');
+            
+            document.getElementById('previewSessionWordCount').textContent = words.length;
+            
+            // Рендерим список слов с рейтингом
+            document.getElementById('previewSessionList').innerHTML = words.map(word => {
+                const fresh = getCurrentWords().find(w => w.id === word.id) || word;
+                const scoreDisp = getScoreDisplay(fresh);
+                const scoreCol = getScoreColor(fresh);
+                return `
+                <div class="compact-item" style="padding: 10px 14px;">
+                    <div class="compact-word">
+                        <span style="font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: ${scoreCol}; background: var(--ios-fill); padding: 2px 6px; border-radius: 6px; min-width: 22px; text-align: center; margin-right: 8px;">${scoreDisp}</span>
+                        ${escapeHtml(fresh.word)}
+                    </div>
+                    <div class="compact-meaning">${escapeHtml(fresh.meaning)}</div>
+                </div>`;
+            }).join('');
         }
 
         function showFlashcard() {
@@ -2871,10 +2939,15 @@
 
         function finishFlashcards() {
             document.getElementById('quizFlashcardsScreen').classList.add('hidden');
+            
             if (flashcardsData.returnToPicker) {
+                // Если запустили через ручной выбор статуса из модалки
                 document.getElementById('quizDirectionPickerScreen').classList.remove('hidden');
             } else {
-                openQuizScreen();
+                // Главный сценарий: сразу запускаем тест после карточек!
+                document.getElementById('quizGameScreen').classList.remove('hidden');
+                updateQuizScore();
+                showNextWord();
             }
         }
 
@@ -3228,23 +3301,6 @@
                     }, 450);
                 }
             }
-        }
-
-        function finishMatchingQuiz() {
-            if (matchingData.timerInterval) clearInterval(matchingData.timerInterval);
-            document.getElementById('quizMatchingScreen').classList.add('hidden');
-            
-            document.getElementById('quizResultsScreen').innerHTML = `
-                <div style="font-size: 20px; font-weight: 700; font-family: var(--font-display); margin-bottom: 10px;">Сопоставление завершено</div>
-                <div style="font-size: 52px; font-weight: 800; color: var(--ios-green); font-family: var(--font-mono); margin: 10px 0;">${matchingData.matchedTotal}</div>
-                <div style="font-size: 13px; color: var(--ios-text-secondary); margin-bottom: 16px;">пар найдено без влияния на рейтинг</div>
-                <div style="display: flex; gap: 8px; justify-content: center; margin: 16px 0;">
-                    <div class="stat-card" style="flex: 1;"><div class="stat-value" style="color: var(--ios-blue); font-size: 20px;">${document.getElementById('matchingTime').textContent}</div><div class="stat-label">Время</div></div>
-                    <div class="stat-card" style="flex: 1;"><div class="stat-value" style="color: var(--ios-red); font-size: 20px;">${matchingData.mistakes}</div><div class="stat-label">Ошибок</div></div>
-                </div>
-                <button class="btn-primary" onclick="openQuizScreen()">Выйти в меню</button>`;
-            
-            document.getElementById('quizResultsScreen').classList.remove('hidden');
         }
 
         document.getElementById('wordModal').addEventListener('click', function(e) { if (e.target === this) closeWordModal(); });
