@@ -416,21 +416,55 @@
             overflow: hidden;
         }
 
+        /* Обертка для свайпа */
+        .swipe-item-wrapper {
+            position: relative;
+            overflow: hidden;
+            border-bottom: 0.5px solid var(--ios-separator);
+            background: var(--ios-red);
+        }
+        .swipe-item-wrapper:last-child {
+            border-bottom: none;
+        }
+        .swipe-item-actions {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            width: 100%;
+            background: var(--ios-red);
+            padding-right: 24px;
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+            gap: 6px;
+        }
         .compact-item {
             padding: 14px 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            border-bottom: 0.5px solid var(--ios-separator);
-            transition: background 0.15s ease;
+            background: #1C1C1E;
+            transition: transform 0.25s cubic-bezier(0.32, 0.72, 0, 1), background 0.15s ease;
             position: relative;
+            z-index: 2;
+            width: 100%;
+            touch-action: pan-y;
         }
-        .compact-item:last-child { border-bottom: none; }
+        body.day-theme .compact-item {
+            background: #FFFFFF;
+        }
         .compact-item:hover { background: var(--ios-card-hover); }
         .compact-item:active { background: var(--ios-fill); }
         .compact-item.has-errors {
-            background: rgba(var(--ios-red-rgb), 0.08);
+            background: #241416;
+        }
+        body.day-theme .compact-item.has-errors {
+            background: #FFF0F0;
         }
 
         .compact-word {
@@ -469,19 +503,21 @@
             text-align: right;
             font-weight: 400;
         }
-        .compact-delete-btn {
-            background: rgba(var(--ios-red-rgb), 0.15);
-            color: var(--ios-red);
+        
+        .compact-action-btn {
+            background: var(--ios-fill);
+            color: var(--ios-text);
             border: none;
-            padding: 6px 10px;
-            border-radius: 10px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
             cursor: pointer;
-            margin-left: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: transform 0.15s ease;
         }
-        .compact-delete-btn:active { transform: scale(0.9); }
+        .compact-action-btn:active { transform: scale(0.9); }
 
         /* iOS Нижняя компактная панель навигации (Tab Bar) */
         .ios-tab-bar {
@@ -762,13 +798,29 @@
             padding: 14px 6px;
             border-radius: 14px;
             background: var(--ios-fill);
-            border: 1px solid var(--ios-border);
+            border: 1.5px solid var(--ios-border);
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s cubic-bezier(0.32, 0.72, 0, 1);
         }
         .quiz-stat-item:hover {
             transform: translateY(-2px);
             border-color: var(--ios-border-bright);
+        }
+        .quiz-stat-item.active-pool {
+            border-color: var(--ios-blue) !important;
+            background: rgba(var(--ios-blue-rgb), 0.18) !important;
+            box-shadow: 0 0 16px rgba(var(--ios-blue-rgb), 0.35);
+            transform: scale(1.03);
+        }
+        .quiz-stat-item.learned.active-pool {
+            border-color: var(--ios-green) !important;
+            background: rgba(var(--ios-green-rgb), 0.18) !important;
+            box-shadow: 0 0 16px rgba(var(--ios-green-rgb), 0.35);
+        }
+        .quiz-stat-item.weak.active-pool {
+            border-color: var(--ios-red) !important;
+            background: rgba(var(--ios-red-rgb), 0.18) !important;
+            box-shadow: 0 0 16px rgba(var(--ios-red-rgb), 0.35);
         }
         .quiz-stat-value {
             font-family: var(--font-mono);
@@ -798,20 +850,25 @@
             background: rgba(var(--ios-red-rgb), 0.12);
         }
 
-        .quiz-mode-buttons { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+        /* 2x2 Сетка режимов теста */
+        .quiz-mode-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 8px; 
+            margin-bottom: 16px; 
+        }
         .quiz-mode-btn {
-            flex: 1;
-            min-width: 90px;
-            padding: 10px 12px;
+            padding: 13px 8px;
             background: var(--ios-fill);
             border: 1px solid var(--ios-border);
-            border-radius: 12px;
+            border-radius: 14px;
             color: var(--ios-text-secondary);
             cursor: pointer;
-            font-size: 13px;
+            font-size: 13.5px;
             font-weight: 600;
             font-family: var(--font-display);
             transition: all 0.2s ease;
+            text-align: center;
         }
         .quiz-mode-btn.active {
             background: var(--ios-blue);
@@ -859,6 +916,45 @@
             box-shadow: var(--ios-shadow-card), var(--ios-highlight);
             position: relative;
             letter-spacing: -0.02em;
+        }
+
+        /* Flashcards Mode Styles */
+        .flashcard-wrapper {
+            perspective: 1000px;
+            margin: 20px 0;
+            cursor: pointer;
+            touch-action: pan-y;
+        }
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            min-height: 220px;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.32, 0.72, 0, 1);
+            transform-style: preserve-3d;
+        }
+        .flashcard-wrapper.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 24px;
+            border: 1px solid var(--ios-border);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--ios-shadow-card), var(--ios-highlight);
+            background: var(--ios-card);
+        }
+        .flashcard-back {
+            transform: rotateY(180deg);
+            background: var(--ios-card-hover);
         }
 
         .quiz-options { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
@@ -956,7 +1052,7 @@
                 </div>
                 <div class="header-controls">
                     <button class="icon-btn-header" onclick="toggleTheme()" title="Сменить тему">
-                        <svg class="svg-icon" id="themeIcon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                        <svg class="svg-icon" id="themeIcon" viewBox="0 0 24 24"></svg>
                     </button>
                 </div>
             </div>
@@ -977,9 +1073,6 @@
                 <button class="view-toggle-btn" id="tabRulesBtn" onclick="switchMainTab('rules')">
                     <svg class="svg-icon" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
                     Правила
-                </button>
-                <button class="view-toggle-btn" id="toggleDeleteModeBtn" onclick="toggleDeleteMode()" style="flex: 0 0 42px; padding: 0; color: var(--ios-red);" title="Режим удаления">
-                    <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                 </button>
             </div>
             <div class="search-container">
@@ -1020,7 +1113,7 @@
 
         <!-- Вкладка 3: Изучение (Тесты) -->
         <section class="tab-view-section" id="pageQuiz">
-            <div class="header">
+            <div class="header" id="quizMainHeader">
                 <div class="header-brand">
                     <div class="header-logo-icon">
                         <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
@@ -1031,11 +1124,20 @@
             
             <div id="quizStartScreen" class="quiz-container">
                 <div class="quiz-stats-block">
-                    <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.05em;">Статистика словаря</div>
+                    <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.05em;">Выберите раздел для изучения</div>
                     <div class="quiz-stats-grid">
-                        <div class="quiz-stat-item learned" onclick="showWordsByStatus('learned')"><div class="quiz-stat-value" id="statLearned">0</div><div class="quiz-stat-label">Изучено</div></div>
-                        <div class="quiz-stat-item weak" onclick="showWordsByStatus('weak')"><div class="quiz-stat-value" id="statWeak">0</div><div class="quiz-stat-label">Ошибки</div></div>
-                        <div class="quiz-stat-item new" onclick="showWordsByStatus('new')"><div class="quiz-stat-value" id="statNew">0</div><div class="quiz-stat-label">Новых</div></div>
+                        <div class="quiz-stat-item learned" id="statCardLearned" onclick="selectPoolFilter('learned')">
+                            <div class="quiz-stat-value" id="statLearned">0</div>
+                            <div class="quiz-stat-label">Изучено</div>
+                        </div>
+                        <div class="quiz-stat-item weak" id="statCardWeak" onclick="selectPoolFilter('weak')">
+                            <div class="quiz-stat-value" id="statWeak">0</div>
+                            <div class="quiz-stat-label">Ошибки</div>
+                        </div>
+                        <div class="quiz-stat-item new" id="statCardNew" onclick="selectPoolFilter('new')">
+                            <div class="quiz-stat-value" id="statNew">0</div>
+                            <div class="quiz-stat-label">Новых</div>
+                        </div>
                     </div>
                     <div class="quiz-stats-buttons-row">
                         <button class="btn-reset-stats" onclick="resetQuizStats()">Весь рейтинг</button>
@@ -1043,20 +1145,22 @@
                     </div>
                 </div>
                 
-                <div style="text-align: left; margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Режим теста</div>
-                <div class="quiz-mode-buttons">
+                <div style="text-align: left; margin-bottom: 8px; font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Режим тренировки</div>
+                <div class="quiz-mode-grid">
                     <button class="quiz-mode-btn active" data-mode="all" onclick="setQuizMode('all')">Все слова</button>
-                    <button class="quiz-mode-btn" data-mode="category" onclick="setQuizMode('category')">По разделам</button>
+                    <button class="quiz-mode-btn" data-mode="category" onclick="setQuizMode('category')">По темам</button>
                     <button class="quiz-mode-btn" data-mode="matching" onclick="setQuizMode('matching')">Сопоставление</button>
+                    <button class="quiz-mode-btn" data-mode="flashcards" onclick="setQuizMode('flashcards')">Экспресс повторение</button>
                 </div>
                 <select id="quizCategorySelect" class="form-input hidden" style="margin-bottom: 14px;" onchange="updateQuizCounter()"><option value="">Все категории</option></select>
                 
                 <div id="quantitySection">
                     <div style="text-align: left; margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Количество слов</div>
-                    <div class="quiz-mode-buttons">
-                        <button class="quiz-mode-btn active" data-count="50" onclick="setQuizCount(50)">50</button>
-                        <button class="quiz-mode-btn" data-count="100" onclick="setQuizCount(100)">100</button>
-                        <button class="quiz-mode-btn" data-count="all" onclick="setQuizCount('all')">Все</button>
+                    <div style="display: flex; gap: 6px; margin-bottom: 16px;">
+                        <button class="quiz-mode-btn" data-count="20" onclick="setQuizCount(20)" style="flex: 1;">20</button>
+                        <button class="quiz-mode-btn active" data-count="50" onclick="setQuizCount(50)" style="flex: 1;">50</button>
+                        <button class="quiz-mode-btn" data-count="100" onclick="setQuizCount(100)" style="flex: 1;">100</button>
+                        <button class="quiz-mode-btn" data-count="all" onclick="setQuizCount('all')" style="flex: 1;">Все</button>
                     </div>
                 </div>
                 
@@ -1070,20 +1174,39 @@
                     </div>
                 </div>
                 
-                <div id="quizCounter" style="font-size: 13px; color: var(--ios-text-secondary); margin-internal: 14px; font-weight: 600;">Будет выбрано слов: 50</div>
-                <button class="btn-primary" onclick="beginQuiz()">Начать тест</button>
+                <div id="quizCounter" style="font-size: 13px; color: var(--ios-text-secondary); margin: 14px 0; font-weight: 600;">Будет выбрано слов: 50</div>
+                <button class="btn-primary" onclick="beginQuiz()">Начать</button>
             </div>
 
             <div id="quizDirectionPickerScreen" class="quiz-container hidden">
-                <div style="font-size: 18px; font-weight: 700; margin-bottom: 4px; font-family: var(--font-display);">Выберите тип теста</div>
-                <div style="color: var(--ios-text-secondary); margin-bottom: 18px; font-size: 14px;">
-                    Для <strong id="pickerWordCount" style="color: var(--ios-blue);">0</strong> слов
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                    <button class="icon-btn-header" onclick="backToWordsList()" style="width: 36px; height: 36px; background: var(--ios-fill);" title="Назад">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                    <div style="font-size: 18px; font-weight: 700; font-family: var(--font-display);">Настройка теста</div>
+                    <div style="width: 36px;"></div>
                 </div>
+                <div style="color: var(--ios-text-secondary); margin-bottom: 14px; font-size: 14px;">
+                    Доступно слов: <strong id="pickerWordCount" style="color: var(--ios-blue);">0</strong>
+                </div>
+
+                <div style="text-align: left; margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Количество слов</div>
+                <div style="display: flex; gap: 6px; margin-bottom: 16px;">
+                    <button class="quiz-mode-btn" id="pickerCount20" onclick="setPickerCount(20)" style="flex: 1;">20</button>
+                    <button class="quiz-mode-btn active" id="pickerCount50" onclick="setPickerCount(50)" style="flex: 1;">50</button>
+                    <button class="quiz-mode-btn" id="pickerCount100" onclick="setPickerCount(100)" style="flex: 1;">100</button>
+                    <button class="quiz-mode-btn" id="pickerCountAll" onclick="setPickerCount('all')" style="flex: 1;">Все</button>
+                </div>
+
+                <div style="text-align: left; margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Тип теста</div>
                 <button class="direction-picker-btn" onclick="startTestWithDirection('wordToMeaning')"><span>Слово → Перевод</span><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
                 <button class="direction-picker-btn" onclick="startTestWithDirection('meaningToWord')"><span>Перевод → Слово</span><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
                 <button class="direction-picker-btn" onclick="startTestWithDirection('mixed')"><span>Смешанный</span><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
                 <button class="direction-picker-btn" onclick="startTestWithDirection('listening')"><span>На слух</span><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
-                <button class="btn-primary" onclick="backToWordsList()" style="background: var(--ios-fill); color: var(--ios-text); margin-top: 12px; box-shadow: none;">Назад</button>
+                <button class="btn-primary" onclick="startPreviewFromPicker()" style="background: linear-gradient(135deg, var(--ios-purple) 0%, #8930B8 100%); margin-top: 10px;">
+                    <svg class="svg-icon" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                    Экспресс повторение
+                </button>
             </div>
 
             <div id="quizGameScreen" class="quiz-container hidden">
@@ -1093,7 +1216,7 @@
                         <button onclick="toggleQuizSound()" id="quizSoundToggleBtn" class="icon-btn-header" style="width: 32px; height: 32px;">
                             <svg class="svg-icon" id="audioToggleSvg" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
                         </button>
-                        <button id="btnUndoQuiz" onclick="undoQuizStep()" style="display: none; background: rgba(var(--ios-blue-rgb), 0.16); border: none; color: var(--ios-blue); font-size: 14px; cursor: pointer; font-weight: 600; padding: 5px 10px; border-radius: 10px;">↩️</button>
+                        <button id="btnUndoQuiz" onclick="undoQuizStep()" style="opacity: 0.35; background: rgba(var(--ios-blue-rgb), 0.16); border: none; color: var(--ios-blue); font-size: 14px; cursor: pointer; font-weight: 600; padding: 5px 10px; border-radius: 10px;" title="Шаг назад">↩️</button>
                     </div>
                 </div>
                 <div style="display: flex; justify-content: center; gap: 16px; font-size: 14px; margin-bottom: 12px; font-weight: 700;">
@@ -1108,8 +1231,37 @@
                 <button class="btn-primary btn-warning" onclick="finishQuizEarly()" style="margin-top: 16px;">Завершить</button>
             </div>
 
+            <!-- Экран Экспресс повторения (Flip Cards) -->
+            <div id="quizFlashcardsScreen" class="quiz-container hidden">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div id="flashcardProgress" style="font-size: 14px; color: var(--ios-text-secondary); font-weight: 600;">Карточка 1 из 10</div>
+                    <button onclick="speakWord(currentFlashcardWord ? currentFlashcardWord.word : '')" class="icon-btn-header" style="width: 32px; height: 32px;">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    </button>
+                </div>
+                <div class="flashcard-wrapper" id="flashcardElement" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div style="font-size: 12px; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; font-weight: 700;">Слово (нажмите чтобы перевернуть)</div>
+                            <div id="flashcardFrontText" style="font-size: 32px; font-weight: 800; font-family: var(--font-display);">—</div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div style="font-size: 12px; color: var(--ios-blue); text-transform: uppercase; margin-bottom: 8px; font-weight: 700;">Перевод</div>
+                            <div id="flashcardBackText" style="font-size: 26px; font-weight: 700; color: var(--ios-text); font-family: var(--font-display);">—</div>
+                            <div id="flashcardNotesText" style="font-size: 14px; color: var(--ios-text-secondary); margin-top: 8px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-primary" onclick="prevFlashcard()" style="flex: 1; background: var(--ios-fill); color: var(--ios-text); box-shadow: none;">← Назад</button>
+                    <button class="btn-primary" onclick="nextFlashcard()" style="flex: 2;">Дальше →</button>
+                </div>
+                <button class="btn-primary btn-warning" onclick="finishFlashcards()" style="margin-top: 10px;">Завершить</button>
+            </div>
+
+            <!-- Экран Сопоставления -->
             <div id="quizMatchingScreen" class="quiz-container hidden">
-                <div id="matchingProgress" style="font-size: 14px; color: var(--ios-text-secondary); margin-bottom: 8px;">Найдите пары: 0 / 10</div>
+                <div id="matchingProgress" style="font-size: 14px; color: var(--ios-text-secondary); margin-bottom: 8px;">Сопоставлено: 0 слов</div>
                 <div style="display: flex; justify-content: center; gap: 14px; font-size: 14px; margin-bottom: 12px; font-weight: 700;">
                     <span style="color: var(--ios-text-secondary);">⏱️ <span id="matchingTime">00:00</span></span>
                     <span style="color: var(--ios-red);">Ошибок: <span id="matchingMistakes">0</span></span>
@@ -1118,7 +1270,7 @@
                     <div style="display: flex; flex-direction: column; gap: 8px; flex: 1;" id="matchingLeft"></div>
                     <div style="display: flex; flex-direction: column; gap: 8px; flex: 1;" id="matchingRight"></div>
                 </div>
-                <button class="btn-primary btn-warning" onclick="finishQuizEarly()" style="margin-top: 16px;">Завершить</button>
+                <button class="btn-primary btn-warning" onclick="finishMatchingQuiz()" style="margin-top: 16px;">Завершить</button>
             </div>
 
             <div id="quizResultsScreen" class="quiz-container hidden"></div>
@@ -1164,26 +1316,35 @@
             </div>
 
             <div class="ios-settings-card">
-                <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Резервная копия</div>
+                <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Резервная копия (JSON)</div>
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                     <button class="btn-primary" onclick="exportAllDictionaries()" style="margin-top: 0;">
                         <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                        В память телефона
+                        В память телефона (JSON)
                     </button>
                     <button class="btn-primary" onclick="importDictionary()" style="margin-top: 0; background: var(--ios-fill); color: var(--ios-text); box-shadow: none;">
                         <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                        Из памяти телефона
+                        Из памяти телефона (JSON)
                     </button>
                 </div>
             </div>
 
             <div class="ios-settings-card">
-                <div style="font-size: 11px; font-weight: 700; color: var(--ios-red); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Опасная зона</div>
-                <button class="btn-primary btn-danger" onclick="clearAllWords()" style="margin-top: 0; font-size: 14px;">Очистить текущий словарь</button>
+                <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Таблицы Excel (CSV)</div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <button class="btn-primary" onclick="exportToCSV()" style="margin-top: 0; background: rgba(var(--ios-green-rgb), 0.16); color: var(--ios-green); box-shadow: none;">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        Экспорт в Excel (CSV)
+                    </button>
+                    <button class="btn-primary" onclick="importFromCSV()" style="margin-top: 0; background: var(--ios-fill); color: var(--ios-text); box-shadow: none;">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        Импорт из Excel (CSV)
+                    </button>
+                </div>
             </div>
 
-            <div style="text-align: center; margin-top: 24px; padding-bottom: 12px; font-size: 12px; color: var(--ios-text-tertiary); font-style: italic;">
-                Мухаммад абу Абдульмалик
+            <div style="text-align: center; margin-top: 24px; padding-bottom: 12px; font-size: 13px; color: var(--ios-text-tertiary); font-style: italic; font-weight: 500;">
+                Мухаммад Абу Абдулмалик
             </div>
         </section>
 
@@ -1443,15 +1604,29 @@
         let isEditing = false;
         let currentCategory = 'all';
         let currentTab = 'words';
-        let isDeleteMode = false;
         let quizMode = 'all';
+        let selectedPoolFilter = 'all';
         let quizCount = 50;
+        let pickerCount = 50;
         let quizCategory = '';
         let sessionWordIds = [];
         let customTestPool = null;
         let lastStatusForPicker = null;
-        let quizData = { correct: 0, wrong: 0, learnedCount: 0, currentWord: null, options: [], direction: 'wordToMeaning', wordQueue: [], wrongWords: [], isRetryMode: false, isFinished: false, lastState: null, nextTimeout: null };
-        let matchingData = { pairs: [], leftItems: [], rightItems: [], selectedLeft: null, selectedRight: null, matchedCount: 0, mistakes: 0, startTime: null, timerInterval: null, isLocked: false };
+        
+        let quizData = { 
+            correct: 0, wrong: 0, learnedCount: 0, currentWord: null, options: [], 
+            direction: 'wordToMeaning', wordQueue: [], wrongWords: [], isRetryMode: false, 
+            isFinished: false, lastState: null, nextTimeout: null 
+        };
+        
+        let matchingData = { 
+            pool: [], batch: [], leftItems: [], rightItems: [], selectedLeft: null, 
+            selectedRight: null, matchedTotal: 0, mistakes: 0, startTime: null, timerInterval: null, isLocked: false 
+        };
+
+        let flashcardsData = { queue: [], currentIndex: 0, returnToPicker: false };
+        let currentFlashcardWord = null;
+
         let bulkImportParsedData = [];
         let bulkRulesParsedData = [];
         let editingRuleId = null;
@@ -1464,10 +1639,8 @@
 
         function switchNavTab(tab) {
             currentNavTab = tab;
-            
             document.querySelectorAll('.tab-view-section').forEach(sec => sec.classList.remove('active-tab-page'));
             document.querySelectorAll('.tab-item').forEach(btn => btn.classList.remove('active'));
-            
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             if (tab === 'home') {
@@ -1525,16 +1698,14 @@
         }
 
         function speakWord(text) {
-            if (!('speechSynthesis' in window)) return;
+            if (!text || !('speechSynthesis' in window)) return;
             window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = ttsLang;
             
             const voices = window.speechSynthesis.getVoices();
             const targetVoice = voices.find(voice => voice.lang.includes(ttsLang.split('-')[0]));
-            if (targetVoice) {
-                utterance.voice = targetVoice;
-            }
+            if (targetVoice) utterance.voice = targetVoice;
             window.speechSynthesis.speak(utterance);
         }
 
@@ -1551,7 +1722,8 @@
 
         function getSessionKey() {
             let modeKey = quizMode;
-            if (quizMode === 'category' && quizCategory) modeKey = `category_${quizCategory}`;
+            if (selectedPoolFilter !== 'all') modeKey += `_${selectedPoolFilter}`;
+            if (quizMode === 'category' && quizCategory) modeKey += `_cat_${quizCategory}`;
             return `sessionWordIds_${data.currentDictionary}_${modeKey}`;
         }
         function saveSessionWordIds() { try { localStorage.setItem(getSessionKey(), JSON.stringify(sessionWordIds)); } catch (e) { console.error(e); } }
@@ -1561,8 +1733,11 @@
         function getAllPoolWords() {
             if (customTestPool) return customTestPool;
             let pool = [...getCurrentWords()];
-            if (quizMode === 'weak') pool = pool.filter(w => isWeakWord(w));
-            else if (quizMode === 'category' && quizCategory) pool = pool.filter(w => w.category === quizCategory);
+            if (selectedPoolFilter === 'learned') pool = pool.filter(w => isLearnedWord(w));
+            else if (selectedPoolFilter === 'weak') pool = pool.filter(w => isWeakWord(w));
+            else if (selectedPoolFilter === 'new') pool = pool.filter(w => isNewWord(w));
+            
+            if (quizMode === 'category' && quizCategory) pool = pool.filter(w => w.category === quizCategory);
             return pool;
         }
 
@@ -1613,12 +1788,11 @@
             const isDay = document.body.classList.contains('day-theme');
             const icon = document.getElementById('themeIcon');
             if (isDay) {
-                icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
-            } else {
                 icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+            } else {
+                icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
             }
         }
-
         updateThemeIcon();
 
         function toggleTheme() {
@@ -1732,15 +1906,6 @@
             renderMainContent();
         }
 
-        function toggleDeleteMode() {
-            isDeleteMode = !isDeleteMode;
-            const btn = document.getElementById('toggleDeleteModeBtn');
-            btn.classList.toggle('active', isDeleteMode);
-            btn.style.background = isDeleteMode ? 'var(--ios-red)' : 'transparent';
-            btn.style.color = isDeleteMode ? '#fff' : 'var(--ios-red)';
-            renderMainContent();
-        }
-
         function handleSearchInput() { renderMainContent(); }
 
         function renderMainContent() {
@@ -1749,6 +1914,43 @@
             } else {
                 renderWordsContent();
             }
+        }
+
+        /* Инициализация свайпа для элементов списка */
+        function initSwipeListeners() {
+            document.querySelectorAll('.swipe-item-wrapper').forEach(wrapper => {
+                const item = wrapper.querySelector('.compact-item');
+                let startX = 0, currentX = 0, isSwiping = false;
+
+                item.addEventListener('touchstart', e => {
+                    startX = e.touches[0].clientX;
+                    isSwiping = true;
+                    item.style.transition = 'none';
+                }, { passive: true });
+
+                item.addEventListener('touchmove', e => {
+                    if (!isSwiping) return;
+                    currentX = e.touches[0].clientX;
+                    const diff = currentX - startX;
+                    if (diff < 0) {
+                        item.style.transform = `translateX(${Math.max(diff, -100)}px)`;
+                    } else if (diff > 0 && item.style.transform !== '') {
+                        item.style.transform = `translateX(${Math.min(diff, 0)}px)`;
+                    }
+                }, { passive: true });
+
+                item.addEventListener('touchend', () => {
+                    if (!isSwiping) return;
+                    isSwiping = false;
+                    item.style.transition = 'transform 0.25s cubic-bezier(0.32, 0.72, 0, 1)';
+                    const diff = currentX - startX;
+                    if (diff < -50) {
+                        item.style.transform = 'translateX(-75px)';
+                    } else {
+                        item.style.transform = 'translateX(0px)';
+                    }
+                });
+            });
         }
 
         function renderWordsContent() {
@@ -1778,21 +1980,24 @@
             
             listEl.innerHTML = '<div class="compact-list">' + words.map(item => {
                 const hasErrors = isWeakWord(item);
-                return `<div class="compact-item ${hasErrors ? 'has-errors' : ''}" onclick="showWordDetail(${item.id})">
-                    <div class="compact-word">
-                        ${hasErrors ? '<div class="compact-error-dot"></div>' : ''}
-                        <span class="compact-audio-btn" onclick="speakWord('${escapeHtml(item.word)}'); event.stopPropagation();">
-                            <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-                        </span>
-                        ${escapeHtml(item.word)}
+                return `<div class="swipe-item-wrapper">
+                    <div class="swipe-item-actions" onclick="deleteWord(${item.id})">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                     </div>
-                    <div class="compact-meaning">${escapeHtml(item.meaning)}</div>
-                    ${isDeleteMode ? `<button class="compact-delete-btn" onclick="deleteWord(${item.id}); event.stopPropagation();">
-                        <svg class="svg-icon" style="width: 15px; height: 15px;" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                    </button>` : ''}
+                    <div class="compact-item ${hasErrors ? 'has-errors' : ''}" onclick="showWordDetail(${item.id})">
+                        <div class="compact-word">
+                            ${hasErrors ? '<div class="compact-error-dot"></div>' : ''}
+                            <span class="compact-audio-btn" onclick="speakWord('${escapeHtml(item.word)}'); event.stopPropagation();">
+                                <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                            </span>
+                            ${escapeHtml(item.word)}
+                        </div>
+                        <div class="compact-meaning">${escapeHtml(item.meaning)}</div>
+                    </div>
                 </div>`;
             }).join('') + '</div>';
 
+            initSwipeListeners();
             setTimeout(changeFontSize, 50);
         }
 
@@ -1818,20 +2023,23 @@
             }
 
             listEl.innerHTML = '<div class="compact-list">' + rules.map(rule => `
-                <div class="compact-item" onclick="showRuleDetailModal(${rule.id})">
-                    <div class="compact-word">
-                        <span class="compact-audio-btn" style="background: rgba(var(--ios-blue-rgb), 0.12);">
-                            <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-                        </span>
-                        ${escapeHtml(rule.title)}
+                <div class="swipe-item-wrapper">
+                    <div class="swipe-item-actions" onclick="deleteRule(${rule.id})">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                     </div>
-                    <div class="compact-meaning" style="color: var(--ios-blue); font-size: 12px; font-weight: 600; text-transform: uppercase;">${escapeHtml(rule.category || 'Грамматика')}</div>
-                    ${isDeleteMode ? `<button class="compact-delete-btn" onclick="deleteRule(${rule.id}); event.stopPropagation();">
-                        <svg class="svg-icon" style="width: 15px; height: 15px;" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                    </button>` : ''}
+                    <div class="compact-item" onclick="showRuleDetailModal(${rule.id})">
+                        <div class="compact-word">
+                            <span class="compact-audio-btn" style="background: rgba(var(--ios-blue-rgb), 0.12);">
+                                <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                            </span>
+                            ${escapeHtml(rule.title)}
+                        </div>
+                        <div class="compact-meaning" style="color: var(--ios-blue); font-size: 12px; font-weight: 600; text-transform: uppercase;">${escapeHtml(rule.category || 'Грамматика')}</div>
+                    </div>
                 </div>
             `).join('') + '</div>';
 
+            initSwipeListeners();
             setTimeout(changeFontSize, 50);
         }
 
@@ -1879,9 +2087,7 @@
             const title = document.getElementById('ruleTitleInput').value.trim();
             const category = document.getElementById('ruleCategoryInput').value.trim() || 'Грамматика';
             const content = document.getElementById('ruleContentInput').value.trim();
-            
             if (!title || !content) return alert('Заполните тему и текст правила');
-            
             if (!data.rules) data.rules = [];
             
             if (editingRuleId) {
@@ -1924,7 +2130,6 @@
             renderMainContent();
         }
 
-        /* Управление словарями на отдельной вкладке */
         function renderDictsPage() {
             const list = document.getElementById('dictsPageList');
             list.innerHTML = Object.keys(data.dictionaries).map(name => {
@@ -1935,12 +2140,12 @@
                         <div style="font-weight: 600; color: ${isActive ? 'var(--ios-blue)' : 'var(--ios-text)'};">${escapeHtml(name)} ${isActive ? '✓' : ''}</div>
                         <div style="font-size: 13px; color: var(--ios-text-secondary);">${count} слов</div>
                     </div>
-                    <div style="display: flex; gap: 6px;" onclick="event.stopPropagation()">
-                        <button class="compact-delete-btn" style="background: var(--ios-fill); color: var(--ios-blue);" onclick="renameDictionary('${name.replace(/'/g, "\\'")}')">
-                            <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                    <div style="display: flex; gap: 8px;" onclick="event.stopPropagation()">
+                        <button class="compact-action-btn" title="Переименовать" onclick="renameDictionary('${name.replace(/'/g, "\\'")}')">
+                            <svg class="svg-icon" style="width: 15px; height: 15px; color: var(--ios-blue);" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                         </button>
-                        <button class="compact-delete-btn" onclick="deleteDictionary('${name.replace(/'/g, "\\'")}')">
-                            <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        <button class="compact-action-btn" title="Удалить" onclick="deleteDictionary('${name.replace(/'/g, "\\'")}')">
+                            <svg class="svg-icon" style="width: 15px; height: 15px; color: var(--ios-red);" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                         </button>
                     </div>
                 </div>`;
@@ -2031,6 +2236,7 @@
             document.getElementById('wordModal').classList.add('active');
         }
         function closeWordModal() { document.getElementById('wordModal').classList.remove('active'); }
+        
         function saveWord() {
             const word = document.getElementById('wordInput').value.trim();
             const meaning = document.getElementById('meaningInput').value.trim();
@@ -2049,12 +2255,14 @@
             }
             setCurrentWords(words); closeWordModal(); renderMainContent(); updateStats(); updateCategories(); setTimeout(changeFontSize, 50);
         }
+
         function deleteWordFromEdit() {
             if (!editingWordId || !confirm('Удалить это слово?')) return;
             let words = getCurrentWords().filter(w => w.id !== editingWordId);
             setCurrentWords(words); sessionWordIds = sessionWordIds.filter(id => id !== editingWordId); saveSessionWordIds();
             closeWordModal(); renderMainContent(); updateStats(); updateCategories();
         }
+
         function showWordDetail(wordId) {
             const word = getCurrentWords().find(w => w.id === wordId);
             if (!word) return;
@@ -2081,7 +2289,9 @@
                 <button class="btn-primary" onclick="closeWordDetail(); openEditModal(${word.id})" style="margin-top: 14px;">Редактировать</button>`;
             document.getElementById('wordDetailModal').classList.add('active');
         }
+
         function closeWordDetail() { document.getElementById('wordDetailModal').classList.remove('active'); }
+        
         function deleteWord(id) {
             if (!confirm('Удалить это слово?')) return;
             let words = getCurrentWords().filter(w => w.id !== id);
@@ -2299,12 +2509,13 @@
             renderMainContent();
         }
 
+        /* Экспорт / Импорт JSON */
         async function exportAllDictionaries() {
             const content = JSON.stringify({ allDictionaries: true, dictionaries: data.dictionaries, rules: data.rules || [], exportDate: new Date().toISOString() }, null, 2);
             const suggestedName = `Личный_словарь_${new Date().toISOString().split('T')[0]}.json`;
             const blob = new Blob([content], {type: 'application/json'});
             const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = suggestedName; link.click(); URL.revokeObjectURL(link.href);
-            alert('Файл сохранён');
+            alert('Файл JSON сохранён');
         }
         async function importDictionary() {
             const input = document.createElement('input'); input.type = 'file'; input.accept = '.json,application/json';
@@ -2322,46 +2533,134 @@
                             data.dictionaries[imported.name] = imported.words;
                             data.currentDictionary = imported.name;
                         }
-                        saveData(); 
-                        renderMainContent(); 
-                        updateStats(); 
-                        updateCategories(); 
-                        alert('Импорт завершён');
+                        saveData(); renderMainContent(); updateStats(); updateCategories(); alert('Импорт завершён');
                     } catch(err) { alert('Ошибка файла'); }
                 };
                 reader.readAsText(file);
             };
             input.click();
         }
-        function clearAllWords() {
-            if (!confirm(`Очистить текущий словарь "${data.currentDictionary}"?`)) return;
-            setCurrentWords([]); resetSessionWordIds(); renderMainContent(); updateStats(); updateCategories(); alert('Словарь очищен');
+
+        /* Экспорт / Импорт CSV (Excel) */
+        function exportToCSV() {
+            const words = getCurrentWords();
+            if (words.length === 0) return alert('Словарь пуст');
+            let csvContent = '\uFEFFСлово;Перевод;Категория;Заметки\n';
+            words.forEach(w => {
+                const row = [
+                    `"${(w.word || '').replace(/"/g, '""')}"`,
+                    `"${(w.meaning || '').replace(/"/g, '""')}"`,
+                    `"${(w.category || 'Общее').replace(/"/g, '""')}"`,
+                    `"${(w.notes || '').replace(/"/g, '""')}"`
+                ];
+                csvContent += row.join(';') + '\n';
+            });
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${data.currentDictionary}_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+            URL.revokeObjectURL(link.href);
+            alert('Файл Excel (CSV) сохранён');
         }
+
+        function importFromCSV() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.csv,text/csv';
+            input.onchange = e => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    try {
+                        const text = ev.target.result;
+                        const lines = text.split('\n');
+                        let count = 0;
+                        const words = getCurrentWords();
+                        const existing = new Set(words.map(w => w.word.toLowerCase().trim()));
+                        const now = new Date().toISOString();
+
+                        for (let i = 1; i < lines.length; i++) {
+                            const line = lines[i].trim();
+                            if (!line) continue;
+                            const delimiter = line.includes(';') ? ';' : ',';
+                            const parts = line.split(delimiter).map(p => p.trim().replace(/^"|"$/g, '').replace(/""/g, '"'));
+                            if (parts.length >= 2) {
+                                const word = parts[0];
+                                const meaning = parts[1];
+                                const category = parts[2] || 'Общее';
+                                const notes = parts[3] || '';
+                                if (word && meaning && !existing.has(word.toLowerCase().trim())) {
+                                    words.push({
+                                        id: Date.now() + i,
+                                        word, meaning, category, notes,
+                                        image: null, createdAt: now, lastReviewed: null, score: null
+                                    });
+                                    existing.add(word.toLowerCase().trim());
+                                    count++;
+                                }
+                            }
+                        }
+                        if (count > 0) {
+                            setCurrentWords(words);
+                            updateStats();
+                            updateCategories();
+                            renderMainContent();
+                            alert(`Успешно импортировано ${count} слов из CSV`);
+                        } else {
+                            alert('Новых слов не обнаружено');
+                        }
+                    } catch(err) {
+                        alert('Ошибка чтения CSV файла');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
         function escapeHtml(text) { if (text === null || text === undefined) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
         function openQuizScreen() {
             quizData = { correct: 0, wrong: 0, learnedCount: 0, currentWord: null, options: [], direction: 'wordToMeaning', wordQueue: [], wrongWords: [], isRetryMode: false, isFinished: false, lastState: null, nextTimeout: null };
-            customTestPool = null; lastStatusForPicker = null; loadSessionWordIds();
+            customTestPool = null; lastStatusForPicker = null; selectedPoolFilter = 'all'; loadSessionWordIds();
             document.getElementById('quizStartScreen').classList.remove('hidden');
             document.getElementById('quizDirectionPickerScreen').classList.add('hidden');
             document.getElementById('quizGameScreen').classList.add('hidden');
             document.getElementById('quizMatchingScreen').classList.add('hidden');
+            document.getElementById('quizFlashcardsScreen').classList.add('hidden');
             document.getElementById('quizResultsScreen').classList.add('hidden');
             fillQuizCategorySelect(); updateQuizCounter(); updateQuizDirectionButtons(); updateQuizStats();
             setQuizMode(quizMode);
+        }
+
+        function selectPoolFilter(filter) {
+            if (selectedPoolFilter === filter) {
+                selectedPoolFilter = 'all';
+            } else {
+                selectedPoolFilter = filter;
+            }
+            if (quizMode !== 'category') {
+                quizMode = 'all';
+                document.querySelectorAll('.quiz-mode-grid .quiz-mode-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === 'all'));
+            }
+            loadSessionWordIds();
+            updateQuizStats();
+            updateQuizCounter();
         }
 
         function setQuizMode(mode) {
             quizMode = mode;
             document.querySelectorAll('.quiz-mode-btn[data-mode]').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
             document.getElementById('quizCategorySelect').classList.toggle('hidden', mode !== 'category');
-            document.getElementById('directionSection').classList.toggle('hidden', mode === 'matching');
+            document.getElementById('directionSection').classList.toggle('hidden', mode === 'matching' || mode === 'flashcards');
             document.getElementById('quantitySection').classList.toggle('hidden', mode === 'matching');
             loadSessionWordIds(); updateQuizCounter();
         }
         function setQuizCount(count) {
             quizCount = count === 'all' ? Infinity : count;
-            document.querySelectorAll('.quiz-mode-btn[data-count]').forEach(btn => btn.classList.toggle('active', btn.dataset.count === String(count)));
+            document.querySelectorAll('#quantitySection .quiz-mode-btn[data-count]').forEach(btn => btn.classList.toggle('active', btn.dataset.count === String(count)));
             updateQuizCounter();
         }
         function setQuizDirection(direction) { quizData.direction = direction; updateQuizDirectionButtons(); }
@@ -2379,28 +2678,34 @@
         
         function getWordsForQuiz() {
             if (customTestPool) return [...customTestPool].sort(() => 0.5 - Math.random());
-            let pool = getCurrentWords().filter(w => !sessionWordIds.includes(w.id));
-            if (quizMode === 'weak') pool = pool.filter(w => isWeakWord(w)).sort((a, b) => (a.score || 0) - (b.score || 0));
-            else if (quizMode === 'category' && quizCategory) pool = pool.filter(w => w.category === quizCategory);
+            let pool = getAllPoolWords().filter(w => !sessionWordIds.includes(w.id));
+            if (selectedPoolFilter === 'weak') pool = pool.sort((a, b) => (a.score || 0) - (b.score || 0));
             return pool.sort(() => 0.5 - Math.random()).slice(0, quizCount);
         }
         
         function updateQuizCounter() {
             quizCategory = document.getElementById('quizCategorySelect').value;
             const counter = document.getElementById('quizCounter');
+            
+            let filterName = 'Все слова';
+            if (selectedPoolFilter === 'learned') filterName = 'Изученные';
+            else if (selectedPoolFilter === 'weak') filterName = 'Ошибки';
+            else if (selectedPoolFilter === 'new') filterName = 'Новые';
+
             if (quizMode === 'matching') {
-                let pool = getCurrentWords();
-                if (quizMode === 'weak') pool = pool.filter(w => isWeakWord(w));
-                if (quizMode === 'category' && quizCategory) pool = pool.filter(w => w.category === quizCategory);
-                const pairsCount = Math.min(pool.length, 15);
-                counter.textContent = `Будет выбрано пар: ${pairsCount}`;
+                let pool = getAllPoolWords();
+                counter.innerHTML = `<span style="color: var(--ios-blue);">Раздел: ${filterName}</span> | Доступно для сопоставления: <strong>${pool.length}</strong>`;
                 return;
             }
             const available = getWordsForQuiz();
             const allPool = getAllPoolWords();
             const remaining = allPool.length - allPool.filter(w => sessionWordIds.includes(w.id)).length;
-            if (available.length === 0) counter.textContent = allPool.length === 0 ? 'Нет подходящих слов' : `Все слова уже пройдены (${allPool.length})`;
-            else counter.textContent = `Будет выбрано: ${Math.min(quizCount === Infinity ? available.length : quizCount, available.length)} (осталось: ${remaining})`;
+            
+            if (available.length === 0) {
+                counter.innerHTML = allPool.length === 0 ? `<span style="color: var(--ios-orange);">В разделе "${filterName}" нет слов</span>` : `<span style="color: var(--ios-green);">Все слова раздела "${filterName}" пройдены (${allPool.length})</span>`;
+            } else {
+                counter.innerHTML = `<span style="color: var(--ios-blue); font-weight: 700;">Раздел: ${filterName}</span> • Будет выбрано: <strong>${Math.min(quizCount === Infinity ? available.length : quizCount, available.length)}</strong> (осталось: ${remaining})`;
+            }
         }
         
         function updateQuizStats() {
@@ -2414,6 +2719,10 @@
             document.getElementById('statLearned').textContent = learned;
             document.getElementById('statWeak').textContent = weak;
             document.getElementById('statNew').textContent = newWords;
+
+            document.getElementById('statCardLearned').classList.toggle('active-pool', selectedPoolFilter === 'learned');
+            document.getElementById('statCardWeak').classList.toggle('active-pool', selectedPoolFilter === 'weak');
+            document.getElementById('statCardNew').classList.toggle('active-pool', selectedPoolFilter === 'new');
         }
 
         function resetQuizStats() {
@@ -2445,25 +2754,17 @@
         }
 
         function showWordsByStatus(status) {
-            const words = getCurrentWords();
-            let filteredWords = [], title = '';
-            if (status === 'learned') { filteredWords = words.filter(w => isLearnedWord(w)); title = 'Изученные слова'; }
-            else if (status === 'weak') { filteredWords = words.filter(w => isWeakWord(w)); title = 'Слова с ошибками'; }
-            else { filteredWords = words.filter(w => isNewWord(w)); title = 'Новые слова'; }
-            
-            if (filteredWords.length === 0) return alert('В этой категории нет слов');
-            
-            let html = filteredWords.map(w => `<div class="compact-item" style="margin-bottom: 6px; border-radius: 12px;">
-                <div><div style="font-weight: 600;">${escapeHtml(w.word)}</div><div style="font-size: 12px; color: var(--ios-text-secondary);">${escapeHtml(w.meaning)}</div></div>
-            </div>`).join('');
-            
-            if (filteredWords.length >= 4) html += `<button class="btn-primary" onclick="startTestFromStatus('${status}')">Протестировать (${filteredWords.length})</button>`;
-            
-            document.getElementById('wordsListModalContent').innerHTML = html;
-            document.getElementById('wordsListModalTitle').textContent = `${title} (${filteredWords.length})`;
-            document.getElementById('wordsListModal').classList.add('active');
+            selectPoolFilter(status);
         }
         
+        function setPickerCount(count) {
+            pickerCount = count === 'all' ? Infinity : count;
+            document.getElementById('pickerCount20').classList.toggle('active', count === 20);
+            document.getElementById('pickerCount50').classList.toggle('active', count === 50);
+            document.getElementById('pickerCount100').classList.toggle('active', count === 100);
+            document.getElementById('pickerCountAll').classList.toggle('active', count === 'all');
+        }
+
         function startTestFromStatus(status) {
             let filteredWords = [];
             const words = getCurrentWords();
@@ -2475,6 +2776,8 @@
             
             customTestPool = filteredWords;
             lastStatusForPicker = status;
+            pickerCount = 50;
+            setPickerCount(50);
             
             closeWordsListModal();
             document.getElementById('pickerWordCount').textContent = filteredWords.length;
@@ -2484,38 +2787,121 @@
         
         function startTestWithDirection(direction) {
             if (!customTestPool || customTestPool.length < 4) return alert('Недостаточно слов');
+            const targetCount = pickerCount === Infinity ? customTestPool.length : pickerCount;
+            const chosen = [...customTestPool].sort(() => 0.5 - Math.random()).slice(0, targetCount);
+
             quizData = { 
                 correct: 0, wrong: 0, learnedCount: 0, currentWord: null, options: [], 
                 direction: direction, 
-                wordQueue: [...customTestPool].sort(() => 0.5 - Math.random()), 
-                wrongWords: [], isRetryMode: false, isFinished: false, lastState: null, nextTimeout: null
+                wordQueue: chosen, 
+                wrongWords: [], isRetryMode: false, isFinished: false, lastState: null, nextTimeout: null 
             };
             document.getElementById('quizDirectionPickerScreen').classList.add('hidden');
             document.getElementById('quizGameScreen').classList.remove('hidden');
             updateQuizScore();
             showNextWord();
         }
+
+        function startPreviewFromPicker() {
+            if (!customTestPool || customTestPool.length === 0) return alert('Нет слов');
+            const targetCount = pickerCount === Infinity ? customTestPool.length : pickerCount;
+            const chosen = [...customTestPool].slice(0, targetCount);
+            flashcardsData = { queue: chosen, currentIndex: 0, returnToPicker: true };
+            document.getElementById('quizDirectionPickerScreen').classList.add('hidden');
+            document.getElementById('quizFlashcardsScreen').classList.remove('hidden');
+            showFlashcard();
+        }
         
         function backToWordsList() {
             document.getElementById('quizDirectionPickerScreen').classList.add('hidden');
             document.getElementById('quizStartScreen').classList.remove('hidden');
-            if (lastStatusForPicker) showWordsByStatus(lastStatusForPicker);
         }
         function closeWordsListModal() { document.getElementById('wordsListModal').classList.remove('active'); }
         
         function beginQuiz() {
             if (quizMode === 'matching') { startMatchingQuiz(); return; }
+            if (quizMode === 'flashcards') { startFlashcards(); return; }
+
             const words = getWordsForQuiz();
             if (words.length < 4) return alert(`Нужно минимум 4 слова. Доступно: ${words.length}`);
             quizData.wordQueue = words; quizData.correct = 0; quizData.wrong = 0; quizData.learnedCount = 0; quizData.wrongWords = []; quizData.isRetryMode = false; quizData.isFinished = false;
+            quizData.lastState = null;
             document.getElementById('quizStartScreen').classList.add('hidden');
             document.getElementById('quizGameScreen').classList.remove('hidden');
             updateQuizScore(); showNextWord();
         }
 
+        /* Логика Экспресс повторения (Flip Cards) со свайпом */
+        function startFlashcards() {
+            const words = getWordsForQuiz();
+            if (words.length === 0) return alert('Нет слов для изучения');
+            flashcardsData = { queue: words, currentIndex: 0, returnToPicker: false };
+            document.getElementById('quizStartScreen').classList.add('hidden');
+            document.getElementById('quizFlashcardsScreen').classList.remove('hidden');
+            showFlashcard();
+        }
+
+        function showFlashcard() {
+            const cardEl = document.getElementById('flashcardElement');
+            cardEl.classList.remove('flipped');
+            const word = flashcardsData.queue[flashcardsData.currentIndex];
+            currentFlashcardWord = word;
+            document.getElementById('flashcardProgress').textContent = `Карточка ${flashcardsData.currentIndex + 1} из ${flashcardsData.queue.length}`;
+            document.getElementById('flashcardFrontText').textContent = word.word;
+            document.getElementById('flashcardBackText').textContent = word.meaning;
+            document.getElementById('flashcardNotesText').textContent = word.notes ? `Заметка: ${word.notes}` : '';
+            if (autoTts) speakWord(word.word);
+        }
+
+        function nextFlashcard() {
+            if (flashcardsData.currentIndex < flashcardsData.queue.length - 1) {
+                flashcardsData.currentIndex++;
+                showFlashcard();
+            } else {
+                finishFlashcards();
+            }
+        }
+
+        function prevFlashcard() {
+            if (flashcardsData.currentIndex > 0) {
+                flashcardsData.currentIndex--;
+                showFlashcard();
+            }
+        }
+
+        function finishFlashcards() {
+            document.getElementById('quizFlashcardsScreen').classList.add('hidden');
+            if (flashcardsData.returnToPicker) {
+                document.getElementById('quizDirectionPickerScreen').classList.remove('hidden');
+            } else {
+                openQuizScreen();
+            }
+        }
+
+        // Свайп влево/вправо для карточек
+        let fcStartX = 0, fcCurrentX = 0;
+        const fcEl = document.getElementById('flashcardElement');
+        fcEl.addEventListener('touchstart', e => {
+            fcStartX = e.touches[0].clientX;
+            fcCurrentX = fcStartX;
+        }, { passive: true });
+        fcEl.addEventListener('touchmove', e => {
+            fcCurrentX = e.touches[0].clientX;
+        }, { passive: true });
+        fcEl.addEventListener('touchend', () => {
+            const diff = fcCurrentX - fcStartX;
+            if (diff < -50) {
+                nextFlashcard();
+            } else if (diff > 50) {
+                prevFlashcard();
+            }
+        });
+
         function showNextWord() {
             if (quizData.wordQueue.length === 0) { showResults(); return; }
-            document.getElementById('btnUndoQuiz').style.display = quizData.lastState ? 'block' : 'none';
+            
+            const undoBtn = document.getElementById('btnUndoQuiz');
+            undoBtn.style.opacity = quizData.lastState ? '1' : '0.35';
 
             quizData.currentWord = quizData.wordQueue.shift();
             const freshWord = getCurrentWords().find(w => w.id === quizData.currentWord.id);
@@ -2570,7 +2956,8 @@
                 wrongWords: [...quizData.wrongWords],
                 wordScore: wordIndex !== -1 ? words[wordIndex].score : null,
                 wordLastReviewed: wordIndex !== -1 ? words[wordIndex].lastReviewed : null,
-                sessionAdded: !sessionWordIds.includes(quizData.currentWord.id)
+                sessionAdded: !sessionWordIds.includes(quizData.currentWord.id),
+                wasCorrect: isCorrect
             };
 
             const buttons = document.querySelectorAll('.quiz-option');
@@ -2599,7 +2986,9 @@
                 }
             } else {
                 quizData.wrong++;
-                quizData.wrongWords.push(quizData.currentWord);
+                if (!quizData.wrongWords.some(w => w.id === quizData.currentWord.id)) {
+                    quizData.wrongWords.push(quizData.currentWord);
+                }
                 if (wordIndex !== -1) {
                     const currentScore = words[wordIndex].score;
                     words[wordIndex].score = (currentScore === null || currentScore === undefined) ? -1 : currentScore - 1;
@@ -2610,7 +2999,8 @@
 
             if (newlyLearned) quizData.learnedCount++;
             updateQuizScore();
-            quizData.nextTimeout = setTimeout(() => { showNextWord(); }, 120);
+            document.getElementById('btnUndoQuiz').style.opacity = '1';
+            quizData.nextTimeout = setTimeout(() => { showNextWord(); }, 140);
         }
 
         function undoQuizStep() {
@@ -2637,9 +3027,28 @@
             updateQuizScore();
             quizData.currentWord = quizData.lastState.word;
             quizData.options = quizData.lastState.options;
-            showNextWord();
-            document.getElementById('btnUndoQuiz').style.display = 'none';
             quizData.lastState = null;
+            document.getElementById('btnUndoQuiz').style.opacity = '0.35';
+            
+            const scoreDisplay = getScoreDisplay(quizData.currentWord);
+            const scoreColor = getScoreColor(quizData.currentWord);
+            const scoreBadge = `<span style="position: absolute; top: 12px; left: 14px; font-size: 12px; font-weight: 700; color: ${scoreColor}; background: var(--ios-fill); padding: 3px 8px; border-radius: 8px;">${scoreDisplay}</span>`;
+
+            if (quizData.currentDirection === 'listening') {
+                document.getElementById('quizWord').innerHTML = `${scoreBadge}<span class="compact-audio-btn" style="width: 52px; height: 52px;" onclick="speakWord('${escapeHtml(quizData.currentWord.word)}')"><svg class="svg-icon svg-icon-large" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>`;
+                document.getElementById('quizLabel').textContent = 'Прослушайте и выберите:';
+                document.getElementById('quizOptions').innerHTML = quizData.options.map((opt, idx) => `<button class="quiz-option" onclick="checkAnswer(${idx})">${escapeHtml(opt.meaning)}</button>`).join('');
+            } else if (quizData.currentDirection === 'wordToMeaning') {
+                document.getElementById('quizWord').innerHTML = `${scoreBadge}${escapeHtml(quizData.currentWord.word)} <span class="compact-audio-btn" style="position: absolute; right: 14px; top: 12px;" onclick="speakWord('${escapeHtml(quizData.currentWord.word)}')"><svg class="svg-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>`;
+                document.getElementById('quizLabel').textContent = 'Выберите перевод:';
+                document.getElementById('quizOptions').innerHTML = quizData.options.map((opt, idx) => `<button class="quiz-option" onclick="checkAnswer(${idx})">${escapeHtml(opt.meaning)}</button>`).join('');
+            } else {
+                document.getElementById('quizWord').innerHTML = `${scoreBadge}${escapeHtml(quizData.currentWord.meaning)}`;
+                document.getElementById('quizLabel').textContent = 'Выберите слово:';
+                document.getElementById('quizOptions').innerHTML = quizData.options.map((opt, idx) => `<button class="quiz-option" onclick="checkAnswer(${idx})">${escapeHtml(opt.word)}</button>`).join('');
+            }
+            document.getElementById('quizProgress').textContent = `Вопрос ${quizData.correct + quizData.wrong + 1} из ${quizData.wordQueue.length + quizData.correct + quizData.wrong + 1}`;
+            document.getElementById('remainingCount').textContent = quizData.wordQueue.length;
         }
 
         function updateQuizScore() {
@@ -2656,6 +3065,36 @@
             const total = quizData.correct + quizData.wrong;
             const percentage = total > 0 ? Math.round(quizData.correct / total * 100) : 0;
             
+            let wrongWordsHtml = '';
+            if (quizData.wrongWords && quizData.wrongWords.length > 0) {
+                wrongWordsHtml = `
+                    <div style="text-align: left; margin: 20px 4px 8px; font-size: 11px; font-weight: 700; color: var(--ios-red); text-transform: uppercase; letter-spacing: 0.05em;">
+                        Слова для повторения (${quizData.wrongWords.length})
+                    </div>
+                    <div class="compact-list" style="margin-bottom: 16px; text-align: left; max-height: 240px; overflow-y: auto;">
+                        ${quizData.wrongWords.map(item => {
+                            const fresh = getCurrentWords().find(w => w.id === item.id) || item;
+                            const scoreDisp = getScoreDisplay(fresh);
+                            const scoreCol = getScoreColor(fresh);
+                            return `
+                            <div class="compact-item">
+                                <div class="compact-word">
+                                    <span style="font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: ${scoreCol}; background: var(--ios-fill); padding: 2px 6px; border-radius: 6px; min-width: 22px; text-align: center;">${scoreDisp}</span>
+                                    <span class="compact-audio-btn" onclick="speakWord('${escapeHtml(fresh.word)}'); event.stopPropagation();">
+                                        <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                                    </span>
+                                    ${escapeHtml(fresh.word)}
+                                </div>
+                                <div class="compact-meaning">${escapeHtml(fresh.meaning)}</div>
+                            </div>`;
+                        }).join('')}
+                    </div>
+                    <button class="btn-primary" onclick="retryWrongWordsOnly()" style="background: var(--ios-orange); margin-bottom: 8px;">
+                        Повторить только ошибки (${quizData.wrongWords.length})
+                    </button>
+                `;
+            }
+
             document.getElementById('quizResultsScreen').innerHTML = `
                 <div style="font-size: 20px; font-weight: 700; font-family: var(--font-display); margin-bottom: 10px;">Результаты теста</div>
                 <div style="font-size: 52px; font-weight: 800; color: var(--ios-blue); font-family: var(--font-mono); margin: 10px 0;">${percentage}%</div>
@@ -2663,29 +3102,82 @@
                     <div class="stat-card" style="flex: 1;"><div class="stat-value" style="color: var(--ios-green);">${quizData.correct}</div><div class="stat-label">Верно</div></div>
                     <div class="stat-card" style="flex: 1;"><div class="stat-value" style="color: var(--ios-red);">${quizData.wrong}</div><div class="stat-label">Ошибок</div></div>
                 </div>
+                ${wrongWordsHtml}
                 <button class="btn-primary" onclick="openQuizScreen()">Пройти заново</button>`;
             
             document.getElementById('quizGameScreen').classList.add('hidden');
+            document.getElementById('quizMatchingScreen').classList.add('hidden');
+            document.getElementById('quizFlashcardsScreen').classList.add('hidden');
             document.getElementById('quizResultsScreen').classList.remove('hidden');
         }
 
-        function startMatchingQuiz() {
-            let pool = getCurrentWords().slice(0, 10);
-            if (pool.length < 4) return alert('Нужно минимум 4 слова');
-            matchingData = {
-                pairs: pool,
-                leftItems: pool.map(w => ({ id: w.id, text: w.word, type: 'left' })).sort(() => 0.5 - Math.random()),
-                rightItems: pool.map(w => ({ id: w.id, text: w.meaning, type: 'right' })).sort(() => 0.5 - Math.random()),
-                selectedLeft: null, selectedRight: null, matchedCount: 0, mistakes: 0, startTime: Date.now(), timerInterval: null, isLocked: false
+        function retryWrongWordsOnly() {
+            if (!quizData.wrongWords || quizData.wrongWords.length === 0) return;
+            const chosen = [...quizData.wrongWords].sort(() => 0.5 - Math.random());
+            const currentDir = quizData.direction;
+            quizData = { 
+                correct: 0, wrong: 0, learnedCount: 0, currentWord: null, options: [], 
+                direction: currentDir, 
+                wordQueue: chosen, 
+                wrongWords: [], isRetryMode: true, isFinished: false, lastState: null, nextTimeout: null 
             };
+            document.getElementById('quizResultsScreen').classList.add('hidden');
+            document.getElementById('quizGameScreen').classList.remove('hidden');
+            updateQuizScore();
+            showNextWord();
+        }
+
+        /* Непрерывный режим Сопоставления без влияния на рейтинг */
+        function startMatchingQuiz() {
+            let pool = getAllPoolWords();
+            if (pool.length < 4) return alert('Нужно минимум 4 слова');
+
+            matchingData = {
+                pool: [...pool].sort(() => 0.5 - Math.random()),
+                batch: [],
+                leftItems: [], rightItems: [],
+                selectedLeft: null, selectedRight: null,
+                matchedTotal: 0, mistakes: 0,
+                startTime: Date.now(), timerInterval: null, isLocked: false
+            };
+
+            if (matchingData.timerInterval) clearInterval(matchingData.timerInterval);
+            matchingData.timerInterval = setInterval(updateMatchingTimer, 1000);
+
             document.getElementById('quizStartScreen').classList.add('hidden');
             document.getElementById('quizMatchingScreen').classList.remove('hidden');
+            loadNextMatchingBatch();
+        }
+
+        function updateMatchingTimer() {
+            const diff = Math.floor((Date.now() - matchingData.startTime) / 1000);
+            const m = String(Math.floor(diff / 60)).padStart(2, '0');
+            const s = String(diff % 60).padStart(2, '0');
+            document.getElementById('matchingTime').textContent = `${m}:${s}`;
+        }
+
+        function loadNextMatchingBatch() {
+            if (matchingData.pool.length === 0) {
+                finishMatchingQuiz();
+                return;
+            }
+
+            const batch = matchingData.pool.splice(0, 10);
+            matchingData.batch = batch;
+            matchingData.leftItems = batch.map(w => ({ id: w.id, text: w.word })).sort(() => 0.5 - Math.random());
+            matchingData.rightItems = batch.map(w => ({ id: w.id, text: w.meaning })).sort(() => 0.5 - Math.random());
+            matchingData.batchMatched = 0;
+
+            document.getElementById('matchingProgress').textContent = `Сопоставлено: ${matchingData.matchedTotal} слов (Осталось в очереди: ${matchingData.pool.length + batch.length})`;
+            document.getElementById('matchingMistakes').textContent = matchingData.mistakes;
             renderMatchingGrid();
         }
+
         function renderMatchingGrid() {
             document.getElementById('matchingLeft').innerHTML = matchingData.leftItems.map(item => `<div class="quiz-option" data-id="${item.id}" data-type="left" onclick="selectMatchingItem(this)">${escapeHtml(item.text)}</div>`).join('');
             document.getElementById('matchingRight').innerHTML = matchingData.rightItems.map(item => `<div class="quiz-option" data-id="${item.id}" data-type="right" onclick="selectMatchingItem(this)">${escapeHtml(item.text)}</div>`).join('');
         }
+
         function selectMatchingItem(el) {
             if (matchingData.isLocked || el.classList.contains('correct')) return;
             const type = el.dataset.type;
@@ -2704,25 +3196,55 @@
                 if (isMatch) {
                     matchingData.selectedLeft.classList.add('correct');
                     matchingData.selectedRight.classList.add('correct');
-                    matchingData.matchedCount++;
+                    matchingData.matchedTotal++;
+                    matchingData.batchMatched++;
                     matchingData.selectedLeft = null;
                     matchingData.selectedRight = null;
                     matchingData.isLocked = false;
-                    if (matchingData.matchedCount === matchingData.pairs.length) setTimeout(finishQuizEarly, 500);
+                    document.getElementById('matchingProgress').textContent = `Сопоставлено: ${matchingData.matchedTotal} слов`;
+
+                    if (matchingData.batchMatched === matchingData.batch.length) {
+                        setTimeout(() => {
+                            loadNextMatchingBatch();
+                        }, 400);
+                    }
                 } else {
+                    matchingData.mistakes++;
+                    document.getElementById('matchingMistakes').textContent = matchingData.mistakes;
                     matchingData.selectedLeft.classList.add('wrong');
                     matchingData.selectedRight.classList.add('wrong');
                     setTimeout(() => {
-                        matchingData.selectedLeft.classList.remove('wrong');
-                        matchingData.selectedRight.classList.remove('wrong');
-                        matchingData.selectedLeft.style.borderColor = 'var(--ios-border)';
-                        matchingData.selectedRight.style.borderColor = 'var(--ios-border)';
-                        matchingData.selectedLeft = null;
-                        matchingData.selectedRight = null;
+                        if (matchingData.selectedLeft) {
+                            matchingData.selectedLeft.classList.remove('wrong');
+                            matchingData.selectedLeft.style.borderColor = 'var(--ios-border)';
+                            matchingData.selectedLeft = null;
+                        }
+                        if (matchingData.selectedRight) {
+                            matchingData.selectedRight.classList.remove('wrong');
+                            matchingData.selectedRight.style.borderColor = 'var(--ios-border)';
+                            matchingData.selectedRight = null;
+                        }
                         matchingData.isLocked = false;
-                    }, 500);
+                    }, 450);
                 }
             }
+        }
+
+        function finishMatchingQuiz() {
+            if (matchingData.timerInterval) clearInterval(matchingData.timerInterval);
+            document.getElementById('quizMatchingScreen').classList.add('hidden');
+            
+            document.getElementById('quizResultsScreen').innerHTML = `
+                <div style="font-size: 20px; font-weight: 700; font-family: var(--font-display); margin-bottom: 10px;">Сопоставление завершено</div>
+                <div style="font-size: 52px; font-weight: 800; color: var(--ios-green); font-family: var(--font-mono); margin: 10px 0;">${matchingData.matchedTotal}</div>
+                <div style="font-size: 13px; color: var(--ios-text-secondary); margin-bottom: 16px;">пар найдено без влияния на рейтинг</div>
+                <div style="display: flex; gap: 8px; justify-content: center; margin: 16px 0;">
+                    <div class="stat-card" style="flex: 1;"><div class="stat-value" style="color: var(--ios-blue); font-size: 20px;">${document.getElementById('matchingTime').textContent}</div><div class="stat-label">Время</div></div>
+                    <div class="stat-card" style="flex: 1;"><div class="stat-value" style="color: var(--ios-red); font-size: 20px;">${matchingData.mistakes}</div><div class="stat-label">Ошибок</div></div>
+                </div>
+                <button class="btn-primary" onclick="openQuizScreen()">Выйти в меню</button>`;
+            
+            document.getElementById('quizResultsScreen').classList.remove('hidden');
         }
 
         document.getElementById('wordModal').addEventListener('click', function(e) { if (e.target === this) closeWordModal(); });
