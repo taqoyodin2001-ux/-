@@ -1,4 +1,3 @@
-// Изменили версию кэша с v20 на v21
 const CACHE_NAME = "my-dictionary-v21"; 
 const FILES_TO_CACHE = [
   "./",
