@@ -799,6 +799,54 @@
             text-align: center;
         }
 
+        /* Список слов в стиле floating-карточек FAB-меню */
+        .words-fab-modal.active {
+            background-color: rgba(0, 0, 0, 0.55) !important;
+            backdrop-filter: blur(16px) !important;
+            -webkit-backdrop-filter: blur(16px) !important;
+            align-items: center !important;
+        }
+        .words-fab-modal .modal-content {
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+            padding: 0;
+            width: 92%;
+            max-width: 460px;
+            max-height: 82vh;
+            display: flex;
+            flex-direction: column;
+            animation: fabPanelIn 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+        @keyframes fabPanelIn {
+            from { opacity: 0; transform: scale(0.88) translateY(14px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .words-fab-modal .modal-header {
+            background: var(--ios-card);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--ios-border);
+            border-radius: 18px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            box-shadow: var(--ios-shadow-card), var(--ios-highlight);
+        }
+        .words-fab-modal #wordsListModalContent {
+            overflow-y: auto;
+            padding: 2px;
+            flex: 1;
+            min-height: 0;
+        }
+        .word-fab-card {
+            opacity: 0;
+            transform: translateY(8px) scale(0.97);
+            animation: fabItemIn 0.3s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+        }
+
         .quiz-container { text-align: center; padding: 4px 0; }
         .quiz-stats-block {
             background: var(--ios-card);
@@ -1149,19 +1197,20 @@
                 <div class="quiz-stats-block">
                     <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.05em;">Выберите раздел для изучения</div>
                     <div class="quiz-stats-grid">
-                        <div class="quiz-stat-item learned" id="statCardLearned" onclick="selectPoolFilter('learned')">
+                        <div class="quiz-stat-item learned" id="statCardLearned" onclick="selectPoolFilter('learned')" ondblclick="openWordsListModal('learned')">
                             <div class="quiz-stat-value" id="statLearned">0</div>
                             <div class="quiz-stat-label">Изучено</div>
                         </div>
-                        <div class="quiz-stat-item weak" id="statCardWeak" onclick="selectPoolFilter('weak')">
+                        <div class="quiz-stat-item weak" id="statCardWeak" onclick="selectPoolFilter('weak')" ondblclick="openWordsListModal('weak')">
                             <div class="quiz-stat-value" id="statWeak">0</div>
                             <div class="quiz-stat-label">Ошибки</div>
                         </div>
-                        <div class="quiz-stat-item new" id="statCardNew" onclick="selectPoolFilter('new')">
+                        <div class="quiz-stat-item new" id="statCardNew" onclick="selectPoolFilter('new')" ondblclick="openWordsListModal('new')">
                             <div class="quiz-stat-value" id="statNew">0</div>
                             <div class="quiz-stat-label">Новых</div>
                         </div>
                     </div>
+                    <div style="font-size: 10px; color: var(--ios-text-secondary); text-align: center; margin-top: 2px; opacity: 0.7;">Двойной тап по карточке — посмотреть список слов</div>
                     <div class="quiz-stats-buttons-row">
                         <button class="btn-reset-stats" onclick="resetQuizStats()">Весь рейтинг</button>
                         <button class="btn-reset-stats" onclick="resetLearnedToNew()" style="border-color: var(--ios-orange); color: var(--ios-orange);">Изученные → Новые</button>
@@ -1369,7 +1418,11 @@
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                     <button class="btn-primary" onclick="exportAllDictionaries()" style="margin-top: 0;">
                         <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                        В память телефона (JSON)
+                        В память телефона (JSON) — все словари
+                    </button>
+                    <button class="btn-primary" onclick="exportCurrentDictionary()" style="margin-top: 0; background: rgba(var(--ios-blue-rgb), 0.16); color: var(--ios-blue); box-shadow: none;">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        В память телефона (JSON) — только текущий словарь
                     </button>
                     <button class="btn-primary" onclick="importDictionary()" style="margin-top: 0; background: var(--ios-fill); color: var(--ios-text); box-shadow: none;">
                         <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
@@ -1556,7 +1609,7 @@
     </div>
 
     <!-- Модалка списка статусов -->
-    <div class="modal" id="wordsListModal">
+    <div class="modal words-fab-modal" id="wordsListModal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title" id="wordsListModalTitle">Список слов</h2>
@@ -2554,6 +2607,16 @@
             const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = suggestedName; link.click(); URL.revokeObjectURL(link.href);
             alert('Файл JSON сохранён');
         }
+        async function exportCurrentDictionary() {
+            const dictName = data.currentDictionary;
+            const words = data.dictionaries[dictName] || [];
+            const content = JSON.stringify({ name: dictName, words: words, exportDate: new Date().toISOString() }, null, 2);
+            const safeName = dictName.replace(/[\\/:*?"<>|]/g, '_');
+            const suggestedName = `${safeName}_${new Date().toISOString().split('T')[0]}.json`;
+            const blob = new Blob([content], {type: 'application/json'});
+            const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = suggestedName; link.click(); URL.revokeObjectURL(link.href);
+            alert(`Словарь "${dictName}" (${words.length} слов) сохранён`);
+        }
         async function importDictionary() {
             const input = document.createElement('input'); input.type = 'file'; input.accept = '.json,application/json';
             input.onchange = e => {
@@ -2890,6 +2953,48 @@
             document.getElementById('quizSessionPreviewScreen').classList.add('hidden');
             document.getElementById('quizFlashcardsScreen').classList.remove('hidden');
             showFlashcard();
+        }
+
+        function openWordsListModal(status) {
+            const words = getCurrentWords();
+            let filtered = [];
+            let title = 'Список слов';
+            if (status === 'learned') { filtered = words.filter(w => isLearnedWord(w)); title = `Изучено (${filtered.length})`; }
+            else if (status === 'weak') { filtered = words.filter(w => isWeakWord(w)); title = `Ошибки (${filtered.length})`; }
+            else { filtered = words.filter(w => isNewWord(w)); title = `Новые (${filtered.length})`; }
+
+            document.getElementById('wordsListModalTitle').textContent = title;
+
+            if (filtered.length === 0) {
+                document.getElementById('wordsListModalContent').innerHTML = `<div class="empty-state">
+                    <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    В этом разделе пока нет слов
+                </div>`;
+            } else {
+                filtered.sort((a, b) => a.word.toLowerCase().localeCompare(b.word.toLowerCase(), 'ru'));
+                document.getElementById('wordsListModalContent').innerHTML = '<div class="compact-list">' + filtered.map((word, idx) => {
+                    const hasErrors = isWeakWord(word);
+                    const delay = (Math.min(idx, 14) * 0.035).toFixed(3);
+                    return `<div class="swipe-item-wrapper word-fab-card" style="animation-delay: ${delay}s;">
+                        <div class="swipe-item-actions" onclick="deleteWord(${word.id}); openWordsListModal('${status}');">
+                            <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        </div>
+                        <div class="compact-item ${hasErrors ? 'has-errors' : ''}" onclick="closeWordsListModal(); showWordDetail(${word.id});">
+                            <div class="compact-word">
+                                ${hasErrors ? '<div class="compact-error-dot"></div>' : ''}
+                                <span class="compact-audio-btn" onclick="speakWord('${escapeHtml(word.word)}'); event.stopPropagation();">
+                                    <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                                </span>
+                                ${escapeHtml(word.word)}
+                            </div>
+                            <div class="compact-meaning">${escapeHtml(word.meaning)}</div>
+                        </div>
+                    </div>`;
+                }).join('') + '</div>';
+                initSwipeListeners();
+            }
+
+            document.getElementById('wordsListModal').classList.add('active');
         }
 
         function closeWordsListModal() { document.getElementById('wordsListModal').classList.remove('active'); }
