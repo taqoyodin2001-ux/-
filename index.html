@@ -2757,12 +2757,9 @@
             } else {
                 // Красивый индикатор прогресса круга
                 counter.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 14px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 14px;">
                         <span style="color: var(--ios-blue); font-weight: 700;">${filterName}</span>
                         <span style="color: var(--ios-purple); font-weight: 700;">Осталось в круге: ${remainingInRound}</span>
-                    </div>
-                    <div style="font-size: 12px; color: var(--ios-text-secondary); text-align: left;">
-                        В эту сессию войдет слов: <strong>${Math.min(quizCount === Infinity ? available.length : quizCount, available.length)}</strong>
                     </div>
                 `;
             }
@@ -3094,7 +3091,14 @@
                 }
                 if (wordIndex !== -1) {
                     const currentScore = words[wordIndex].score;
-                    words[wordIndex].score = (currentScore === null || currentScore === undefined) ? -1 : currentScore - 1;
+                    if (currentScore === null || currentScore === undefined) {
+                        words[wordIndex].score = -1;
+                    } else if (currentScore === 1) {
+                        // Ошибка на уже изученном слове — сразу возвращаем в "Ошибки", минуя score=0
+                        words[wordIndex].score = -1;
+                    } else {
+                        words[wordIndex].score = currentScore - 1;
+                    }
                     words[wordIndex].lastReviewed = new Date().toISOString();
                     setCurrentWords(words);
                 }
@@ -3344,4 +3348,3 @@
     </script>
 </body>
 </html>
-
