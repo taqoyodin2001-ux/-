@@ -1,4 +1,4 @@
-const CACHE_NAME = "my-dictionary-v22"; 
+const CACHE_NAME = "my-dictionary-v23";
 const FILES_TO_CACHE = [
   "./",
   "./index.html",
@@ -34,14 +34,40 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+  const req = event.request;
+
+  // HTML-страницы (навигация) и сам index.html: всегда сначала сеть,
+  // чтобы не залипать на старой закэшированной версии.
+  const isHtmlRequest =
+    req.mode === "navigate" ||
+    (req.method === "GET" && req.headers.get("accept")?.includes("text/html"));
+
+  if (isHtmlRequest) {
+    event.respondWith(
+      fetch(req)
+        .then((networkResponse) => {
+          // Обновляем кэш свежей версией на будущее (для офлайн-режима)
+          const clone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+          return networkResponse;
+        })
+        .catch(() => {
+          // Нет сети — отдаём то, что есть в кэше
+          return caches.match(req).then((cached) => cached || caches.match("./index.html"));
+        })
+    );
+    return;
+  }
+
+  // Остальные статичные файлы (иконки, manifest и т.д.): сначала кэш, это быстрее
   event.respondWith(
-    caches.match(event.request).then((response) => {
+    caches.match(req).then((response) => {
       return (
         response ||
-        fetch(event.request).catch(() => {
-          if (event.request.mode === "navigate") {
-            return caches.match("./index.html");
-          }
+        fetch(req).then((networkResponse) => {
+          const clone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+          return networkResponse;
         })
       );
     })
