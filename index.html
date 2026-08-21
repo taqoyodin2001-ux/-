@@ -1457,11 +1457,11 @@
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                     <button class="btn-primary" onclick="exportAllDictionaries()" style="margin-top: 0;">
                         <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                        Экспорт в телефон — все словари
+                        Экспорт всех словарей
                     </button>
                     <button class="btn-primary" onclick="exportCurrentDictionary()" style="margin-top: 0; background: rgba(var(--ios-blue-rgb), 0.16); color: var(--ios-blue); box-shadow: none;">
                         <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                        Экспорт в телефон — текущий
+                        Экспорт текущего
                     </button>
                     <button class="btn-primary" onclick="importDictionary()" style="margin-top: 0; background: var(--ios-fill); color: var(--ios-text); box-shadow: none;">
                         <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
@@ -1482,6 +1482,17 @@
                         Импорт из Excel
                     </button>
                 </div>
+            </div>
+
+            <div class="ios-settings-card">
+                <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Обслуживание словаря</div>
+                <div style="font-size: 13px; color: var(--ios-text-secondary); margin-bottom: 10px; line-height: 1.4;">
+                    Если раньше при массовом импорте тег категории вида «[Категория]» прилип к значению слова (например «Факультет [Общее]») — эта кнопка найдёт такие слова во всех словарях, уберёт тег из значения и подставит его в поле «Категория».
+                </div>
+                <button class="btn-primary" onclick="cleanupMeaningCategoryTags()" style="margin-top: 0; background: var(--ios-fill); color: var(--ios-text); box-shadow: none;">
+                    <svg class="svg-icon" viewBox="0 0 24 24"><path d="M3 6h18"></path><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg>
+                    Очистить теги в значениях
+                </button>
             </div>
 
             <div style="text-align: center; margin-top: 24px; padding-bottom: 12px; font-size: 13px; color: var(--ios-text-tertiary); font-style: italic; font-weight: 500;">
@@ -1687,7 +1698,7 @@
             <div id="bulkImportStep2" class="hidden">
                 <div id="bulkImportSummary"></div>
                 <div id="bulkImportPreview" style="max-height: 260px; overflow-y: auto; margin: 12px 0;"></div>
-                <button class="btn-primary" onclick="confirmBulkImport()">Добавить слова</button>
+                <button class="btn-primary" onclick="confirmBulkImport()">Добавить новые слова</button>
                 <button class="btn-primary" onclick="backToBulkImportStep1()" style="background: var(--ios-fill); color: var(--ios-text); margin-top: 8px; box-shadow: none;">Назад</button>
             </div>
         </div>
@@ -1757,6 +1768,7 @@
         let currentFlashcardWord = null;
 
         let bulkImportParsedData = [];
+        let bulkImportTargetDictionary = '';
         let bulkRulesParsedData = [];
         let editingRuleId = null;
 
@@ -1907,6 +1919,36 @@
                 }
             } catch (e) { console.error(e); }
             return { dictionaries: { "Мой словарь": [] }, currentDictionary: "Мой словарь", rules: [] };
+        }
+
+        function cleanupMeaningCategoryTags() {
+            let fixedCount = 0;
+            const tagPattern = /^(.*?)\s*\[([^\]]+)\]\s*$/;
+            Object.keys(data.dictionaries).forEach(dictName => {
+                data.dictionaries[dictName].forEach(word => {
+                    if (!word.meaning) return;
+                    const match = word.meaning.match(tagPattern);
+                    if (match) {
+                        const cleanMeaning = match[1].trim();
+                        const extractedCategory = match[2].trim();
+                        if (cleanMeaning) {
+                            word.meaning = cleanMeaning;
+                            if (extractedCategory) word.category = extractedCategory;
+                            fixedCount++;
+                        }
+                    }
+                });
+            });
+
+            if (fixedCount === 0) {
+                alert('Слов с прилипшим тегом категории не найдено — всё чисто.');
+                return;
+            }
+
+            saveData();
+            updateCategories();
+            renderMainContent();
+            alert(`Исправлено слов: ${fixedCount}.`);
         }
 
         function saveData() { try { localStorage.setItem('myDictionaryData', JSON.stringify(data)); updateStats(); } catch (e) { console.error(e); } }
@@ -2551,13 +2593,22 @@
         function parseLine(line, defaultCategory) {
             line = line.trim();
             if (!line) return null;
-            let category = defaultCategory;
+            let category = null;
             let processedLine = line;
+            // Категория в начале строки: [Категория] слово — перевод
             const categoryAtStart = processedLine.match(/^\[([^\]]+)\]\s*(.+)/);
             if (categoryAtStart) {
                 category = categoryAtStart[1].trim();
                 processedLine = categoryAtStart[2];
+            } else {
+                // Категория в конце строки: слово — перевод [Категория]
+                const categoryAtEnd = processedLine.match(/^(.+?)\s*\[([^\]]+)\]\s*$/);
+                if (categoryAtEnd) {
+                    processedLine = categoryAtEnd[1];
+                    category = categoryAtEnd[2].trim();
+                }
             }
+            if (!category) category = defaultCategory;
             const separators = ['—', '→', '⇒', '-', ':'];
             for (const sep of separators) {
                 const idx = processedLine.indexOf(sep);
@@ -2575,44 +2626,93 @@
             const targetDictionary = document.getElementById('bulkImportDictionary').value;
             const defaultCategory = document.getElementById('bulkImportCategory').value.trim() || 'Общее';
             if (!text.trim()) return alert('Вставьте список слов для импорта');
-            
+
             const lines = text.split('\n');
             const existingWords = new Set(data.dictionaries[targetDictionary].map(w => w.word.toLowerCase().trim()));
             bulkImportParsedData = [];
+            bulkImportTargetDictionary = targetDictionary;
             lines.forEach((line, index) => {
+                const trimmed = line.trim();
+                if (!trimmed) return;
                 const parsed = parseLine(line, defaultCategory);
+                const id = Date.now() + index + Math.random();
                 if (parsed) {
                     const isDuplicate = existingWords.has(parsed.word.toLowerCase().trim());
                     bulkImportParsedData.push({
-                        id: Date.now() + index + Math.random(),
+                        id,
                         word: parsed.word,
                         meaning: parsed.meaning,
                         category: parsed.category,
-                        targetDictionary: targetDictionary,
+                        targetDictionary,
                         status: isDuplicate ? 'duplicate' : 'new'
                     });
                     existingWords.add(parsed.word.toLowerCase().trim());
+                } else {
+                    bulkImportParsedData.push({
+                        id,
+                        word: trimmed,
+                        meaning: '',
+                        category: '',
+                        targetDictionary,
+                        status: 'error'
+                    });
                 }
             });
-            
+
             if (bulkImportParsedData.length === 0) return alert('Не удалось распознать слова.');
 
-            document.getElementById('bulkImportSummary').innerHTML = `<div style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">Новых слов: ${bulkImportParsedData.filter(i => i.status === 'new').length}</div>`;
-            document.getElementById('bulkImportPreview').innerHTML = bulkImportParsedData.map(item => `
-                <div class="compact-item" style="margin-bottom: 6px; border-radius: 12px;">
-                    <div><div style="font-weight: 600;">${escapeHtml(item.word)}</div><div style="font-size: 12px; color: var(--ios-text-secondary);">${escapeHtml(item.meaning)}</div></div>
-                </div>
-            `).join('');
+            renderBulkImportPreview();
 
             document.getElementById('bulkImportStep1').classList.add('hidden');
             document.getElementById('bulkImportStep2').classList.remove('hidden');
+        }
+
+        function renderBulkImportPreview() {
+            const newCount = bulkImportParsedData.filter(i => i.status === 'new').length;
+            const dupCount = bulkImportParsedData.filter(i => i.status === 'duplicate').length;
+            const errCount = bulkImportParsedData.filter(i => i.status === 'error').length;
+            const categories = [...new Set(bulkImportParsedData.filter(i => i.category).map(i => i.category))];
+
+            document.getElementById('bulkImportSummary').innerHTML = `
+                <p style="color: var(--ios-text-secondary); font-size: 14px; margin-bottom: 4px;"><strong style="color: var(--ios-blue);">Словарь:</strong> ${escapeHtml(bulkImportTargetDictionary)}</p>
+                ${categories.length ? `<p style="color: var(--ios-text-secondary); font-size: 14px; margin-bottom: 12px;"><strong style="color: var(--ios-purple);">Категории:</strong> ${escapeHtml(categories.join(', '))}</p>` : '<div style="margin-bottom: 8px;"></div>'}
+                <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+                    <span style="flex: 1; text-align: center; color: var(--ios-green); font-weight: 600; font-size: 13px; background: var(--ios-fill); padding: 6px 8px; border-radius: 10px;">Новых: ${newCount}</span>
+                    <span style="flex: 1; text-align: center; color: var(--ios-orange); font-weight: 600; font-size: 13px; background: var(--ios-fill); padding: 6px 8px; border-radius: 10px;">Дублей: ${dupCount}</span>
+                    <span style="flex: 1; text-align: center; color: var(--ios-red); font-weight: 600; font-size: 13px; background: var(--ios-fill); padding: 6px 8px; border-radius: 10px;">Ошибок: ${errCount}</span>
+                </div>`;
+
+            const dotColor = { new: 'var(--ios-green)', duplicate: 'var(--ios-orange)', error: 'var(--ios-red)' };
+
+            document.getElementById('bulkImportPreview').innerHTML = bulkImportParsedData.map(item => {
+                const bodyHtml = item.status === 'error'
+                    ? `<div class="compact-word">${escapeHtml(item.word)}</div><div class="compact-meaning" style="text-align: left; color: var(--ios-red);">Не удалось распознать строку</div>`
+                    : `<div class="compact-word">${escapeHtml(item.word)}</div>
+                       <div class="compact-meaning" style="text-align: left;">${escapeHtml(item.meaning)}</div>
+                       ${item.category ? `<div style="display:inline-block; margin-top: 4px; font-size: 12px; font-weight: 600; color: var(--ios-purple);">${escapeHtml(item.category)}</div>` : ''}`;
+                return `
+                <div class="compact-item" style="margin-bottom: 6px; border-radius: 12px; align-items: flex-start;">
+                    <div style="display: flex; gap: 10px; align-items: flex-start; flex: 1; min-width: 0;">
+                        <div style="width: 7px; height: 7px; border-radius: 50%; background: ${dotColor[item.status]}; box-shadow: 0 0 8px ${dotColor[item.status]}; margin-top: 7px; flex-shrink: 0;"></div>
+                        <div style="min-width: 0;">${bodyHtml}</div>
+                    </div>
+                    <button class="compact-action-btn" onclick="removeBulkImportItem('${item.id}')" style="flex-shrink: 0;">
+                        <svg class="svg-icon" viewBox="0 0 24 24" style="width: 16px; height: 16px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>`;
+            }).join('') || `<div class="empty-state" style="padding: 20px 0;">Список пуст</div>`;
+        }
+
+        function removeBulkImportItem(id) {
+            bulkImportParsedData = bulkImportParsedData.filter(i => String(i.id) !== String(id));
+            renderBulkImportPreview();
         }
         
         function confirmBulkImport() {
             const newWords = bulkImportParsedData.filter(item => item.status === 'new');
             if (newWords.length === 0) return alert('Нет новых слов для добавления.');
-            
-            const targetDictionary = newWords[0].targetDictionary;
+
+            const targetDictionary = bulkImportTargetDictionary;
             const now = new Date().toISOString();
             newWords.forEach((item, index) => {
                 data.dictionaries[targetDictionary].push({
@@ -2627,9 +2727,10 @@
                     score: null
                 });
             });
-            
+
             saveData();
-            alert(`Добавлено ${newWords.length} слов.`);
+            const skipped = bulkImportParsedData.length - newWords.length;
+            alert(`Добавлено ${newWords.length} слов.${skipped ? ` Пропущено (дубли/ошибки): ${skipped}.` : ''}`);
             closeBulkImport();
             updateStats();
             updateCategories();
@@ -3489,4 +3590,4 @@
         document.getElementById('fabMenuModal').addEventListener('click', function(e) { if (e.target === this) closeFabMenu(); });
     </script>
 </body>
-                                                                      </html>
+    </html>
