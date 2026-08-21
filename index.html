@@ -2265,39 +2265,46 @@
             const content = JSON.stringify({ name: name, words: words, exportDate: new Date().toISOString() }, null, 2);
             const safeName = name.replace(/[\\/:*?"<>|]/g, '_');
             const fileName = `${safeName}_${new Date().toISOString().split('T')[0]}.json`;
+            const shareTitle = `Словарь «${name}»`;
+            const shareText = `Словарь «${name}» (${words.length} слов) из приложения «Мой словарь»`;
+
+            const downloadFile = (reason) => {
+                const blob = new Blob([content], { type: 'application/json' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = fileName;
+                link.click();
+                URL.revokeObjectURL(link.href);
+                if (reason) alert(reason);
+            };
 
             let file = null;
             try { file = new File([content], fileName, { type: 'application/json' }); } catch (e) {}
 
+            // Попытка 1: поделиться самим файлом
             if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
-                    await navigator.share({
-                        files: [file],
-                        title: `Словарь «${name}»`,
-                        text: `Словарь «${name}» (${words.length} слов) из приложения «Мой словарь»`
-                    });
+                    await navigator.share({ files: [file], title: shareTitle, text: shareText });
+                    return;
                 } catch (err) {
-                    if (err.name !== 'AbortError') alert('Не удалось поделиться: ' + err.message);
+                    if (err.name === 'AbortError') return; // пользователь сам отменил
+                    // не получилось поделиться файлом — пробуем дальше
                 }
-                return;
             }
 
-            // Файлы не поддерживаются — пробуем поделиться хотя бы ссылкой/текстом
+            // Попытка 2: поделиться хотя бы текстом (без файла)
             if (navigator.share) {
                 try {
-                    await navigator.share({ title: `Словарь «${name}»`, text: `Словарь «${name}» (${words.length} слов)` });
+                    await navigator.share({ title: shareTitle, text: shareText });
+                    downloadFile('Файл словаря также сохранён на телефон — приложите его к отправленному сообщению вручную, если нужно.');
                     return;
-                } catch (err) { /* пользователь отменил или не сработало — идём в фолбэк ниже */ }
+                } catch (err) {
+                    if (err.name === 'AbortError') return;
+                }
             }
 
-            // Совсем нет Web Share API (например, старый браузер) — сохраняем файл, чтобы отправить вручную
-            const blob = new Blob([content], { type: 'application/json' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = fileName;
-            link.click();
-            URL.revokeObjectURL(link.href);
-            alert('Ваш браузер не поддерживает быстрый обмен — файл сохранён, отправьте его вручную.');
+            // Попытка 3: браузер вообще не поддерживает шеринг — просто скачиваем файл
+            downloadFile('Поделиться напрямую не удалось (браузер это не поддерживает) — файл сохранён, отправьте его вручную.');
         }
 
         function renderDictsPage() {
@@ -3603,4 +3610,4 @@
         document.getElementById('fabMenuModal').addEventListener('click', function(e) { if (e.target === this) closeFabMenu(); });
     </script>
 </body>
-                    </html>
+                        </html>
