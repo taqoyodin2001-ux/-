@@ -415,6 +415,22 @@
             box-shadow: var(--ios-shadow-card), var(--ios-highlight);
             overflow: hidden;
         }
+        /* Явное скругление первой/последней строки: непрозрачный фон .compact-item
+           поверх блюра иногда не обрезается родительским overflow:hidden в Chrome/WebView */
+        .compact-list > .swipe-item-wrapper:first-child,
+        .compact-list > .swipe-item-wrapper:first-child .compact-item {
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .compact-list > .swipe-item-wrapper:last-child,
+        .compact-list > .swipe-item-wrapper:last-child .compact-item {
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+        .compact-list > .swipe-item-wrapper:first-child,
+        .compact-list > .swipe-item-wrapper:last-child {
+            overflow: hidden;
+        }
 
         /* Обертка для свайпа */
         .swipe-item-wrapper {
@@ -821,6 +837,14 @@
             flex-direction: column;
             animation: fabPanelIn 0.32s cubic-bezier(0.32, 0.72, 0, 1);
         }
+        /* На светлой теме правило body.day-theme .modal-content (фон + отсутствие
+           border-radius) имеет более высокую специфичность, чем .words-fab-modal
+           .modal-content выше, и "перебивает" прозрачность — из-за этого позади
+           скруглённых карточек списка виден квадратный белый прямоугольник.
+           Явно фиксируем прозрачность для этого случая. */
+        body.day-theme .words-fab-modal .modal-content {
+            background: transparent;
+        }
         @keyframes fabPanelIn {
             from { opacity: 0; transform: scale(0.88) translateY(14px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
@@ -1123,7 +1147,7 @@
                 </div>
                 <div class="header-controls">
                     <button class="icon-btn-header" onclick="toggleTheme()" title="Сменить тему">
-                        <svg class="svg-icon" id="themeIcon" viewBox="0 0 24 24"></svg>
+                        <svg class="svg-icon theme-toggle-icon" id="themeIcon" viewBox="0 0 24 24"></svg>
                     </button>
                 </div>
             </div>
@@ -1170,6 +1194,11 @@
                     </div>
                     <h1>Словари</h1>
                 </div>
+                <div class="header-controls">
+                    <button class="icon-btn-header" onclick="toggleTheme()" title="Сменить тему">
+                        <svg class="svg-icon theme-toggle-icon" viewBox="0 0 24 24"></svg>
+                    </button>
+                </div>
             </div>
             <div class="ios-settings-card">
                 <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.05em;">Создать новый словарь</div>
@@ -1190,6 +1219,11 @@
                         <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
                     </div>
                     <h1>Изучение</h1>
+                </div>
+                <div class="header-controls">
+                    <button class="icon-btn-header" onclick="toggleTheme()" title="Сменить тему">
+                        <svg class="svg-icon theme-toggle-icon" viewBox="0 0 24 24"></svg>
+                    </button>
                 </div>
             </div>
             
@@ -1383,6 +1417,11 @@
                     </div>
                     <h1>Настройки</h1>
                 </div>
+                <div class="header-controls">
+                    <button class="icon-btn-header" onclick="toggleTheme()" title="Сменить тему">
+                        <svg class="svg-icon theme-toggle-icon" viewBox="0 0 24 24"></svg>
+                    </button>
+                </div>
             </div>
 
             <div class="ios-settings-card">
@@ -1418,15 +1457,15 @@
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                     <button class="btn-primary" onclick="exportAllDictionaries()" style="margin-top: 0;">
                         <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                        В память телефона (JSON) — все словари
+                        Экспорт в телефон — все словари
                     </button>
                     <button class="btn-primary" onclick="exportCurrentDictionary()" style="margin-top: 0; background: rgba(var(--ios-blue-rgb), 0.16); color: var(--ios-blue); box-shadow: none;">
                         <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                        В память телефона (JSON) — только текущий словарь
+                        Экспорт в телефон — текущий
                     </button>
                     <button class="btn-primary" onclick="importDictionary()" style="margin-top: 0; background: var(--ios-fill); color: var(--ios-text); box-shadow: none;">
                         <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                        Из памяти телефона (JSON)
+                        Импорт из телефона
                     </button>
                 </div>
             </div>
@@ -1436,11 +1475,11 @@
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                     <button class="btn-primary" onclick="exportToCSV()" style="margin-top: 0; background: rgba(var(--ios-green-rgb), 0.16); color: var(--ios-green); box-shadow: none;">
                         <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                        Экспорт в Excel (CSV)
+                        Экспорт в Excel
                     </button>
                     <button class="btn-primary" onclick="importFromCSV()" style="margin-top: 0; background: var(--ios-fill); color: var(--ios-text); box-shadow: none;">
                         <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                        Импорт из Excel (CSV)
+                        Импорт из Excel
                     </button>
                 </div>
             </div>
@@ -1876,12 +1915,10 @@
 
         function updateThemeIcon() {
             const isDay = document.body.classList.contains('day-theme');
-            const icon = document.getElementById('themeIcon');
-            if (isDay) {
-                icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
-            } else {
-                icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
-            }
+            const icons = document.querySelectorAll('.theme-toggle-icon');
+            const sunHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+            const moonHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+            icons.forEach(icon => { icon.innerHTML = isDay ? sunHTML : moonHTML; });
         }
         updateThemeIcon();
 
@@ -3452,4 +3489,4 @@
         document.getElementById('fabMenuModal').addEventListener('click', function(e) { if (e.target === this) closeFabMenu(); });
     </script>
 </body>
-</html>
+                                                                      </html>
