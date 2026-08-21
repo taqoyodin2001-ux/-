@@ -2268,43 +2268,31 @@
             const shareTitle = `Словарь «${name}»`;
             const shareText = `Словарь «${name}» (${words.length} слов) из приложения «Мой словарь»`;
 
-            const downloadFile = (reason) => {
+            const downloadFile = () => {
                 const blob = new Blob([content], { type: 'application/json' });
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
                 link.download = fileName;
                 link.click();
                 URL.revokeObjectURL(link.href);
-                if (reason) alert(reason);
+                alert('Файл сохранён в «Загрузки». Чтобы отправить его в WhatsApp/Telegram: откройте уведомление о загрузке (или папку «Загрузки»), нажмите на файл и выберите «Поделиться».');
             };
 
             let file = null;
             try { file = new File([content], fileName, { type: 'application/json' }); } catch (e) {}
 
-            // Попытка 1: поделиться самим файлом
             if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
                     await navigator.share({ files: [file], title: shareTitle, text: shareText });
                     return;
                 } catch (err) {
                     if (err.name === 'AbortError') return; // пользователь сам отменил
-                    // не получилось поделиться файлом — пробуем дальше
-                }
-            }
-
-            // Попытка 2: поделиться хотя бы текстом (без файла)
-            if (navigator.share) {
-                try {
-                    await navigator.share({ title: shareTitle, text: shareText });
-                    downloadFile('Файл словаря также сохранён на телефон — приложите его к отправленному сообщению вручную, если нужно.');
+                    downloadFile(); // браузер не даёт поделиться файлом — сразу скачиваем
                     return;
-                } catch (err) {
-                    if (err.name === 'AbortError') return;
                 }
             }
 
-            // Попытка 3: браузер вообще не поддерживает шеринг — просто скачиваем файл
-            downloadFile('Поделиться напрямую не удалось (браузер это не поддерживает) — файл сохранён, отправьте его вручную.');
+            downloadFile();
         }
 
         function renderDictsPage() {
@@ -3610,4 +3598,4 @@
         document.getElementById('fabMenuModal').addEventListener('click', function(e) { if (e.target === this) closeFabMenu(); });
     </script>
 </body>
-                        </html>
+    </html>
