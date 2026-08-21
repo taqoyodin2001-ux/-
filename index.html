@@ -1484,17 +1484,6 @@
                 </div>
             </div>
 
-            <div class="ios-settings-card">
-                <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Обслуживание словаря</div>
-                <div style="font-size: 13px; color: var(--ios-text-secondary); margin-bottom: 10px; line-height: 1.4;">
-                    Если раньше при массовом импорте тег категории вида «[Категория]» прилип к значению слова (например «Факультет [Общее]») — эта кнопка найдёт такие слова во всех словарях, уберёт тег из значения и подставит его в поле «Категория».
-                </div>
-                <button class="btn-primary" onclick="cleanupMeaningCategoryTags()" style="margin-top: 0; background: var(--ios-fill); color: var(--ios-text); box-shadow: none;">
-                    <svg class="svg-icon" viewBox="0 0 24 24"><path d="M3 6h18"></path><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg>
-                    Очистить теги в значениях
-                </button>
-            </div>
-
             <div style="text-align: center; margin-top: 24px; padding-bottom: 12px; font-size: 13px; color: var(--ios-text-tertiary); font-style: italic; font-weight: 500;">
                 Мухаммад Абу Абдулмалик
             </div>
@@ -1921,36 +1910,6 @@
             return { dictionaries: { "Мой словарь": [] }, currentDictionary: "Мой словарь", rules: [] };
         }
 
-        function cleanupMeaningCategoryTags() {
-            let fixedCount = 0;
-            const tagPattern = /^(.*?)\s*\[([^\]]+)\]\s*$/;
-            Object.keys(data.dictionaries).forEach(dictName => {
-                data.dictionaries[dictName].forEach(word => {
-                    if (!word.meaning) return;
-                    const match = word.meaning.match(tagPattern);
-                    if (match) {
-                        const cleanMeaning = match[1].trim();
-                        const extractedCategory = match[2].trim();
-                        if (cleanMeaning) {
-                            word.meaning = cleanMeaning;
-                            if (extractedCategory) word.category = extractedCategory;
-                            fixedCount++;
-                        }
-                    }
-                });
-            });
-
-            if (fixedCount === 0) {
-                alert('Слов с прилипшим тегом категории не найдено — всё чисто.');
-                return;
-            }
-
-            saveData();
-            updateCategories();
-            renderMainContent();
-            alert(`Исправлено слов: ${fixedCount}.`);
-        }
-
         function saveData() { try { localStorage.setItem('myDictionaryData', JSON.stringify(data)); updateStats(); } catch (e) { console.error(e); } }
         function getCurrentWords() { return data.dictionaries[data.currentDictionary] || []; }
         function setCurrentWords(words) { data.dictionaries[data.currentDictionary] = words; saveData(); }
@@ -2299,6 +2258,48 @@
             renderMainContent();
         }
 
+        async function shareDictionary(name) {
+            const words = data.dictionaries[name] || [];
+            if (words.length === 0) return alert('Словарь пуст — делиться нечем');
+
+            const content = JSON.stringify({ name: name, words: words, exportDate: new Date().toISOString() }, null, 2);
+            const safeName = name.replace(/[\\/:*?"<>|]/g, '_');
+            const fileName = `${safeName}_${new Date().toISOString().split('T')[0]}.json`;
+
+            let file = null;
+            try { file = new File([content], fileName, { type: 'application/json' }); } catch (e) {}
+
+            if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        files: [file],
+                        title: `Словарь «${name}»`,
+                        text: `Словарь «${name}» (${words.length} слов) из приложения «Мой словарь»`
+                    });
+                } catch (err) {
+                    if (err.name !== 'AbortError') alert('Не удалось поделиться: ' + err.message);
+                }
+                return;
+            }
+
+            // Файлы не поддерживаются — пробуем поделиться хотя бы ссылкой/текстом
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: `Словарь «${name}»`, text: `Словарь «${name}» (${words.length} слов)` });
+                    return;
+                } catch (err) { /* пользователь отменил или не сработало — идём в фолбэк ниже */ }
+            }
+
+            // Совсем нет Web Share API (например, старый браузер) — сохраняем файл, чтобы отправить вручную
+            const blob = new Blob([content], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = fileName;
+            link.click();
+            URL.revokeObjectURL(link.href);
+            alert('Ваш браузер не поддерживает быстрый обмен — файл сохранён, отправьте его вручную.');
+        }
+
         function renderDictsPage() {
             const list = document.getElementById('dictsPageList');
             list.innerHTML = Object.keys(data.dictionaries).map(name => {
@@ -2310,6 +2311,9 @@
                         <div style="font-size: 13px; color: var(--ios-text-secondary);">${count} слов</div>
                     </div>
                     <div style="display: flex; gap: 8px;" onclick="event.stopPropagation()">
+                        <button class="compact-action-btn" title="Поделиться" onclick="shareDictionary('${name.replace(/'/g, "\\'")}')">
+                            <svg class="svg-icon" style="width: 15px; height: 15px; color: var(--ios-green);" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                        </button>
                         <button class="compact-action-btn" title="Переименовать" onclick="renameDictionary('${name.replace(/'/g, "\\'")}')">
                             <svg class="svg-icon" style="width: 15px; height: 15px; color: var(--ios-blue);" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                         </button>
@@ -2765,9 +2769,18 @@
                     try {
                         const imported = JSON.parse(ev.target.result);
                         if (imported.allDictionaries && imported.dictionaries) {
+                            const dictCount = Object.keys(imported.dictionaries).length;
+                            const wordCount = Object.values(imported.dictionaries).reduce((s, arr) => s + (Array.isArray(arr) ? arr.length : 0), 0);
+                            const ok = confirm(`Это резервная копия ВСЕХ словарей (${dictCount} словарей, ${wordCount} слов).\n\nОна полностью заменит все словари, которые сейчас есть на телефоне. Текущие данные будут удалены безвозвратно.\n\nПродолжить?`);
+                            if (!ok) return;
                             data.dictionaries = imported.dictionaries;
                             data.rules = imported.rules || [];
                         } else if (imported.name && Array.isArray(imported.words)) {
+                            const existingCount = data.dictionaries[imported.name]?.length;
+                            if (existingCount !== undefined) {
+                                const ok = confirm(`Словарь «${imported.name}» уже есть (${existingCount} слов). Заменить его содержимым файла (${imported.words.length} слов)? Текущие слова в этом словаре будут удалены.`);
+                                if (!ok) return;
+                            }
                             data.dictionaries[imported.name] = imported.words;
                             data.currentDictionary = imported.name;
                         }
@@ -3590,4 +3603,4 @@
         document.getElementById('fabMenuModal').addEventListener('click', function(e) { if (e.target === this) closeFabMenu(); });
     </script>
 </body>
-    </html>
+                    </html>
