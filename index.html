@@ -1182,6 +1182,7 @@
                     </button>
                 </div>
             </div>
+            <div id="categoryQuizBar"></div>
             <div class="words-list" id="mainContentList"></div>
         </section>
 
@@ -1346,7 +1347,7 @@
                     <div id="quizProgress" style="font-size: 14px; color: var(--ios-text-secondary); font-weight: 600;">Вопрос 1 из 10</div>
                     <div style="display: flex; gap: 8px; align-items: center;">
                         <button onclick="toggleQuizSound()" id="quizSoundToggleBtn" class="icon-btn-header" style="width: 32px; height: 32px;">
-                            <svg class="svg-icon" id="audioToggleSvg" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                            <svg class="svg-icon audio-toggle-icon" id="audioToggleSvg" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
                         </button>
                         <button id="btnUndoQuiz" onclick="undoQuizStep()" style="opacity: 0.35; background: rgba(var(--ios-blue-rgb), 0.16); border: none; color: var(--ios-blue); font-size: 14px; cursor: pointer; font-weight: 600; padding: 5px 10px; border-radius: 10px;" title="Шаг назад">↩️</button>
                     </div>
@@ -1367,9 +1368,14 @@
             <div id="quizFlashcardsScreen" class="quiz-container hidden">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                     <div id="flashcardProgress" style="font-size: 14px; color: var(--ios-text-secondary); font-weight: 600;">Карточка 1 из 10</div>
-                    <button onclick="speakWord(currentFlashcardWord ? currentFlashcardWord.word : '')" class="icon-btn-header" style="width: 32px; height: 32px;">
-                        <svg class="svg-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-                    </button>
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="toggleQuizSound()" id="quizSoundToggleBtnFlash" class="icon-btn-header" style="width: 32px; height: 32px;">
+                            <svg class="svg-icon audio-toggle-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                        </button>
+                        <button onclick="speakWord(currentFlashcardWord ? currentFlashcardWord.word : '')" class="icon-btn-header" style="width: 32px; height: 32px;">
+                            <svg class="svg-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                        </button>
+                    </div>
                 </div>
                 <div class="flashcard-wrapper" id="flashcardElement" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
@@ -1758,7 +1764,7 @@
         let editingRuleId = null;
 
         let ttsLang = 'en-US';
-        let autoTts = true;
+        let autoTts = (() => { try { return localStorage.getItem('autoTts') !== 'off'; } catch (e) { return true; } })();
         try {
             if (localStorage.getItem('ttsLang')) ttsLang = localStorage.getItem('ttsLang');
         } catch(e) {}
@@ -1807,19 +1813,28 @@
             try { localStorage.setItem('ttsLang', ttsLang); } catch(e){}
         }
 
+        function syncAudioToggleIcons() {
+            const onSvg = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>';
+            const offSvg = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>';
+            document.querySelectorAll('.audio-toggle-icon').forEach(svg => { svg.innerHTML = autoTts ? onSvg : offSvg; });
+        }
+        syncAudioToggleIcons();
+
         function toggleQuizSound() {
             autoTts = !autoTts;
-            const svg = document.getElementById('audioToggleSvg');
-            if (autoTts) {
-                svg.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>';
-            } else {
-                svg.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>';
-            }
-            
+            try { localStorage.setItem('autoTts', autoTts ? 'on' : 'off'); } catch (e) {}
+            const onSvg = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>';
+            const offSvg = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>';
+            document.querySelectorAll('.audio-toggle-icon').forEach(svg => { svg.innerHTML = autoTts ? onSvg : offSvg; });
+
             if (!autoTts && 'speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
-            } else if (autoTts && quizData.currentWord && !document.getElementById('quizGameScreen').classList.contains('hidden')) {
-                speakWord(quizData.currentWord.word);
+            } else if (autoTts) {
+                if (quizData.currentWord && !document.getElementById('quizGameScreen').classList.contains('hidden')) {
+                    speakWord(quizData.currentWord.word);
+                } else if (currentFlashcardWord && !document.getElementById('quizFlashcardsScreen').classList.contains('hidden')) {
+                    speakWord(currentFlashcardWord.word);
+                }
             }
         }
 
@@ -2079,6 +2094,7 @@
 
         function renderWordsContent() {
             const listEl = document.getElementById('mainContentList');
+            const quizBarEl = document.getElementById('categoryQuizBar');
             const searchInput = document.getElementById('searchInput');
             const quickAddBtn = document.getElementById('searchAddQuickBtn');
             const searchQuery = searchInput.value.toLowerCase().trim();
@@ -2087,6 +2103,16 @@
             if (currentCategory !== 'all') words = words.filter(w => w.category === currentCategory);
             if (searchQuery) words = words.filter(w => w.word.toLowerCase().includes(searchQuery) || w.meaning.toLowerCase().includes(searchQuery) || (w.notes && w.notes.toLowerCase().includes(searchQuery)));
             words = [...words].sort((a, b) => a.word.toLowerCase().localeCompare(b.word.toLowerCase(), 'ru'));
+
+            if (currentCategory !== 'all' && !searchQuery && words.length > 0) {
+                quizBarEl.innerHTML = `
+                    <button class="btn-primary" onclick="startCategoryFlashcardsFromHome('${currentCategory.replace(/'/g, "\\'")}')" style="margin-top: 0; margin-bottom: 12px; background: linear-gradient(135deg, var(--ios-purple) 0%, #8930B8 100%); display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <svg class="svg-icon" style="width: 18px; height: 18px;" viewBox="0 0 24 24"><rect x="3" y="4" width="14" height="18" rx="2" transform="rotate(-8 10 13)"></rect><rect x="7" y="2" width="14" height="18" rx="2"></rect></svg>
+                        Экспресс повторение темы «${escapeHtml(currentCategory)}» (${words.length})
+                    </button>`;
+            } else {
+                quizBarEl.innerHTML = '';
+            }
             
             if (searchQuery && words.length === 0) {
                 quickAddBtn.classList.remove('hidden');
@@ -2258,7 +2284,9 @@
             const words = data.dictionaries[name] || [];
             if (words.length === 0) return alert('Словарь пуст — делиться нечем');
 
-            const content = JSON.stringify({ name: name, words: words, exportDate: new Date().toISOString() }, null, 2);
+            // Экспорт "для отправки" — только слово, значение и категория, без личного рейтинга/прогресса
+            const cleanWords = words.map(w => ({ word: w.word, meaning: w.meaning, category: w.category || 'Общее' }));
+            const content = JSON.stringify({ name: name, words: cleanWords, exportDate: new Date().toISOString() }, null, 2);
             const safeName = name.replace(/[\\/:*?"<>|]/g, '_');
             const fileName = `${safeName}_${new Date().toISOString().split('T')[0]}.json`;
             const shareTitle = `Словарь «${name}»`;
@@ -2767,13 +2795,35 @@
                             data.dictionaries = imported.dictionaries;
                             data.rules = imported.rules || [];
                         } else if (imported.name && Array.isArray(imported.words)) {
-                            const existingCount = data.dictionaries[imported.name]?.length;
-                            if (existingCount !== undefined) {
-                                const ok = confirm(`Словарь «${imported.name}» уже есть (${existingCount} слов). Заменить его содержимым файла (${imported.words.length} слов)? Текущие слова в этом словаре будут удалены.`);
-                                if (!ok) return;
-                            }
-                            data.dictionaries[imported.name] = imported.words;
+                            // Слияние словаря вместо полной перезаписи: новые слова добавляются,
+                            // у уже существующих (по совпадению названия слова) рейтинг/прогресс не трогаем
+                            if (!data.dictionaries[imported.name]) data.dictionaries[imported.name] = [];
+                            const target = data.dictionaries[imported.name];
+                            const existingKeys = new Set(target.map(w => (w.word || '').toLowerCase().trim()));
+                            const now = new Date().toISOString();
+                            let added = 0, skipped = 0;
+                            imported.words.forEach(w => {
+                                const key = (w.word || '').toLowerCase().trim();
+                                if (!key) return;
+                                if (existingKeys.has(key)) { skipped++; return; }
+                                target.push({
+                                    id: Date.now() + Math.random(),
+                                    word: w.word,
+                                    meaning: w.meaning || '',
+                                    category: w.category || 'Общее',
+                                    notes: '',
+                                    image: null,
+                                    createdAt: now,
+                                    lastReviewed: null,
+                                    score: null
+                                });
+                                existingKeys.add(key);
+                                added++;
+                            });
                             data.currentDictionary = imported.name;
+                            saveData(); renderMainContent(); updateStats(); updateCategories();
+                            alert(`Добавлено новых слов: ${added}.${skipped ? ` Уже было в словаре (рейтинг сохранён): ${skipped}.` : ''}`);
+                            return;
                         }
                         saveData(); renderMainContent(); updateStats(); updateCategories(); alert('Импорт завершён');
                     } catch(err) { alert('Ошибка файла'); }
@@ -3211,10 +3261,27 @@
             }
         }
 
+        function startCategoryFlashcardsFromHome(category) {
+            const pool = getCurrentWords().filter(w => (w.category || 'Общее') === category);
+            if (pool.length === 0) return alert('В этой категории нет слов');
+            switchNavTab('quiz');
+            document.getElementById('quizStartScreen').classList.add('hidden');
+            document.getElementById('quizSessionPreviewScreen').classList.add('hidden');
+            document.getElementById('quizDirectionPickerScreen').classList.add('hidden');
+            document.getElementById('quizGameScreen').classList.add('hidden');
+            document.getElementById('quizMatchingScreen').classList.add('hidden');
+            document.getElementById('quizResultsScreen').classList.add('hidden');
+            flashcardsData = { queue: [...pool].sort(() => 0.5 - Math.random()), currentIndex: 0, returnToPicker: false, returnTo: 'home' };
+            document.getElementById('quizFlashcardsScreen').classList.remove('hidden');
+            showFlashcard();
+        }
+
         function finishFlashcards() {
             document.getElementById('quizFlashcardsScreen').classList.add('hidden');
             
-            if (flashcardsData.returnToPicker) {
+            if (flashcardsData.returnTo === 'home') {
+                switchNavTab('home');
+            } else if (flashcardsData.returnToPicker) {
                 // Если запустили через ручной выбор статуса из модалки
                 document.getElementById('quizDirectionPickerScreen').classList.remove('hidden');
             } else {
@@ -3594,4 +3661,4 @@
         document.getElementById('fabMenuModal').addEventListener('click', function(e) { if (e.target === this) closeFabMenu(); });
     </script>
 </body>
-</html>
+                                                                      </html>
