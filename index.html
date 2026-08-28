@@ -1786,7 +1786,12 @@
             } else if (tab === 'quiz') {
                 document.getElementById('pageQuiz').classList.add('active-tab-page');
                 document.getElementById('tabNavQuiz').classList.add('active');
-                openQuizScreen();
+                const quizSessionActive = !document.getElementById('quizGameScreen').classList.contains('hidden')
+                    || !document.getElementById('quizMatchingScreen').classList.contains('hidden')
+                    || !document.getElementById('quizFlashcardsScreen').classList.contains('hidden');
+                if (!quizSessionActive) {
+                    openQuizScreen();
+                }
             } else if (tab === 'settings') {
                 document.getElementById('pageSettings').classList.add('active-tab-page');
                 document.getElementById('tabNavSettings').classList.add('active');
@@ -3661,4 +3666,4 @@
         document.getElementById('fabMenuModal').addEventListener('click', function(e) { if (e.target === this) closeFabMenu(); });
     </script>
 </body>
-</html>
+                    </html>
