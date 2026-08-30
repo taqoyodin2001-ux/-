@@ -1847,10 +1847,12 @@
             if (!text || !('speechSynthesis' in window)) return;
             window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = ttsLang;
-            
+            const isArabicText = /[\u0600-\u06FF]/.test(text);
+            const langToUse = isArabicText ? 'ar-SA' : ttsLang;
+            utterance.lang = langToUse;
+
             const voices = window.speechSynthesis.getVoices();
-            const targetVoice = voices.find(voice => voice.lang.includes(ttsLang.split('-')[0]));
+            const targetVoice = voices.find(voice => voice.lang.includes(langToUse.split('-')[0]));
             if (targetVoice) utterance.voice = targetVoice;
             window.speechSynthesis.speak(utterance);
         }
@@ -3386,7 +3388,9 @@
                 else if (idx === selectedIndexNum && !isCorrect) btn.classList.add('wrong');
             });
             if (!sessionWordIds.includes(quizData.currentWord.id)) { sessionWordIds.push(quizData.currentWord.id); saveSessionWordIds(); }
-            
+
+            if (autoTts && quizData.currentDirection === 'meaningToWord') { speakWord(quizData.currentWord.word); }
+
             if (isCorrect) {
                 quizData.correct++;
                 if (wordIndex !== -1 && !quizData.isRetryMode) {
@@ -3666,4 +3670,4 @@
         document.getElementById('fabMenuModal').addEventListener('click', function(e) { if (e.target === this) closeFabMenu(); });
     </script>
 </body>
-                    </html>
+</html>
