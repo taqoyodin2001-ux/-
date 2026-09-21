@@ -1128,6 +1128,123 @@
             margin: 0 auto 12px; 
             color: var(--ios-text-tertiary);
         }
+        /* Языки слова: переключатели, строки списка */
+        .header-brand { min-width: 0; }
+        .header-logo-icon { flex-shrink: 0; }
+        .header h1 { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .header-controls { flex-shrink: 0; align-items: center; }
+        /* Заголовки колонок: переключатели языков над списком */
+        .lang-col-head {
+            display: grid;
+            gap: 6px;
+            padding: 0 19px 8px 55px;
+        }
+        .lang-chip {
+            height: 30px;
+            min-width: 46px;
+            padding: 0 14px;
+            border-radius: 15px;
+            border: 1px solid var(--ios-border);
+            background: var(--ios-fill-secondary);
+            color: var(--ios-text-tertiary);
+            font-size: 12px;
+            font-weight: 700;
+            font-family: var(--font-display);
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+        .lang-chip.active {
+            background: rgba(var(--ios-blue-rgb), 0.2);
+            color: var(--ios-blue);
+            border-color: rgba(var(--ios-blue-rgb), 0.45);
+        }
+        .lang-chip:active { transform: scale(0.94); }
+        /* Строка слова: три постоянные колонки (слева / середина / справа) */
+        .row-lead { position: relative; display: flex; align-items: center; flex-shrink: 0; margin-right: 8px; }
+        .row-lead .compact-error-dot { position: absolute; left: -12px; top: 50%; transform: translateY(-50%); }
+        .word-cols { flex: 1; min-width: 0; display: grid; gap: 6px; align-items: center; }
+        .wcell { min-width: 0; overflow-wrap: break-word; line-height: 1.3; }
+        .wcell-main { font-size: 16px; font-weight: 600; color: var(--ios-text); }
+        .wcell-sec { font-size: 15px; font-weight: 400; color: var(--ios-text-secondary); }
+        .wcell .arb { font-size: 1.15em; }
+        .compact-meaning.meaning-multi {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 2px 12px;
+            max-width: 62%;
+        }
+        .meaning-part.is-rtl { font-size: 1.15em; }
+        .dict-lang-line { font-size: 13px; color: var(--ios-text-secondary); }
+        .lang-hint-line { font-size: 12px; color: var(--ios-text-secondary); margin: -6px 0 14px; line-height: 1.4; }
+        .quiz-pair-row { display: flex; gap: 8px; align-items: flex-end; margin-bottom: 16px; }
+        .pair-mini-label { font-size: 11px; color: var(--ios-text-secondary); font-weight: 600; margin-bottom: 4px; text-align: left; }
+        .quiz-option { text-align: start; }
+        /* Подсказка на третьем языке и переключатель */
+        .quiz-word-body { text-align: center; max-width: 100%; }
+        .quiz-hint { font-size: 18px; font-weight: 500; color: var(--ios-text-secondary); margin-top: 6px; letter-spacing: 0; line-height: 1.3; }
+        .quiz-hint .arb { font-size: 1.15em; }
+        .hint-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            background: var(--ios-fill);
+            border: 1px solid var(--ios-border);
+            border-radius: 14px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            text-align: left;
+        }
+        .hint-title { font-size: 14px; font-weight: 600; color: var(--ios-text); }
+        .hint-sub { font-size: 12px; color: var(--ios-text-secondary); margin-top: 2px; }
+        .ios-switch {
+            position: relative;
+            width: 51px;
+            height: 31px;
+            border-radius: 16px;
+            border: none;
+            background: rgba(120, 120, 128, 0.36);
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: background 0.2s ease;
+        }
+        .ios-switch span {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 27px;
+            height: 27px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+        .ios-switch.on { background: var(--ios-green); }
+        .ios-switch.on span { transform: translateX(20px); }
+        /* Таймер */
+        .timer-box { position: sticky; top: 0; z-index: 20; background: var(--ios-bg); margin: 0 -18px 12px; padding: 6px 18px 8px; }
+        .timer-top { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 40px; margin-bottom: 6px; }
+        .timer-clock { font-family: var(--font-mono); font-size: 34px; font-weight: 700; color: var(--ios-text); letter-spacing: -0.03em; min-width: 90px; }
+        .timer-clock.low { color: var(--ios-red); }
+        .timer-flash { font-family: var(--font-mono); font-size: 16px; font-weight: 700; color: var(--ios-green); opacity: 0; transition: opacity 0.3s ease; min-width: 40px; }
+        .timer-flash.show { opacity: 1; }
+        .timer-bonus {
+            border: 1px solid var(--ios-orange);
+            background: rgba(255, 159, 10, 0.16);
+            color: var(--ios-orange);
+            border-radius: 12px;
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: var(--font-display);
+            cursor: pointer;
+        }
+        .timer-bonus:active { transform: scale(0.95); }
+        .timer-bar { height: 6px; border-radius: 3px; background: var(--ios-fill); overflow: hidden; }
+        .timer-bar > div { height: 100%; width: 100%; background: var(--ios-blue); border-radius: 3px; transition: width 0.2s linear, background 0.2s ease; }
+        .timer-bar > div.low { background: var(--ios-red); }
         .hidden { display: none !important; }
     </style>
 </head>
@@ -1183,6 +1300,7 @@
                 </div>
             </div>
             <div id="categoryQuizBar"></div>
+            <div class="lang-col-head" id="langChips"></div>
             <div class="words-list" id="mainContentList"></div>
         </section>
 
@@ -1259,7 +1377,7 @@
                     <button class="quiz-mode-btn quiz-mode-btn-wide" data-mode="matching" onclick="setQuizMode('matching')">🧩 Сопоставление</button>
                 </div>
                 <select id="quizCategorySelect" class="form-input hidden" style="margin-bottom: 14px;" onchange="updateQuizCounter()"><option value="">Все категории</option></select>
-                
+
                 <div id="quantitySection">
                     <div style="text-align: left; margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Количество слов</div>
                     <div style="display: flex; gap: 6px; margin-bottom: 16px;">
@@ -1268,17 +1386,48 @@
                         <button class="quiz-mode-btn" data-count="all" onclick="setQuizCount('all')" style="flex: 1;">Все</button>
                     </div>
                 </div>
-                
-                <div id="directionSection">
-                    <div style="text-align: left; margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Направление</div>
-                    <div class="quiz-direction">
-                        <button class="quiz-direction-btn active" id="dirWordToMeaning" onclick="setQuizDirection('wordToMeaning')">Слово → Перевод</button>
-                        <button class="quiz-direction-btn" id="dirMeaningToWord" onclick="setQuizDirection('meaningToWord')">Перевод → Слово</button>
-                        <button class="quiz-direction-btn" id="dirMixed" onclick="setQuizDirection('mixed')">Смешанный</button>
-                        <button class="quiz-direction-btn" id="dirListening" onclick="setQuizDirection('listening')">На слух</button>
+
+                <div id="pairSection">
+                    <div style="text-align: left; margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Языки</div>
+                    <div class="quiz-pair-row">
+                        <div style="flex: 1; min-width: 0;">
+                            <div class="pair-mini-label">Вопрос</div>
+                            <select class="form-input" id="pairQ" onchange="setQuizPairSide('q', this.value)" style="padding: 10px 12px;"></select>
+                        </div>
+                        <button class="icon-btn-header" onclick="swapQuizPair()" style="background: var(--ios-fill); flex-shrink: 0; margin-bottom: 2px;" title="Поменять местами">
+                            <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+                        </button>
+                        <div style="flex: 1; min-width: 0;">
+                            <div class="pair-mini-label">Ответ</div>
+                            <select class="form-input" id="pairA" onchange="setQuizPairSide('a', this.value)" style="padding: 10px 12px;"></select>
+                        </div>
                     </div>
                 </div>
-                
+
+                <div id="directionSection">
+                    <div style="text-align: left; margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Как задавать</div>
+                    <div class="quiz-direction">
+                        <button class="quiz-direction-btn active" id="modeNormal" onclick="setQuizHow('normal')">Обычно</button>
+                        <button class="quiz-direction-btn" id="modeMixed" onclick="setQuizHow('mixed')">Вперемешку</button>
+                        <button class="quiz-direction-btn" id="modeListening" onclick="setQuizHow('listening')">На слух</button>
+                    </div>
+                    <div class="hint-row hidden" id="hintRow">
+                        <div>
+                            <div class="hint-title" id="hintRowLabel">Подсказка</div>
+                            <div class="hint-sub">Мелко под вопросом</div>
+                        </div>
+                        <button class="ios-switch on" id="hintSwitch" role="switch" aria-checked="true" onclick="toggleQuizHint()"><span></span></button>
+                    </div>
+                </div>
+
+                <div class="hint-row" id="timerRow">
+                    <div>
+                        <div class="hint-title">Таймер</div>
+                        <div class="hint-sub">40 с на 10 слов, бонус за скорость</div>
+                    </div>
+                    <button class="ios-switch" id="timerSwitch" role="switch" aria-checked="false" onclick="toggleQuizTimer()"><span></span></button>
+                </div>
+
                 <div id="quizCounter" style="font-size: 13px; color: var(--ios-text-secondary); margin: 14px 0; font-weight: 600;">Будет выбрано слов: 50</div>
                 <button class="btn-primary" onclick="beginQuiz()">Начать</button>
             </div>
@@ -1332,8 +1481,8 @@
                 </div>
 
                 <div style="text-align: left; margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Тип теста</div>
-                <button class="direction-picker-btn" onclick="startTestWithDirection('wordToMeaning')"><span>Слово → Перевод</span><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
-                <button class="direction-picker-btn" onclick="startTestWithDirection('meaningToWord')"><span>Перевод → Слово</span><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                <button class="direction-picker-btn" onclick="startTestWithDirection('wordToMeaning')"><span id="pickDirW2M">Слово → Перевод</span><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                <button class="direction-picker-btn" onclick="startTestWithDirection('meaningToWord')"><span id="pickDirM2W">Перевод → Слово</span><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
                 <button class="direction-picker-btn" onclick="startTestWithDirection('mixed')"><span>Смешанный</span><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
                 <button class="direction-picker-btn" onclick="startTestWithDirection('listening')"><span>На слух</span><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
                 <button class="btn-primary" onclick="startPreviewFromPicker()" style="background: linear-gradient(135deg, var(--ios-purple) 0%, #8930B8 100%); margin-top: 10px;">
@@ -1358,6 +1507,14 @@
                     <span style="color: var(--ios-green);">🟢 <span id="sessionLearnedCount">0</span></span>
                     <span style="color: var(--ios-text-secondary);">Осталось: <span id="remainingCount">0</span></span>
                 </div>
+                <div class="timer-box hidden" id="quizTimerBox">
+                    <div class="timer-top">
+                        <span class="timer-clock" id="quizClock">0:40</span>
+                        <span class="timer-flash" id="quizFlash"></span>
+                        <button class="timer-bonus hidden" id="quizBonusBtn" onclick="useQuizBonus()">Бонус</button>
+                    </div>
+                    <div class="timer-bar"><div id="quizBar"></div></div>
+                </div>
                 <div id="quizLabel" style="font-size: 14px; color: var(--ios-text-secondary); margin-bottom: 6px;">Выберите перевод:</div>
                 <div class="quiz-word" id="quizWord">—</div>
                 <div class="quiz-options" id="quizOptions"></div>
@@ -1372,7 +1529,7 @@
                         <button onclick="toggleQuizSound()" id="quizSoundToggleBtnFlash" class="icon-btn-header" style="width: 32px; height: 32px;">
                             <svg class="svg-icon audio-toggle-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
                         </button>
-                        <button onclick="speakWord(currentFlashcardWord ? currentFlashcardWord.word : '')" class="icon-btn-header" style="width: 32px; height: 32px;">
+                        <button onclick="speakFlashcardFront()" class="icon-btn-header" style="width: 32px; height: 32px;">
                             <svg class="svg-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
                         </button>
                     </div>
@@ -1382,6 +1539,7 @@
                         <div class="flashcard-front">
                             <div style="font-size: 12px; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; font-weight: 700;">Слово (нажмите чтобы перевернуть)</div>
                             <div id="flashcardFrontText" style="font-size: 32px; font-weight: 800; font-family: var(--font-display);">—</div>
+                            <div id="flashcardFrontHint" class="quiz-hint" dir="auto" style="margin-top: 8px;"></div>
                         </div>
                         <div class="flashcard-back">
                             <div style="font-size: 12px; color: var(--ios-blue); text-transform: uppercase; margin-bottom: 8px; font-weight: 700;">Перевод</div>
@@ -1401,8 +1559,16 @@
             <div id="quizMatchingScreen" class="quiz-container hidden">
                 <div id="matchingProgress" style="font-size: 14px; color: var(--ios-text-secondary); margin-bottom: 8px;">Сопоставлено: 0 слов</div>
                 <div style="display: flex; justify-content: center; gap: 14px; font-size: 14px; margin-bottom: 12px; font-weight: 700;">
-                    <span style="color: var(--ios-text-secondary);">⏱️ <span id="matchingTime">00:00</span></span>
+                    <span id="matchingStopwatch" style="color: var(--ios-text-secondary);">⏱️ <span id="matchingTime">00:00</span></span>
                     <span style="color: var(--ios-red);">Ошибок: <span id="matchingMistakes">0</span></span>
+                </div>
+                <div class="timer-box hidden" id="matchingTimerBox">
+                    <div class="timer-top">
+                        <span class="timer-clock" id="matchingClock">0:40</span>
+                        <span class="timer-flash" id="matchingFlash"></span>
+                        <button class="timer-bonus hidden" id="matchingBonusBtn" onclick="useQuizBonus()">Бонус</button>
+                    </div>
+                    <div class="timer-bar"><div id="matchingBar"></div></div>
                 </div>
                 <div style="display: flex; gap: 10px; justify-content: center;" id="matchingGrid">
                     <div style="display: flex; flex-direction: column; gap: 8px; flex: 1;" id="matchingLeft"></div>
@@ -1445,7 +1611,7 @@
             <div class="ios-settings-card">
                 <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Озвучка</div>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 15px; font-weight: 500;">Язык речи</span>
+                    <span style="font-size: 15px; font-weight: 500;">Язык речи по умолчанию</span>
                     <select class="form-input" id="ttsLangSelect" style="width: 140px; padding: 8px 12px;" onchange="changeTtsLang()">
                         <option value="en-US">Английский</option>
                         <option value="tr-TR">Турецкий</option>
@@ -1456,6 +1622,15 @@
                         <option value="fr-FR">Французский</option>
                     </select>
                 </div>
+            </div>
+
+            <div class="ios-settings-card">
+                <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Языки словаря</div>
+                <button class="btn-primary" onclick="openDictSettings(data.currentDictionary)" style="margin-top: 0; background: var(--ios-fill); color: var(--ios-text); box-shadow: none;">
+                    <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                    Настроить языки текущего словаря
+                </button>
+                <div style="font-size: 12px; color: var(--ios-text-secondary); margin-top: 8px; line-height: 1.4;">Озвучка выбирается по языку словаря. «Язык речи по умолчанию» нужен только для языков, которых нет в списке.</div>
             </div>
 
             <div class="ios-settings-card">
@@ -1631,8 +1806,9 @@
                     <svg class="svg-icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
-            <div class="form-group"><label class="form-label">Слово</label><input type="text" class="form-input" id="wordInput" placeholder="например: home"></div>
-            <div class="form-group"><label class="form-label">Значение / Перевод</label><textarea class="form-textarea" id="meaningInput" placeholder="например: дом"></textarea></div>
+            <div class="form-group"><label class="form-label" id="wordLabel">Слово</label><input type="text" class="form-input" id="wordInput" placeholder="например: home"></div>
+            <div class="form-group"><label class="form-label" id="meaningLabel">Значение / Перевод</label><textarea class="form-textarea" id="meaningInput" placeholder="например: дом"></textarea></div>
+            <div class="form-group hidden" id="meaning2Group"><label class="form-label" id="meaning2Label">Третий язык</label><input type="text" class="form-input" id="meaning2Input" dir="auto"></div>
             <div class="form-group"><label class="form-label">Категория</label><input type="text" class="form-input" id="categoryInput" list="categoriesList" placeholder="например: Еда"><datalist id="categoriesList"></datalist></div>
             <div class="form-group"><label class="form-label">Заметки</label><textarea class="form-textarea" id="notesInput" placeholder="Примеры использования..."></textarea></div>
             <div class="form-group">
@@ -1646,6 +1822,44 @@
             </div>
             <button class="btn-primary" onclick="saveWord()">Сохранить</button>
             <button class="btn-primary btn-danger hidden" id="deleteWordBtn" onclick="deleteWordFromEdit()" style="margin-top: 8px;">Удалить слово</button>
+        </div>
+    </div>
+
+    <!-- Модалка настроек словаря (название и языки) -->
+    <div class="modal" id="dictSettingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Настройки словаря</h2>
+                <button class="modal-close" onclick="closeDictSettings()">
+                    <svg class="svg-icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Название</label>
+                <input type="text" class="form-input" id="dsName">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Язык слова</label>
+                <select class="form-input" id="dsLang0" onchange="onDsLangChange(0)"></select>
+                <input type="text" class="form-input hidden" id="dsLangCustom0" placeholder="Название языка" style="margin-top: 8px;">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Язык перевода</label>
+                <select class="form-input" id="dsLang1" onchange="onDsLangChange(1)"></select>
+                <input type="text" class="form-input hidden" id="dsLangCustom1" placeholder="Название языка" style="margin-top: 8px;">
+            </div>
+            <div class="form-group">
+                <label class="form-label" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <input type="checkbox" id="dsThirdOn" onchange="onDsThirdToggle()" style="width: 18px; height: 18px;">
+                    Третий язык
+                </label>
+                <div id="dsThirdBox" class="hidden">
+                    <select class="form-input" id="dsLang2" onchange="onDsLangChange(2)"></select>
+                    <input type="text" class="form-input hidden" id="dsLangCustom2" placeholder="Название языка" style="margin-top: 8px;">
+                </div>
+            </div>
+            <div class="lang-hint-line">Слова, рейтинг и уже введённые переводы не удаляются. Язык нужен для названий полей и для озвучки.</div>
+            <button class="btn-primary" onclick="saveDictSettings()">Сохранить</button>
         </div>
     </div>
 
@@ -1674,7 +1888,7 @@
             <div id="bulkImportStep1">
                 <div class="form-group">
                     <label class="form-label">Словарь</label>
-                    <select class="form-input" id="bulkImportDictionary"></select>
+                    <select class="form-input" id="bulkImportDictionary" onchange="updateBulkImportHint()"></select>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Категория</label>
@@ -1683,6 +1897,7 @@
                 <div class="form-group">
                     <label class="form-label">Список слов</label>
                     <textarea class="form-textarea" id="bulkImportText" style="min-height: 160px; font-family: var(--font-mono); font-size: 13px;" placeholder="слово — перевод&#10;[Категория] слово — перевод"></textarea>
+                    <div class="lang-hint-line" id="bulkImportHint" style="margin: 8px 0 0;"></div>
                 </div>
                 <button class="btn-primary" onclick="previewBulkImport()">Предпросмотр</button>
             </div>
@@ -1762,6 +1977,440 @@
         let bulkImportTargetDictionary = '';
         let bulkRulesParsedData = [];
         let editingRuleId = null;
+        let quizPair = { q: 0, a: 1 };
+        let quizHowMode = 'normal';   // normal | mixed | listening
+        let quizHint = true;
+        let quizTimerOn = false;
+        let quizAdvanceSeq = 0;
+
+        /* ===== Языки словаря ===== */
+        const LANG_PRESETS = [
+            { n: 'Турецкий', c: 'tr-TR', s: 'TR' },
+            { n: 'Русский', c: 'ru-RU', s: 'RU' },
+            { n: 'Арабский', c: 'ar-SA', s: 'AR' },
+            { n: 'Английский', c: 'en-US', s: 'EN' },
+            { n: 'Испанский', c: 'es-ES', s: 'ES' },
+            { n: 'Немецкий', c: 'de-DE', s: 'DE' },
+            { n: 'Французский', c: 'fr-FR', s: 'FR' },
+            { n: 'Итальянский', c: 'it-IT', s: 'IT' },
+            { n: 'Португальский', c: 'pt-PT', s: 'PT' },
+            { n: 'Персидский', c: 'fa-IR', s: 'FA' },
+            { n: 'Китайский', c: 'zh-CN', s: 'ZH' },
+            { n: 'Японский', c: 'ja-JP', s: 'JA' },
+            { n: 'Корейский', c: 'ko-KR', s: 'KO' }
+        ];
+        const ARABIC_RE = /[\u0600-\u06FF]/;
+        const CYRILLIC_RE = /[\u0400-\u04FF]/;
+
+        function findLangPreset(name) {
+            const k = (name || '').trim().toLowerCase();
+            return LANG_PRESETS.find(p => p.n.toLowerCase() === k) || null;
+        }
+        function langFromName(name) {
+            const p = findLangPreset(name);
+            return p ? { n: p.n, c: p.c } : { n: (name || '').trim(), c: '' };
+        }
+        function makeDefaultDictSettings(name) {
+            const p = findLangPreset(name);
+            const known = p && p.n !== 'Русский';
+            return {
+                langs: [
+                    known ? { n: p.n, c: p.c } : { n: 'Слово', c: '' },
+                    known ? { n: 'Русский', c: 'ru-RU' } : { n: 'Перевод', c: '' },
+                    null
+                ],
+                show: [true, true, true],
+                quiz: null
+            };
+        }
+        function normalizeDictSettings(s, name) {
+            const d = makeDefaultDictSettings(name);
+            if (!s || !Array.isArray(s.langs)) return d;
+            const langs = [0, 1, 2].map(i => {
+                const l = s.langs[i];
+                return (l && l.n) ? { n: String(l.n), c: l.c || '' } : null;
+            });
+            if (!langs[0]) langs[0] = d.langs[0];
+            if (!langs[1]) langs[1] = d.langs[1];
+            const show = [0, 1, 2].map(i => !(s.show && s.show[i] === false));
+            return { langs, show, quiz: (s.quiz && typeof s.quiz === 'object') ? s.quiz : null };
+        }
+        function getDictSettings(name) {
+            name = name || data.currentDictionary;
+            return normalizeDictSettings(data.dictSettings && data.dictSettings[name], name);
+        }
+        function setDictSettings(name, s) {
+            if (!data.dictSettings) data.dictSettings = {};
+            data.dictSettings[name] = { langs: s.langs, show: s.show, quiz: s.quiz || null };
+        }
+        function activeLangIdx(s) { s = s || getDictSettings(); return [0, 1, 2].filter(i => s.langs[i]); }
+        function visibleLangIdx(s) {
+            s = s || getDictSettings();
+            const act = activeLangIdx(s);
+            const vis = act.filter(i => s.show[i]);
+            return vis.length ? vis : act;
+        }
+        function langName(i, s) { s = s || getDictSettings(); return s.langs[i] ? s.langs[i].n : ''; }
+        function langCode(i, s) { s = s || getDictSettings(); return s.langs[i] ? (s.langs[i].c || '') : ''; }
+        function langShort(i, s) {
+            s = s || getDictSettings();
+            const l = s.langs[i];
+            if (!l) return '';
+            const p = findLangPreset(l.n);
+            return p ? p.s : l.n.slice(0, 2).toUpperCase();
+        }
+        function getField(w, i) {
+            if (!w) return '';
+            return i === 0 ? (w.word || '') : (i === 1 ? (w.meaning || '') : (w.meaning2 || ''));
+        }
+        function hasPair(w) { return !!getField(w, quizPair.q) && !!getField(w, quizPair.a); }
+        function normalizeQuizPair() {
+            const act = activeLangIdx();
+            if (!act.includes(quizPair.q) || !act.includes(quizPair.a) || quizPair.q === quizPair.a) quizPair = { q: 0, a: 1 };
+        }
+        function speakField(w, i) { return speakWord(getField(w, i), langCode(i)); }
+        function speakById(id, i) {
+            const w = getCurrentWords().find(x => x.id === id);
+            if (w) speakField(w, i);
+        }
+        function speakFlashcardFront() {
+            if (currentFlashcardWord) speakField(currentFlashcardWord, quizPair.q);
+        }
+        function fieldSpanHtml(text) {
+            const rtl = ARABIC_RE.test(text);
+            return `<span class="meaning-part${rtl ? ' is-rtl' : ''}" dir="auto">${escapeHtml(text)}</span>`;
+        }
+
+        /* Колонки списка: турецкий (0) всегда слева, третий язык (2) всегда справа,
+           второй (1) стоит посередине, а если рядом нет соседа, занимает его место */
+        function computeSlots(s) {
+            s = s || getDictSettings();
+            const has3 = !!s.langs[2];
+            const count = has3 ? 3 : 2;
+            const vis = visibleLangIdx(s);
+            const slots = {};
+            vis.forEach(i => {
+                if (i === 0) slots[0] = 0;
+                else if (i === 2) slots[2] = 2;
+                else if (has3) {
+                    const v0 = vis.includes(0), v2 = vis.includes(2);
+                    slots[1] = (v0 && v2) ? 1 : (!v0 ? 0 : 2);
+                } else {
+                    slots[1] = vis.includes(0) ? 1 : 0;
+                }
+            });
+            return { count, slots };
+        }
+
+        /* Переключатели языков: стоят над колонками и не двигаются */
+        function renderLangChips() {
+            const box = document.getElementById('langChips');
+            if (!box) return;
+            if (currentTab === 'rules') { box.innerHTML = ''; box.style.display = 'none'; return; }
+            box.style.display = '';
+            const s = getDictSettings();
+            const act = activeLangIdx(s);
+            const count = s.langs[2] ? 3 : 2;
+            box.style.gridTemplateColumns = `repeat(${count}, minmax(0, 1fr))`;
+            box.innerHTML = act.map(i => {
+                const align = i === 0 ? 'start' : (i === count - 1 ? 'end' : 'center');
+                return `<button class="lang-chip ${s.show[i] ? 'active' : ''}" style="grid-column: ${i + 1}; justify-self: ${align};" onclick="toggleLangVisible(${i})" title="${escapeHtml(s.langs[i].n)}">${escapeHtml(langShort(i, s))}</button>`;
+            }).join('');
+        }
+        function toggleLangVisible(i) {
+            const name = data.currentDictionary;
+            const s = getDictSettings(name);
+            const shown = activeLangIdx(s).filter(k => s.show[k]);
+            if (s.show[i] && shown.length <= 1) return; // хотя бы один язык всегда включён
+            s.show[i] = !s.show[i];
+            setDictSettings(name, s);
+            saveData();
+            renderMainContent();
+        }
+
+        /* Настройки словаря: название и языки */
+        let dsEditingName = null;
+        function fillLangSelect(i, lang) {
+            const sel = document.getElementById('dsLang' + i);
+            const custom = document.getElementById('dsLangCustom' + i);
+            sel.innerHTML = LANG_PRESETS.map(p => `<option value="${escapeHtml(p.n)}">${escapeHtml(p.n)}</option>`).join('') + '<option value="__custom__">Другой…</option>';
+            const p = lang ? findLangPreset(lang.n) : null;
+            if (p) { sel.value = p.n; custom.classList.add('hidden'); custom.value = ''; }
+            else if (lang && lang.n) { sel.value = '__custom__'; custom.classList.remove('hidden'); custom.value = lang.n; }
+            else { sel.value = LANG_PRESETS[0].n; custom.classList.add('hidden'); custom.value = ''; }
+        }
+        function onDsLangChange(i) {
+            const isCustom = document.getElementById('dsLang' + i).value === '__custom__';
+            const custom = document.getElementById('dsLangCustom' + i);
+            custom.classList.toggle('hidden', !isCustom);
+            if (isCustom) custom.focus();
+        }
+        function onDsThirdToggle() {
+            document.getElementById('dsThirdBox').classList.toggle('hidden', !document.getElementById('dsThirdOn').checked);
+        }
+        function readDsLang(i) {
+            const v = document.getElementById('dsLang' + i).value;
+            if (v === '__custom__') {
+                const n = document.getElementById('dsLangCustom' + i).value.trim();
+                return n ? langFromName(n) : null;
+            }
+            return langFromName(v);
+        }
+        function openDictSettings(name) {
+            if (!data.dictionaries[name]) return;
+            dsEditingName = name;
+            const s = getDictSettings(name);
+            document.getElementById('dsName').value = name;
+            fillLangSelect(0, s.langs[0]);
+            fillLangSelect(1, s.langs[1]);
+            fillLangSelect(2, s.langs[2] || LANG_PRESETS[2]);
+            document.getElementById('dsThirdOn').checked = !!s.langs[2];
+            document.getElementById('dsThirdBox').classList.toggle('hidden', !s.langs[2]);
+            document.getElementById('dictSettingsModal').classList.add('active');
+        }
+        function closeDictSettings() {
+            document.getElementById('dictSettingsModal').classList.remove('active');
+            dsEditingName = null;
+        }
+        function renameDictionaryTo(oldName, newName) {
+            const newDicts = {};
+            for (const key of Object.keys(data.dictionaries)) newDicts[key === oldName ? newName : key] = data.dictionaries[key];
+            data.dictionaries = newDicts;
+            if (data.dictSettings && data.dictSettings[oldName]) {
+                data.dictSettings[newName] = data.dictSettings[oldName];
+                delete data.dictSettings[oldName];
+            }
+            if (data.currentDictionary === oldName) data.currentDictionary = newName;
+        }
+        function saveDictSettings() {
+            const oldName = dsEditingName;
+            if (!oldName || !data.dictionaries[oldName]) return;
+            const newName = document.getElementById('dsName').value.trim();
+            if (!newName) return alert('Введите название словаря');
+            if (newName !== oldName && data.dictionaries[newName]) return alert('Такое имя уже занято');
+            const l0 = readDsLang(0), l1 = readDsLang(1);
+            const thirdOn = document.getElementById('dsThirdOn').checked;
+            const l2 = thirdOn ? readDsLang(2) : null;
+            if (!l0 || !l1) return alert('Укажите названия языков');
+            if (thirdOn && !l2) return alert('Укажите название третьего языка');
+            const prev = getDictSettings(oldName);
+            if (newName !== oldName) renameDictionaryTo(oldName, newName);
+            const show = [...prev.show];
+            if (l2 && !prev.langs[2]) show[2] = true;
+            setDictSettings(newName, { langs: [l0, l1, l2], show, quiz: prev.quiz });
+            saveData();
+            closeDictSettings();
+            normalizeQuizPair();
+            renderDictsPage();
+            updateStats();
+            updateCategories();
+            renderMainContent();
+        }
+
+
+        /* ===== Таймер: 4 секунды на слово, раунд = 10 слов, бонус только на следующий раунд ===== */
+        const TIMER_PER_WORD = 4, TIMER_ROUND = 10, TIMER_BONUS_CAP = 40;
+        let gt = null;
+        let gtFlashTimeout = null;
+        const GT_IDS = {
+            quiz: { box: 'quizTimerBox', clock: 'quizClock', flash: 'quizFlash', bonus: 'quizBonusBtn', bar: 'quizBar' },
+            matching: { box: 'matchingTimerBox', clock: 'matchingClock', flash: 'matchingFlash', bonus: 'matchingBonusBtn', bar: 'matchingBar' }
+        };
+        function gtRoundWords(idx) { return Math.max(0, Math.min(TIMER_ROUND, gt.total - idx * TIMER_ROUND)); }
+        function fmtClock(sec) {
+            sec = Math.max(0, Math.ceil(sec));
+            return `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`;
+        }
+        function fmtDuration(ms) {
+            const s = Math.round(ms / 1000);
+            return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+        }
+        function gtStart(total, kind, onExpire) {
+            gtDispose();
+            gt = { kind, total, round: 0, base: 0, barMax: 0, remaining: 0, bonus: 0, elapsedMs: 0,
+                   last: performance.now(), paused: false, expired: false, onExpire, interval: null, ids: GT_IDS[kind] };
+            gt.base = gt.barMax = gt.remaining = gtRoundWords(0) * TIMER_PER_WORD;
+            document.getElementById(gt.ids.box).classList.remove('hidden');
+            gt.interval = setInterval(gtTick, 200);
+            gtRender();
+            gtFlash('+' + gt.base);
+        }
+        function gtDispose() {
+            if (gt && gt.interval) clearInterval(gt.interval);
+            gt = null;
+            clearTimeout(gtFlashTimeout);
+            Object.values(GT_IDS).forEach(ids => { const el = document.getElementById(ids.box); if (el) el.classList.add('hidden'); });
+        }
+        function gtTick() {
+            if (!gt || gt.expired) return;
+            const now = performance.now();
+            const dt = now - gt.last;
+            gt.last = now;
+            // Часы стоят, если игра на паузе, приложение свёрнуто или открыта другая вкладка
+            if (gt.paused || document.hidden || currentNavTab !== 'quiz') return;
+            gt.remaining -= dt / 1000;
+            gt.elapsedMs += dt;
+            if (gt.remaining <= 0) {
+                gt.remaining = 0;
+                gt.expired = true;
+                clearInterval(gt.interval);
+                gtRender();
+                if (gt.onExpire) gt.onExpire();
+                return;
+            }
+            gtRender();
+        }
+        function gtPause() { if (gt) { gt.paused = true; gt.last = performance.now(); } }
+        function gtResume() { if (gt) { gt.paused = false; gt.last = performance.now(); } }
+        function gtRender() {
+            if (!gt) return;
+            const ids = gt.ids;
+            const low = Math.ceil(gt.remaining) <= 5;
+            const clock = document.getElementById(ids.clock);
+            clock.textContent = fmtClock(gt.remaining);
+            clock.classList.toggle('low', low);
+            const bar = document.getElementById(ids.bar);
+            bar.style.width = Math.max(0, Math.min(100, gt.remaining / (gt.barMax || 1) * 100)) + '%';
+            bar.classList.toggle('low', low);
+            const btn = document.getElementById(ids.bonus);
+            btn.classList.toggle('hidden', !(gt.bonus > 0));
+            if (gt.bonus > 0) btn.textContent = `Бонус +${gt.bonus} с`;
+        }
+        function gtFlash(text) {
+            if (!gt) return;
+            const el = document.getElementById(gt.ids.flash);
+            el.textContent = text;
+            el.classList.add('show');
+            clearTimeout(gtFlashTimeout);
+            gtFlashTimeout = setTimeout(() => el.classList.remove('show'), 1400);
+        }
+        function gtRoundDone() {
+            if (!gt || gt.expired) return;
+            gt.bonus = Math.min(Math.floor(gt.remaining), TIMER_BONUS_CAP);
+            gt.round++;
+            gt.base = gt.barMax = gt.remaining = gtRoundWords(gt.round) * TIMER_PER_WORD;
+            gtRender();
+            gtFlash('+' + gt.base);
+        }
+        function gtUseBonus() {
+            if (!gt || gt.expired || !(gt.bonus > 0)) return;
+            const n = gt.bonus;
+            gt.bonus = 0;
+            gt.remaining += n;
+            gt.barMax = Math.max(gt.barMax, gt.remaining);
+            gtRender();
+            gtFlash('+' + n);
+        }
+        function useQuizBonus() { gtUseBonus(); }
+        function gtSnapshot() { return gt ? { elapsedMs: gt.elapsedMs, expired: gt.expired } : null; }
+        function beginQuizTimer() {
+            gtDispose();
+            if (!quizTimerOn) return;
+            const total = quizData.wordQueue.length;
+            if (total < 1) return;
+            gtStart(total, 'quiz', () => {
+                quizAdvanceSeq++;
+                if (quizData.nextTimeout) clearTimeout(quizData.nextTimeout);
+                if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+                showResults('timeup');
+            });
+        }
+
+        /* Изучение: языки, режим и подсказка (настройки запоминаются для каждого словаря) */
+        function quizHowDirection() {
+            return quizHowMode === 'mixed' ? 'mixed' : (quizHowMode === 'listening' ? 'listening' : 'wordToMeaning');
+        }
+        function loadQuizPrefs() {
+            const s = getDictSettings();
+            const p = s.quiz || {};
+            const act = activeLangIdx(s);
+            quizPair = { q: act.includes(p.q) ? p.q : 0, a: act.includes(p.a) ? p.a : 1 };
+            if (quizPair.q === quizPair.a) quizPair = { q: 0, a: 1 };
+            quizHowMode = ['normal', 'mixed', 'listening'].includes(p.mode) ? p.mode : 'normal';
+            quizHint = p.hint !== false;
+            quizTimerOn = p.timer === true;
+            quizCount = p.count === 'all' ? Infinity : ((p.count === 100) ? 100 : 50);
+        }
+        function saveQuizPrefs() {
+            const name = data.currentDictionary;
+            const s = getDictSettings(name);
+            s.quiz = { q: quizPair.q, a: quizPair.a, mode: quizHowMode, hint: quizHint, timer: quizTimerOn, count: quizCount === Infinity ? 'all' : quizCount };
+            setDictSettings(name, s);
+            saveData();
+        }
+        function getHintLangIdx() {
+            const act = activeLangIdx();
+            if (act.length < 3) return null;
+            const idx = act.find(i => i !== quizPair.q && i !== quizPair.a);
+            return idx === undefined ? null : idx;
+        }
+        function quizHintText(w) {
+            const hIdx = getHintLangIdx();
+            if (!quizHint || hIdx === null) return '';
+            return getField(w, hIdx);
+        }
+        function quizHintInnerHtml(w) {
+            const text = quizHintText(w);
+            if (!text) return '';
+            return ARABIC_RE.test(text) ? `<span class="arb">${escapeHtml(text)}</span>` : escapeHtml(text);
+        }
+        function quizHintHtml(w) {
+            const inner = quizHintInnerHtml(w);
+            return inner ? `<div class="quiz-hint" dir="auto">${inner}</div>` : '';
+        }
+        function refreshQuizLanguageUI() {
+            normalizeQuizPair();
+            const s = getDictSettings();
+            const act = activeLangIdx(s);
+            const qn = langName(quizPair.q, s), an = langName(quizPair.a, s);
+            const setT = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+            setT('pickDirW2M', `${qn} → ${an}`);
+            setT('pickDirM2W', `${an} → ${qn}`);
+            const opts = sel => act.map(i => `<option value="${i}" ${i === sel ? 'selected' : ''}>${escapeHtml(s.langs[i].n)}</option>`).join('');
+            document.getElementById('pairQ').innerHTML = opts(quizPair.q);
+            document.getElementById('pairA').innerHTML = opts(quizPair.a);
+            document.getElementById('modeNormal').classList.toggle('active', quizHowMode === 'normal');
+            document.getElementById('modeMixed').classList.toggle('active', quizHowMode === 'mixed');
+            document.getElementById('modeListening').classList.toggle('active', quizHowMode === 'listening');
+            const hIdx = getHintLangIdx();
+            document.getElementById('hintRow').classList.toggle('hidden', hIdx === null || quizHowMode === 'listening');
+            if (hIdx !== null) {
+                document.getElementById('hintRowLabel').textContent = `Подсказка: ${langName(hIdx, s)}`;
+                document.getElementById('hintSwitch').classList.toggle('on', quizHint);
+                document.getElementById('hintSwitch').setAttribute('aria-checked', quizHint ? 'true' : 'false');
+            }
+            document.getElementById('timerSwitch').classList.toggle('on', quizTimerOn);
+            document.getElementById('timerSwitch').setAttribute('aria-checked', quizTimerOn ? 'true' : 'false');
+            const cnt = quizCount === Infinity ? 'all' : String(quizCount);
+            document.querySelectorAll('#quantitySection .quiz-mode-btn[data-count]').forEach(btn => btn.classList.toggle('active', btn.dataset.count === cnt));
+        }
+        function setQuizHow(mode) {
+            quizHowMode = mode;
+            quizData.direction = quizHowDirection();
+            saveQuizPrefs();
+            refreshQuizLanguageUI();
+        }
+        function toggleQuizTimer() {
+            quizTimerOn = !quizTimerOn;
+            saveQuizPrefs();
+            refreshQuizLanguageUI();
+        }
+        function toggleQuizHint() {
+            quizHint = !quizHint;
+            saveQuizPrefs();
+            refreshQuizLanguageUI();
+        }
+        function setQuizPairSide(side, value) {
+            const act = activeLangIdx();
+            const v = parseInt(value, 10);
+            if (side === 'q') { quizPair.q = v; if (quizPair.a === v) quizPair.a = act.find(i => i !== v); }
+            else { quizPair.a = v; if (quizPair.q === v) quizPair.q = act.find(i => i !== v); }
+            saveQuizPrefs(); loadSessionWordIds(); refreshQuizLanguageUI(); updateQuizCounter();
+        }
+        function swapQuizPair() {
+            const tmp = quizPair.q; quizPair.q = quizPair.a; quizPair.a = tmp;
+            saveQuizPrefs(); loadSessionWordIds(); refreshQuizLanguageUI(); updateQuizCounter();
+        }
 
         let ttsLang = 'en-US';
         let autoTts = (() => { try { return localStorage.getItem('autoTts') !== 'off'; } catch (e) { return true; } })();
@@ -1836,25 +2485,34 @@
                 window.speechSynthesis.cancel();
             } else if (autoTts) {
                 if (quizData.currentWord && !document.getElementById('quizGameScreen').classList.contains('hidden')) {
-                    speakWord(quizData.currentWord.word);
+                    speakField(quizData.currentWord, quizPair.q);
                 } else if (currentFlashcardWord && !document.getElementById('quizFlashcardsScreen').classList.contains('hidden')) {
-                    speakWord(currentFlashcardWord.word);
+                    speakField(currentFlashcardWord, quizPair.q);
                 }
             }
         }
 
-        function speakWord(text) {
-            if (!text || !('speechSynthesis' in window)) return;
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            const isArabicText = /[\u0600-\u06FF]/.test(text);
-            const langToUse = isArabicText ? 'ar-SA' : ttsLang;
-            utterance.lang = langToUse;
+        function speakWord(text, langCode) {
+            // Возвращает Promise: он выполняется, когда слово договорило (или через 3 с, если телефон не сообщил об окончании)
+            return new Promise(resolve => {
+                if (!text || !('speechSynthesis' in window)) { resolve(); return; }
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                const isArabicText = /[\u0600-\u06FF]/.test(text);
+                const langToUse = isArabicText ? 'ar-SA' : (langCode || ttsLang);
+                utterance.lang = langToUse;
 
-            const voices = window.speechSynthesis.getVoices();
-            const targetVoice = voices.find(voice => voice.lang.includes(langToUse.split('-')[0]));
-            if (targetVoice) utterance.voice = targetVoice;
-            window.speechSynthesis.speak(utterance);
+                const voices = window.speechSynthesis.getVoices();
+                const targetVoice = voices.find(voice => voice.lang.includes(langToUse.split('-')[0]));
+                if (targetVoice) utterance.voice = targetVoice;
+
+                let finished = false;
+                const cap = setTimeout(() => done(), 3000);
+                const done = () => { if (finished) return; finished = true; clearTimeout(cap); resolve(); };
+                utterance.onend = done;
+                utterance.onerror = done;
+                window.speechSynthesis.speak(utterance);
+            });
         }
 
         if ('speechSynthesis' in window) {
@@ -1872,6 +2530,8 @@
             let modeKey = quizMode;
             if (selectedPoolFilter !== 'all') modeKey += `_${selectedPoolFilter}`;
             if (quizMode === 'category' && quizCategory) modeKey += `_cat_${quizCategory}`;
+            normalizeQuizPair();
+            if (quizPair.q !== 0 || quizPair.a !== 1) modeKey += `_pair_${quizPair.q}${quizPair.a}`;
             return `sessionWordIds_${data.currentDictionary}_${modeKey}`;
         }
         function saveSessionWordIds() { try { localStorage.setItem(getSessionKey(), JSON.stringify(sessionWordIds)); } catch (e) { console.error(e); } }
@@ -1886,7 +2546,7 @@
             else if (selectedPoolFilter === 'new') pool = pool.filter(w => isNewWord(w));
             
             if (quizMode === 'category' && quizCategory) pool = pool.filter(w => w.category === quizCategory);
-            return pool;
+            return pool.filter(hasPair);
         }
 
         function loadData() {
@@ -1921,11 +2581,12 @@
                             });
                         }
                         parsed.rules = parsed.rules || [];
+                        parsed.dictSettings = parsed.dictSettings || {};
                         return parsed;
                     }
                 }
             } catch (e) { console.error(e); }
-            return { dictionaries: { "Мой словарь": [] }, currentDictionary: "Мой словарь", rules: [] };
+            return { dictionaries: { "Мой словарь": [] }, currentDictionary: "Мой словарь", rules: [], dictSettings: {} };
         }
 
         function saveData() { try { localStorage.setItem('myDictionaryData', JSON.stringify(data)); updateStats(); } catch (e) { console.error(e); } }
@@ -1950,8 +2611,8 @@
         function changeFontSize() {
             const size = document.getElementById('fontSizeSelect').value;
             try { localStorage.setItem('fontSize', size); } catch (e) {}
-            const wordTexts = document.querySelectorAll('.compact-word');
-            const wordMeanings = document.querySelectorAll('.compact-meaning');
+            const wordTexts = document.querySelectorAll('.compact-word, .wcell-main');
+            const wordMeanings = document.querySelectorAll('.compact-meaning, .wcell-sec');
             if (size === 'small') { wordTexts.forEach(el => el.style.fontSize = '14px'); wordMeanings.forEach(el => el.style.fontSize = '13px'); }
             else if (size === 'large') { wordTexts.forEach(el => el.style.fontSize = '18px'); wordMeanings.forEach(el => el.style.fontSize = '17px'); }
             else { wordTexts.forEach(el => el.style.fontSize = '16px'); wordMeanings.forEach(el => el.style.fontSize = '15px'); }
@@ -2055,6 +2716,7 @@
         function handleSearchInput() { renderMainContent(); }
 
         function renderMainContent() {
+            renderLangChips();
             if (currentTab === 'rules') {
                 renderRulesContent();
             } else {
@@ -2070,6 +2732,7 @@
 
                 item.addEventListener('touchstart', e => {
                     startX = e.touches[0].clientX;
+                    currentX = startX; // без этого простой тап (без движения) считался свайпом влево
                     isSwiping = true;
                     item.style.transition = 'none';
                 }, { passive: true });
@@ -2099,6 +2762,31 @@
             });
         }
 
+        function wordRowInnerHtml(item) {
+            const s = getDictSettings();
+            const { count, slots } = computeSlots(s);
+            const vis = Object.keys(slots).map(Number);
+            const withText = vis.filter(i => getField(item, i));
+            const audioIdx = [...(withText.length ? withText : vis)].sort((a, b) => slots[a] - slots[b])[0];
+            const hasErrors = isWeakWord(item);
+            const cells = vis.map(i => {
+                const text = getField(item, i);
+                if (!text) return '';
+                const slot = slots[i];
+                const align = slot === 0 ? 'left' : (slot === count - 1 ? 'right' : 'center');
+                const inner = ARABIC_RE.test(text) ? `<span class="arb">${escapeHtml(text)}</span>` : escapeHtml(text);
+                return `<div class="wcell ${i === 0 ? 'wcell-main' : 'wcell-sec'}" dir="auto" style="grid-column: ${slot + 1}; text-align: ${align};">${inner}</div>`;
+            }).join('');
+            return `
+                <div class="row-lead">
+                    ${hasErrors ? '<div class="compact-error-dot"></div>' : ''}
+                    <span class="compact-audio-btn" onclick="speakById(${item.id}, ${audioIdx}); event.stopPropagation();">
+                        <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    </span>
+                </div>
+                <div class="word-cols" style="grid-template-columns: repeat(${count}, minmax(0, 1fr));">${cells}</div>`;
+        }
+
         function renderWordsContent() {
             const listEl = document.getElementById('mainContentList');
             const quizBarEl = document.getElementById('categoryQuizBar');
@@ -2108,8 +2796,10 @@
             
             let words = getCurrentWords();
             if (currentCategory !== 'all') words = words.filter(w => w.category === currentCategory);
-            if (searchQuery) words = words.filter(w => w.word.toLowerCase().includes(searchQuery) || w.meaning.toLowerCase().includes(searchQuery) || (w.notes && w.notes.toLowerCase().includes(searchQuery)));
-            words = [...words].sort((a, b) => a.word.toLowerCase().localeCompare(b.word.toLowerCase(), 'ru'));
+            if (searchQuery) words = words.filter(w => w.word.toLowerCase().includes(searchQuery) || (w.meaning || '').toLowerCase().includes(searchQuery) || (w.meaning2 && w.meaning2.toLowerCase().includes(searchQuery)) || (w.notes && w.notes.toLowerCase().includes(searchQuery)));
+            const sortIdx = visibleLangIdx()[0];
+            const sortKey = w => (getField(w, sortIdx) || w.word || '').toLowerCase();
+            words = [...words].sort((a, b) => sortKey(a).localeCompare(sortKey(b), 'ru'));
 
             if (currentCategory !== 'all' && !searchQuery && words.length > 0) {
                 quizBarEl.innerHTML = `
@@ -2141,16 +2831,7 @@
                     <div class="swipe-item-actions" onclick="deleteWord(${item.id})">
                         <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                     </div>
-                    <div class="compact-item ${hasErrors ? 'has-errors' : ''}" onclick="showWordDetail(${item.id})">
-                        <div class="compact-word">
-                            ${hasErrors ? '<div class="compact-error-dot"></div>' : ''}
-                            <span class="compact-audio-btn" onclick="speakWord('${escapeHtml(item.word)}'); event.stopPropagation();">
-                                <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-                            </span>
-                            ${escapeHtml(item.word)}
-                        </div>
-                        <div class="compact-meaning">${escapeHtml(item.meaning)}</div>
-                    </div>
+                    <div class="compact-item ${hasErrors ? 'has-errors' : ''}" onclick="showWordDetail(${item.id})">${wordRowInnerHtml(item)}</div>
                 </div>`;
             }).join('') + '</div>';
 
@@ -2291,9 +2972,10 @@
             const words = data.dictionaries[name] || [];
             if (words.length === 0) return alert('Словарь пуст — делиться нечем');
 
-            // Экспорт "для отправки" — только слово, значение и категория, без личного рейтинга/прогресса
-            const cleanWords = words.map(w => ({ word: w.word, meaning: w.meaning, category: w.category || 'Общее' }));
-            const content = JSON.stringify({ name: name, words: cleanWords, exportDate: new Date().toISOString() }, null, 2);
+            // Экспорт "для отправки" — слово, переводы и категория, без личного рейтинга/прогресса
+            const settings = getDictSettings(name);
+            const cleanWords = words.map(w => ({ word: w.word, meaning: w.meaning, meaning2: w.meaning2 || '', category: w.category || 'Общее' }));
+            const content = JSON.stringify({ name: name, languages: settings.langs.filter(Boolean), words: cleanWords, exportDate: new Date().toISOString() }, null, 2);
             const safeName = name.replace(/[\\/:*?"<>|]/g, '_');
             const fileName = `${safeName}_${new Date().toISOString().split('T')[0]}.json`;
             const shareTitle = `Словарь «${name}»`;
@@ -2331,16 +3013,19 @@
             list.innerHTML = Object.keys(data.dictionaries).map(name => {
                 const count = data.dictionaries[name].length;
                 const isActive = name === data.currentDictionary;
+                const s = getDictSettings(name);
+                const langLine = activeLangIdx(s).map(i => s.langs[i].n).join(' · ');
                 return `<div class="compact-item" onclick="switchToDictionary('${name.replace(/'/g, "\\'")}')">
                     <div>
                         <div style="font-weight: 600; color: ${isActive ? 'var(--ios-blue)' : 'var(--ios-text)'};">${escapeHtml(name)} ${isActive ? '✓' : ''}</div>
-                        <div style="font-size: 13px; color: var(--ios-text-secondary);">${count} слов</div>
+                        <div class="dict-lang-line">${escapeHtml(langLine)}</div>
+                        <div style="font-size: 12px; color: var(--ios-text-tertiary);">${count} слов</div>
                     </div>
                     <div style="display: flex; gap: 8px;" onclick="event.stopPropagation()">
                         <button class="compact-action-btn" title="Экспорт" onclick="shareDictionary('${name.replace(/'/g, "\\'")}')">
                             <svg class="svg-icon" style="width: 15px; height: 15px; color: var(--ios-green);" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
                         </button>
-                        <button class="compact-action-btn" title="Переименовать" onclick="renameDictionary('${name.replace(/'/g, "\\'")}')">
+                        <button class="compact-action-btn" title="Названия и языки" onclick="openDictSettings('${name.replace(/'/g, "\\'")}')">
                             <svg class="svg-icon" style="width: 15px; height: 15px; color: var(--ios-blue);" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                         </button>
                         <button class="compact-action-btn" title="Удалить" onclick="deleteDictionary('${name.replace(/'/g, "\\'")}')">
@@ -2366,22 +3051,14 @@
         }
 
         function renameDictionary(oldName) {
-            const newName = prompt('Новое название:', oldName)?.trim();
-            if (!newName || newName === oldName) return;
-            if (data.dictionaries[newName]) return alert('Такое имя уже занято');
-            const newDicts = {};
-            for (const key of Object.keys(data.dictionaries)) newDicts[key === oldName ? newName : key] = data.dictionaries[key];
-            data.dictionaries = newDicts;
-            if (data.currentDictionary === oldName) data.currentDictionary = newName;
-            saveData();
-            renderDictsPage();
-            updateStats();
+            openDictSettings(oldName);
         }
 
         function deleteDictionary(name) {
             if (Object.keys(data.dictionaries).length === 1) return alert('Нельзя удалить единственный словарь');
             if (!confirm(`Удалить "${name}"?`)) return;
             delete data.dictionaries[name];
+            if (data.dictSettings) delete data.dictSettings[name];
             if (data.currentDictionary === name) data.currentDictionary = Object.keys(data.dictionaries)[0];
             saveData();
             renderDictsPage();
@@ -2402,10 +3079,28 @@
         function openFabMenu() { document.getElementById('fabMenuModal').classList.add('active'); }
         function closeFabMenu() { document.getElementById('fabMenuModal').classList.remove('active'); }
 
+        function applyWordFormLanguages() {
+            const s = getDictSettings();
+            document.getElementById('wordLabel').textContent = s.langs[0].n;
+            document.getElementById('meaningLabel').textContent = s.langs[1].n;
+            document.getElementById('wordInput').placeholder = s.langs[0].n === 'Слово' ? 'например: home' : s.langs[0].n;
+            document.getElementById('meaningInput').placeholder = s.langs[1].n === 'Перевод' ? 'например: дом' : s.langs[1].n;
+            const g = document.getElementById('meaning2Group');
+            if (s.langs[2]) {
+                g.classList.remove('hidden');
+                document.getElementById('meaning2Label').textContent = s.langs[2].n;
+                document.getElementById('meaning2Input').placeholder = s.langs[2].n;
+            } else {
+                g.classList.add('hidden');
+            }
+        }
+
         function openAddModal(initialWord = '') {
             isEditing = false; editingWordId = null; currentImageBase64 = null;
+            applyWordFormLanguages();
             document.getElementById('modalTitle').textContent = 'Новое слово';
             document.getElementById('wordInput').value = initialWord; document.getElementById('meaningInput').value = '';
+            document.getElementById('meaning2Input').value = '';
             document.getElementById('categoryInput').value = 'Общее'; document.getElementById('notesInput').value = '';
             document.getElementById('imageInput').value = ''; document.getElementById('imagePreview').style.display = 'none';
             document.getElementById('fileInputLabel').textContent = 'Выбрать картинку';
@@ -2425,8 +3120,10 @@
             const word = getCurrentWords().find(w => w.id === wordId);
             if (!word) return;
             isEditing = true; editingWordId = wordId; currentImageBase64 = word.image || null;
+            applyWordFormLanguages();
             document.getElementById('modalTitle').textContent = 'Редактировать слово';
             document.getElementById('wordInput').value = word.word; document.getElementById('meaningInput').value = word.meaning;
+            document.getElementById('meaning2Input').value = word.meaning2 || '';
             document.getElementById('categoryInput').value = word.category || 'Общее'; document.getElementById('notesInput').value = word.notes || '';
             const preview = document.getElementById('imagePreview'); const label = document.getElementById('fileInputLabel');
             if (word.image) { preview.src = word.image; preview.style.display = 'block'; label.textContent = 'Картинка добавлена'; }
@@ -2439,18 +3136,24 @@
         function saveWord() {
             const word = document.getElementById('wordInput').value.trim();
             const meaning = document.getElementById('meaningInput').value.trim();
+            const meaning2 = document.getElementById('meaning2Input').value.trim();
+            const hasThird = !!getDictSettings().langs[2];
             const category = document.getElementById('categoryInput').value.trim() || 'Общее';
             const notes = document.getElementById('notesInput').value.trim();
-            if (!word || !meaning) return alert('Заполните слово и значение');
+            if (!word || (!meaning && !(hasThird && meaning2))) return alert('Заполните слово и значение');
             const words = getCurrentWords();
             if (words.find(w => w.word.toLowerCase().trim() === word.toLowerCase().trim() && (!isEditing || w.id !== editingWordId))) {
                 return alert('Слово уже существует');
             }
             if (isEditing) {
                 const idx = words.findIndex(w => w.id === editingWordId);
-                if (idx !== -1) { Object.assign(words[idx], { word, meaning, category, notes, image: currentImageBase64, updatedAt: new Date().toISOString() }); }
+                if (idx !== -1) {
+                    Object.assign(words[idx], { word, meaning, category, notes, image: currentImageBase64, updatedAt: new Date().toISOString() });
+                    // Если третий язык выключен, уже введённый перевод не трогаем
+                    if (hasThird) words[idx].meaning2 = meaning2;
+                }
             } else {
-                words.push({ id: Date.now(), word, meaning, category, notes, image: currentImageBase64, createdAt: new Date().toISOString(), lastReviewed: null, score: null });
+                words.push({ id: Date.now(), word, meaning, meaning2: hasThird ? meaning2 : '', category, notes, image: currentImageBase64, createdAt: new Date().toISOString(), lastReviewed: null, score: null });
             }
             setCurrentWords(words); closeWordModal(); renderMainContent(); updateStats(); updateCategories(); setTimeout(changeFontSize, 50);
         }
@@ -2468,19 +3171,25 @@
             const scoreDisplay = getScoreDisplay(word);
             const scoreColor = getScoreColor(word);
             const scoreLabel = getScoreLabel(word);
+            const s = getDictSettings();
+            const audioBtn = idx => `<span class="compact-audio-btn" style="width: 28px; height: 28px; margin-left: 8px; vertical-align: middle; display: inline-flex;" onclick="speakById(${word.id}, ${idx})"><svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>`;
+            const transLine = (idx, color) => (s.langs[idx] && getField(word, idx))
+                ? `<p style="color: var(--ios-text-secondary); font-size: 17px; margin-bottom: 12px; line-height: 1.4;"><strong style="color: ${color};">${escapeHtml(s.langs[idx].n)}:</strong> <span dir="auto">${escapeHtml(getField(word, idx))}</span>${audioBtn(idx)}</p>`
+                : '';
             
             document.getElementById('wordDetailContent').innerHTML = `
                 <div style="padding: 6px 0;">
                     ${word.image ? `<img src="${word.image}" style="max-width: 100%; border-radius: 16px; margin-bottom: 14px;">` : ''}
                     <h2 style="color: var(--ios-text); margin-bottom: 10px; font-size: 28px; font-weight: 700; font-family: var(--font-display); display: flex; align-items: center; justify-content: space-between;">
-                        ${word.word}
-                        <span class="compact-audio-btn" style="width: 36px; height: 36px;" onclick="speakWord('${escapeHtml(word.word)}')">
+                        <span dir="auto">${escapeHtml(word.word)}</span>
+                        <span class="compact-audio-btn" style="width: 36px; height: 36px;" onclick="speakById(${word.id}, 0)">
                             <svg class="svg-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
                         </span>
                     </h2>
-                    <p style="color: var(--ios-text-secondary); font-size: 17px; margin-bottom: 12px; line-height: 1.4;"><strong style="color: var(--ios-blue);">Значение:</strong> ${word.meaning}</p>
-                    <p style="color: var(--ios-text-secondary); margin-bottom: 6px; font-size: 14px;"><strong style="color: var(--ios-purple);">Категория:</strong> ${word.category}</p>
-                    ${word.notes ? `<p style="color: var(--ios-text-secondary); margin-top: 8px; font-size: 14px; line-height: 1.4;"><strong style="color: var(--ios-orange);">Заметки:</strong> ${word.notes}</p>` : ''}
+                    ${transLine(1, 'var(--ios-blue)')}
+                    ${transLine(2, 'var(--ios-teal)')}
+                    <p style="color: var(--ios-text-secondary); margin-bottom: 6px; font-size: 14px;"><strong style="color: var(--ios-purple);">Категория:</strong> ${escapeHtml(word.category)}</p>
+                    ${word.notes ? `<p style="color: var(--ios-text-secondary); margin-top: 8px; font-size: 14px; line-height: 1.4;"><strong style="color: var(--ios-orange);">Заметки:</strong> ${escapeHtml(word.notes)}</p>` : ''}
                     <div style="display: flex; gap: 10px; margin-top: 14px;">
                         <span style="color: ${scoreColor}; font-weight: 600; font-size: 14px; background: var(--ios-fill); padding: 6px 12px; border-radius: 10px;">Рейтинг: ${scoreDisplay} (${scoreLabel})</span>
                     </div>
@@ -2612,6 +3321,7 @@
             document.getElementById('bulkImportStep1').classList.remove('hidden');
             document.getElementById('bulkImportStep2').classList.add('hidden');
             bulkImportParsedData = [];
+            updateBulkImportHint();
             document.getElementById('bulkImportModal').classList.add('active');
         }
         function closeBulkImport() { document.getElementById('bulkImportModal').classList.remove('active'); }
@@ -2620,7 +3330,20 @@
             document.getElementById('bulkImportStep2').classList.add('hidden');
         }
 
-        function parseLine(line, defaultCategory) {
+        function updateBulkImportHint() {
+            const name = document.getElementById('bulkImportDictionary').value;
+            if (!data.dictionaries[name]) return;
+            const s = getDictSettings(name);
+            const names = activeLangIdx(s).map(i => s.langs[i].n.toLowerCase());
+            const example = names.join(' — ');
+            document.getElementById('bulkImportHint').textContent = `Формат строки: ${example} [Категория]. Пропустить язык можно пустым местом между тире.`;
+            document.getElementById('bulkImportText').placeholder = `${example}\n[Категория] ${example}`;
+        }
+
+        function parseLine(line, defaultCategory, opts) {
+            opts = opts || {};
+            const hasThird = !!opts.hasThird;
+            const thirdArabic = !!opts.thirdArabic;
             line = line.trim();
             if (!line) return null;
             let category = null;
@@ -2642,11 +3365,25 @@
             const separators = ['—', '→', '⇒', '-', ':'];
             for (const sep of separators) {
                 const idx = processedLine.indexOf(sep);
-                if (idx !== -1) {
+                if (idx === -1) continue;
+                if (!hasThird) {
                     const word = processedLine.substring(0, idx).trim();
                     const meaning = processedLine.substring(idx + sep.length).trim();
-                    if (word && meaning) return { word, meaning, category };
+                    if (word && meaning) return { word, meaning, meaning2: '', category };
+                    continue;
                 }
+                // Три языка: слово — перевод — третий язык
+                const parts = processedLine.split(sep).map(p => p.trim());
+                const word = parts[0];
+                if (!word) continue;
+                let meaning = parts[1] || '';
+                let meaning2 = parts.slice(2).filter(Boolean).join(` ${sep} `).trim();
+                // «aç — جوعان»: если третий язык арабский, а во втором поле только арабские буквы — это третий язык
+                if (parts.length === 2 && thirdArabic && ARABIC_RE.test(meaning) && !CYRILLIC_RE.test(meaning)) {
+                    meaning2 = meaning;
+                    meaning = '';
+                }
+                if (meaning || meaning2) return { word, meaning, meaning2, category };
             }
             return null;
         }
@@ -2657,31 +3394,40 @@
             const defaultCategory = document.getElementById('bulkImportCategory').value.trim() || 'Общее';
             if (!text.trim()) return alert('Вставьте список слов для импорта');
 
+            const settings = getDictSettings(targetDictionary);
+            const hasThird = !!settings.langs[2];
+            const thirdArabic = hasThird && /^ar/i.test(settings.langs[2].c || '');
             const lines = text.split('\n');
-            const existingWords = new Set(data.dictionaries[targetDictionary].map(w => w.word.toLowerCase().trim()));
+            const existingWords = new Map();
+            data.dictionaries[targetDictionary].forEach(w => existingWords.set((w.word || '').toLowerCase().trim(), w));
             bulkImportParsedData = [];
             bulkImportTargetDictionary = targetDictionary;
             lines.forEach((line, index) => {
                 const trimmed = line.trim();
                 if (!trimmed) return;
-                const parsed = parseLine(line, defaultCategory);
+                const parsed = parseLine(line, defaultCategory, { hasThird, thirdArabic });
                 const id = Date.now() + index + Math.random();
                 if (parsed) {
-                    const isDuplicate = existingWords.has(parsed.word.toLowerCase().trim());
+                    const key = parsed.word.toLowerCase().trim();
+                    const existing = existingWords.get(key);
+                    let status = 'new';
+                    if (existing) status = (hasThird && parsed.meaning2 && !existing.meaning2) ? 'fill' : 'duplicate';
                     bulkImportParsedData.push({
                         id,
                         word: parsed.word,
                         meaning: parsed.meaning,
+                        meaning2: parsed.meaning2 || '',
                         category: parsed.category,
                         targetDictionary,
-                        status: isDuplicate ? 'duplicate' : 'new'
+                        status
                     });
-                    existingWords.add(parsed.word.toLowerCase().trim());
+                    if (!existing || status === 'fill') existingWords.set(key, { meaning2: parsed.meaning2 || '' });
                 } else {
                     bulkImportParsedData.push({
                         id,
                         word: trimmed,
                         meaning: '',
+                        meaning2: '',
                         category: '',
                         targetDictionary,
                         status: 'error'
@@ -2699,27 +3445,32 @@
 
         function renderBulkImportPreview() {
             const newCount = bulkImportParsedData.filter(i => i.status === 'new').length;
+            const fillCount = bulkImportParsedData.filter(i => i.status === 'fill').length;
             const dupCount = bulkImportParsedData.filter(i => i.status === 'duplicate').length;
             const errCount = bulkImportParsedData.filter(i => i.status === 'error').length;
             const categories = [...new Set(bulkImportParsedData.filter(i => i.category).map(i => i.category))];
+            const thirdName = langName(2, getDictSettings(bulkImportTargetDictionary));
 
             document.getElementById('bulkImportSummary').innerHTML = `
                 <p style="color: var(--ios-text-secondary); font-size: 14px; margin-bottom: 4px;"><strong style="color: var(--ios-blue);">Словарь:</strong> ${escapeHtml(bulkImportTargetDictionary)}</p>
                 ${categories.length ? `<p style="color: var(--ios-text-secondary); font-size: 14px; margin-bottom: 12px;"><strong style="color: var(--ios-purple);">Категории:</strong> ${escapeHtml(categories.join(', '))}</p>` : '<div style="margin-bottom: 8px;"></div>'}
                 <div style="display: flex; gap: 8px; margin-bottom: 14px;">
                     <span style="flex: 1; text-align: center; color: var(--ios-green); font-weight: 600; font-size: 13px; background: var(--ios-fill); padding: 6px 8px; border-radius: 10px;">Новых: ${newCount}</span>
+                    ${fillCount ? `<span style="flex: 1; text-align: center; color: var(--ios-blue); font-weight: 600; font-size: 13px; background: var(--ios-fill); padding: 6px 8px; border-radius: 10px;">Дополнить: ${fillCount}</span>` : ''}
                     <span style="flex: 1; text-align: center; color: var(--ios-orange); font-weight: 600; font-size: 13px; background: var(--ios-fill); padding: 6px 8px; border-radius: 10px;">Дублей: ${dupCount}</span>
                     <span style="flex: 1; text-align: center; color: var(--ios-red); font-weight: 600; font-size: 13px; background: var(--ios-fill); padding: 6px 8px; border-radius: 10px;">Ошибок: ${errCount}</span>
                 </div>`;
 
-            const dotColor = { new: 'var(--ios-green)', duplicate: 'var(--ios-orange)', error: 'var(--ios-red)' };
+            const dotColor = { new: 'var(--ios-green)', fill: 'var(--ios-blue)', duplicate: 'var(--ios-orange)', error: 'var(--ios-red)' };
 
             document.getElementById('bulkImportPreview').innerHTML = bulkImportParsedData.map(item => {
+                const trans = [item.meaning, item.meaning2].filter(Boolean).map(fieldSpanHtml).join('');
                 const bodyHtml = item.status === 'error'
                     ? `<div class="compact-word">${escapeHtml(item.word)}</div><div class="compact-meaning" style="text-align: left; color: var(--ios-red);">Не удалось распознать строку</div>`
-                    : `<div class="compact-word">${escapeHtml(item.word)}</div>
-                       <div class="compact-meaning" style="text-align: left;">${escapeHtml(item.meaning)}</div>
-                       ${item.category ? `<div style="display:inline-block; margin-top: 4px; font-size: 12px; font-weight: 600; color: var(--ios-purple);">${escapeHtml(item.category)}</div>` : ''}`;
+                    : `<div class="compact-word" dir="auto">${escapeHtml(item.word)}</div>
+                       <div class="compact-meaning meaning-multi" style="text-align: left; justify-content: flex-start; max-width: none;">${trans}</div>
+                       ${item.category ? `<div style="display:inline-block; margin-top: 4px; font-size: 12px; font-weight: 600; color: var(--ios-purple);">${escapeHtml(item.category)}</div>` : ''}
+                       ${item.status === 'fill' ? `<div style="margin-top: 4px; font-size: 12px; font-weight: 600; color: var(--ios-blue);">Дополнит слово: ${escapeHtml(thirdName)}</div>` : ''}`;
                 return `
                 <div class="compact-item" style="margin-bottom: 6px; border-radius: 12px; align-items: flex-start;">
                     <div style="display: flex; gap: 10px; align-items: flex-start; flex: 1; min-width: 0;">
@@ -2740,7 +3491,8 @@
         
         function confirmBulkImport() {
             const newWords = bulkImportParsedData.filter(item => item.status === 'new');
-            if (newWords.length === 0) return alert('Нет новых слов для добавления.');
+            const fillItems = bulkImportParsedData.filter(item => item.status === 'fill');
+            if (newWords.length === 0 && fillItems.length === 0) return alert('Нет новых слов для добавления.');
 
             const targetDictionary = bulkImportTargetDictionary;
             const now = new Date().toISOString();
@@ -2749,6 +3501,7 @@
                     id: Date.now() + index,
                     word: item.word,
                     meaning: item.meaning,
+                    meaning2: item.meaning2 || '',
                     category: item.category.trim() || 'Общее',
                     notes: '',
                     image: null,
@@ -2758,9 +3511,17 @@
                 });
             });
 
+            // Слова, которые уже есть: добавляем только недостающий третий язык, остальное не трогаем
+            let filled = 0;
+            fillItems.forEach(item => {
+                const key = item.word.toLowerCase().trim();
+                const w = data.dictionaries[targetDictionary].find(x => (x.word || '').toLowerCase().trim() === key);
+                if (w && !w.meaning2) { w.meaning2 = item.meaning2; filled++; }
+            });
+
             saveData();
-            const skipped = bulkImportParsedData.length - newWords.length;
-            alert(`Добавлено ${newWords.length} слов.${skipped ? ` Пропущено (дубли/ошибки): ${skipped}.` : ''}`);
+            const skipped = bulkImportParsedData.length - newWords.length - fillItems.length;
+            alert(`Добавлено ${newWords.length} слов.${filled ? ` Дополнено: ${filled}.` : ''}${skipped ? ` Пропущено (дубли/ошибки): ${skipped}.` : ''}`);
             closeBulkImport();
             updateStats();
             updateCategories();
@@ -2769,7 +3530,7 @@
 
         /* Экспорт / Импорт JSON */
         async function exportAllDictionaries() {
-            const content = JSON.stringify({ allDictionaries: true, dictionaries: data.dictionaries, rules: data.rules || [], exportDate: new Date().toISOString() }, null, 2);
+            const content = JSON.stringify({ allDictionaries: true, dictionaries: data.dictionaries, dictSettings: data.dictSettings || {}, rules: data.rules || [], exportDate: new Date().toISOString() }, null, 2);
             const suggestedName = `Личный_словарь_${new Date().toISOString().split('T')[0]}.json`;
             const blob = new Blob([content], {type: 'application/json'});
             const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = suggestedName; link.click(); URL.revokeObjectURL(link.href);
@@ -2778,7 +3539,7 @@
         async function exportCurrentDictionary() {
             const dictName = data.currentDictionary;
             const words = data.dictionaries[dictName] || [];
-            const content = JSON.stringify({ name: dictName, words: words, exportDate: new Date().toISOString() }, null, 2);
+            const content = JSON.stringify({ name: dictName, languages: getDictSettings(dictName).langs.filter(Boolean), words: words, exportDate: new Date().toISOString() }, null, 2);
             const safeName = dictName.replace(/[\\/:*?"<>|]/g, '_');
             const suggestedName = `${safeName}_${new Date().toISOString().split('T')[0]}.json`;
             const blob = new Blob([content], {type: 'application/json'});
@@ -2800,36 +3561,53 @@
                             const ok = confirm(`Это резервная копия ВСЕХ словарей (${dictCount} словарей, ${wordCount} слов).\n\nОна полностью заменит все словари, которые сейчас есть на телефоне. Текущие данные будут удалены безвозвратно.\n\nПродолжить?`);
                             if (!ok) return;
                             data.dictionaries = imported.dictionaries;
+                            data.dictSettings = imported.dictSettings || {};
                             data.rules = imported.rules || [];
+                            if (!data.dictionaries[data.currentDictionary]) data.currentDictionary = Object.keys(data.dictionaries)[0];
+                            normalizeQuizPair();
                         } else if (imported.name && Array.isArray(imported.words)) {
                             // Слияние словаря вместо полной перезаписи: новые слова добавляются,
                             // у уже существующих (по совпадению названия слова) рейтинг/прогресс не трогаем
-                            if (!data.dictionaries[imported.name]) data.dictionaries[imported.name] = [];
+                            if (!data.dictionaries[imported.name]) {
+                                data.dictionaries[imported.name] = [];
+                                // Новый словарь получает языки из файла
+                                if (Array.isArray(imported.languages) && imported.languages.length >= 2) {
+                                    setDictSettings(imported.name, normalizeDictSettings({ langs: imported.languages, show: [true, true, true] }, imported.name));
+                                }
+                            }
                             const target = data.dictionaries[imported.name];
-                            const existingKeys = new Set(target.map(w => (w.word || '').toLowerCase().trim()));
+                            const existingByKey = new Map(target.map(w => [(w.word || '').toLowerCase().trim(), w]));
                             const now = new Date().toISOString();
-                            let added = 0, skipped = 0;
+                            let added = 0, skipped = 0, filled = 0;
                             imported.words.forEach(w => {
                                 const key = (w.word || '').toLowerCase().trim();
                                 if (!key) return;
-                                if (existingKeys.has(key)) { skipped++; return; }
-                                target.push({
+                                const ex = existingByKey.get(key);
+                                if (ex) {
+                                    if (w.meaning2 && !ex.meaning2) { ex.meaning2 = w.meaning2; filled++; }
+                                    else skipped++;
+                                    return;
+                                }
+                                const nw = {
                                     id: Date.now() + Math.random(),
                                     word: w.word,
                                     meaning: w.meaning || '',
+                                    meaning2: w.meaning2 || '',
                                     category: w.category || 'Общее',
                                     notes: '',
                                     image: null,
                                     createdAt: now,
                                     lastReviewed: null,
                                     score: null
-                                });
-                                existingKeys.add(key);
+                                };
+                                target.push(nw);
+                                existingByKey.set(key, nw);
                                 added++;
                             });
                             data.currentDictionary = imported.name;
+                            normalizeQuizPair();
                             saveData(); renderMainContent(); updateStats(); updateCategories();
-                            alert(`Добавлено новых слов: ${added}.${skipped ? ` Уже было в словаре (рейтинг сохранён): ${skipped}.` : ''}`);
+                            alert(`Добавлено новых слов: ${added}.${filled ? ` Дополнено переводом: ${filled}.` : ''}${skipped ? ` Уже было в словаре (рейтинг сохранён): ${skipped}.` : ''}`);
                             return;
                         }
                         saveData(); renderMainContent(); updateStats(); updateCategories(); alert('Импорт завершён');
@@ -2844,14 +3622,13 @@
         function exportToCSV() {
             const words = getCurrentWords();
             if (words.length === 0) return alert('Словарь пуст');
-            let csvContent = '\uFEFFСлово;Перевод;Категория;Заметки\n';
+            const s = getDictSettings();
+            const includeThird = !!s.langs[2] || words.some(w => w.meaning2);
+            const q = v => `"${(v || '').replace(/"/g, '""')}"`;
+            let csvContent = '\uFEFF' + [s.langs[0].n, s.langs[1].n, 'Категория', 'Заметки'].concat(includeThird ? [s.langs[2] ? s.langs[2].n : 'Третий язык'] : []).join(';') + '\n';
             words.forEach(w => {
-                const row = [
-                    `"${(w.word || '').replace(/"/g, '""')}"`,
-                    `"${(w.meaning || '').replace(/"/g, '""')}"`,
-                    `"${(w.category || 'Общее').replace(/"/g, '""')}"`,
-                    `"${(w.notes || '').replace(/"/g, '""')}"`
-                ];
+                const row = [q(w.word), q(w.meaning), q(w.category || 'Общее'), q(w.notes)];
+                if (includeThird) row.push(q(w.meaning2));
                 csvContent += row.join(';') + '\n';
             });
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -2875,9 +3652,9 @@
                     try {
                         const text = ev.target.result;
                         const lines = text.split('\n');
-                        let count = 0;
+                        let count = 0, filled = 0;
                         const words = getCurrentWords();
-                        const existing = new Set(words.map(w => w.word.toLowerCase().trim()));
+                        const existing = new Map(words.map(w => [w.word.toLowerCase().trim(), w]));
                         const now = new Date().toISOString();
 
                         for (let i = 1; i < lines.length; i++) {
@@ -2890,23 +3667,31 @@
                                 const meaning = parts[1];
                                 const category = parts[2] || 'Общее';
                                 const notes = parts[3] || '';
-                                if (word && meaning && !existing.has(word.toLowerCase().trim())) {
-                                    words.push({
+                                const meaning2 = parts[4] || '';
+                                if (!word || (!meaning && !meaning2)) continue;
+                                const key = word.toLowerCase().trim();
+                                const ex = existing.get(key);
+                                if (!ex) {
+                                    const nw = {
                                         id: Date.now() + i,
-                                        word, meaning, category, notes,
+                                        word, meaning, meaning2, category, notes,
                                         image: null, createdAt: now, lastReviewed: null, score: null
-                                    });
-                                    existing.add(word.toLowerCase().trim());
+                                    };
+                                    words.push(nw);
+                                    existing.set(key, nw);
                                     count++;
+                                } else if (meaning2 && !ex.meaning2) {
+                                    ex.meaning2 = meaning2;
+                                    filled++;
                                 }
                             }
                         }
-                        if (count > 0) {
+                        if (count > 0 || filled > 0) {
                             setCurrentWords(words);
                             updateStats();
                             updateCategories();
                             renderMainContent();
-                            alert(`Успешно импортировано ${count} слов из CSV`);
+                            alert(`Успешно импортировано ${count} слов из CSV${filled ? `, дополнено переводом: ${filled}` : ''}`);
                         } else {
                             alert('Новых слов не обнаружено');
                         }
@@ -2922,7 +3707,11 @@
         function escapeHtml(text) { if (text === null || text === undefined) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
         function openQuizScreen() {
+            quizAdvanceSeq++;
+            gtDispose();
+            if (typeof matchingData !== 'undefined' && matchingData.timerInterval) clearInterval(matchingData.timerInterval);
             quizData = { correct: 0, wrong: 0, learnedCount: 0, currentWord: null, options: [], direction: 'wordToMeaning', wordQueue: [], wrongWords: [], isRetryMode: false, isFinished: false, lastState: null, nextTimeout: null };
+            loadQuizPrefs(); quizData.direction = quizHowDirection();
             customTestPool = null; lastStatusForPicker = null; selectedPoolFilter = 'all'; loadSessionWordIds();
             document.getElementById('quizStartScreen').classList.remove('hidden');
             document.getElementById('quizSessionPreviewScreen').classList.add('hidden');
@@ -2931,7 +3720,7 @@
             document.getElementById('quizMatchingScreen').classList.add('hidden');
             document.getElementById('quizFlashcardsScreen').classList.add('hidden');
             document.getElementById('quizResultsScreen').classList.add('hidden');
-            fillQuizCategorySelect(); updateQuizCounter(); updateQuizDirectionButtons(); updateQuizStats();
+            fillQuizCategorySelect(); refreshQuizLanguageUI(); updateQuizCounter(); updateQuizDirectionButtons(); updateQuizStats();
             setQuizMode(quizMode);
         }
 
@@ -2960,16 +3749,11 @@
         }
         function setQuizCount(count) {
             quizCount = count === 'all' ? Infinity : count;
-            document.querySelectorAll('#quantitySection .quiz-mode-btn[data-count]').forEach(btn => btn.classList.toggle('active', btn.dataset.count === String(count)));
+            saveQuizPrefs();
+            refreshQuizLanguageUI();
             updateQuizCounter();
         }
-        function setQuizDirection(direction) { quizData.direction = direction; updateQuizDirectionButtons(); }
-        function updateQuizDirectionButtons() {
-            document.getElementById('dirWordToMeaning').classList.toggle('active', quizData.direction === 'wordToMeaning');
-            document.getElementById('dirMeaningToWord').classList.toggle('active', quizData.direction === 'meaningToWord');
-            document.getElementById('dirMixed').classList.toggle('active', quizData.direction === 'mixed');
-            document.getElementById('dirListening').classList.toggle('active', quizData.direction === 'listening');
-        }
+        function updateQuizDirectionButtons() { refreshQuizLanguageUI(); }
         function fillQuizCategorySelect() {
             const select = document.getElementById('quizCategorySelect');
             const categories = [...new Set(getCurrentWords().map(w => w.category || 'Общее'))];
@@ -2977,7 +3761,7 @@
         }
         
         function getWordsForQuiz() {
-            if (customTestPool) return [...customTestPool].sort(() => 0.5 - Math.random());
+            if (customTestPool) return customTestPool.filter(hasPair).sort(() => 0.5 - Math.random());
             let pool = getAllPoolWords().filter(w => !sessionWordIds.includes(w.id));
             if (selectedPoolFilter === 'weak') pool = pool.sort((a, b) => (a.score || 0) - (b.score || 0));
             return pool.sort(() => 0.5 - Math.random()).slice(0, quizCount);
@@ -3014,7 +3798,7 @@
             // Если слов нет вообще
             if (available.length === 0) {
                 counter.innerHTML = allPool.length === 0 ? 
-                    `<span style="color: var(--ios-orange);">В разделе "${filterName}" нет слов</span>` : 
+                    `<span style="color: var(--ios-orange);">В разделе "${filterName}" нет слов${(quizPair.q === 2 || quizPair.a === 2) ? ' с заполненным языком «' + escapeHtml(langName(2)) + '»' : ''}</span>` : 
                     `<span style="color: var(--ios-green);">Все слова раздела "${filterName}" пройдены (${allPool.length})</span>`;
             } else {
                 // Красивый индикатор прогресса круга
@@ -3105,8 +3889,10 @@
         
         function startTestWithDirection(direction) {
             if (!customTestPool || customTestPool.length < 4) return alert('Недостаточно слов');
-            const targetCount = pickerCount === Infinity ? customTestPool.length : pickerCount;
-            const chosen = [...customTestPool].sort(() => 0.5 - Math.random()).slice(0, targetCount);
+            const pairPool = customTestPool.filter(hasPair);
+            if (pairPool.length < 4) return alert(`Нужно минимум 4 слова с заполненными языками пары. Доступно: ${pairPool.length}`);
+            const targetCount = pickerCount === Infinity ? pairPool.length : pickerCount;
+            const chosen = [...pairPool].sort(() => 0.5 - Math.random()).slice(0, targetCount);
 
             quizData = { 
                 correct: 0, wrong: 0, learnedCount: 0, currentWord: null, options: [], 
@@ -3117,13 +3903,16 @@
             document.getElementById('quizDirectionPickerScreen').classList.add('hidden');
             document.getElementById('quizGameScreen').classList.remove('hidden');
             updateQuizScore();
+            beginQuizTimer();
             showNextWord();
         }
 
         function startPreviewFromPicker() {
             if (!customTestPool || customTestPool.length === 0) return alert('Нет слов');
-            const targetCount = pickerCount === Infinity ? customTestPool.length : pickerCount;
-            const chosen = [...customTestPool].slice(0, targetCount);
+            const pairPool = customTestPool.filter(hasPair);
+            if (pairPool.length === 0) return alert('Нет слов с заполненными языками пары');
+            const targetCount = pickerCount === Infinity ? pairPool.length : pickerCount;
+            const chosen = [...pairPool].slice(0, targetCount);
             flashcardsData = { queue: chosen, currentIndex: 0, returnToPicker: true };
             document.getElementById('quizDirectionPickerScreen').classList.add('hidden');
             document.getElementById('quizFlashcardsScreen').classList.remove('hidden');
@@ -3144,6 +3933,7 @@
             document.getElementById('quizSessionPreviewScreen').classList.add('hidden');
             document.getElementById('quizGameScreen').classList.remove('hidden');
             updateQuizScore(); 
+            beginQuizTimer();
             showNextWord();
         }
 
@@ -3170,7 +3960,9 @@
                     В этом разделе пока нет слов
                 </div>`;
             } else {
-                filtered.sort((a, b) => a.word.toLowerCase().localeCompare(b.word.toLowerCase(), 'ru'));
+                const sortIdx = visibleLangIdx()[0];
+                const sortKey = w => (getField(w, sortIdx) || w.word || '').toLowerCase();
+                filtered.sort((a, b) => sortKey(a).localeCompare(sortKey(b), 'ru'));
                 document.getElementById('wordsListModalContent').innerHTML = '<div class="compact-list">' + filtered.map((word, idx) => {
                     const hasErrors = isWeakWord(word);
                     const delay = (Math.min(idx, 14) * 0.035).toFixed(3);
@@ -3178,16 +3970,7 @@
                         <div class="swipe-item-actions" onclick="deleteWord(${word.id}); openWordsListModal('${status}');">
                             <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                         </div>
-                        <div class="compact-item ${hasErrors ? 'has-errors' : ''}" onclick="closeWordsListModal(); showWordDetail(${word.id});">
-                            <div class="compact-word">
-                                ${hasErrors ? '<div class="compact-error-dot"></div>' : ''}
-                                <span class="compact-audio-btn" onclick="speakWord('${escapeHtml(word.word)}'); event.stopPropagation();">
-                                    <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-                                </span>
-                                ${escapeHtml(word.word)}
-                            </div>
-                            <div class="compact-meaning">${escapeHtml(word.meaning)}</div>
-                        </div>
+                        <div class="compact-item ${hasErrors ? 'has-errors' : ''}" onclick="closeWordsListModal(); showWordDetail(${word.id});">${wordRowInnerHtml(word)}</div>
                     </div>`;
                 }).join('') + '</div>';
                 initSwipeListeners();
@@ -3233,9 +4016,9 @@
                 <div class="compact-item" style="padding: 10px 14px;">
                     <div class="compact-word">
                         <span style="font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: ${scoreCol}; background: var(--ios-fill); padding: 2px 6px; border-radius: 6px; min-width: 22px; text-align: center; margin-right: 8px;">${scoreDisp}</span>
-                        ${escapeHtml(fresh.word)}
+                        <span dir="auto">${escapeHtml(getField(fresh, quizPair.q))}</span>
                     </div>
-                    <div class="compact-meaning">${escapeHtml(fresh.meaning)}</div>
+                    <div class="compact-meaning"><span dir="auto">${escapeHtml(getField(fresh, quizPair.a))}</span></div>
                 </div>`;
             }).join('');
         }
@@ -3246,10 +4029,11 @@
             const word = flashcardsData.queue[flashcardsData.currentIndex];
             currentFlashcardWord = word;
             document.getElementById('flashcardProgress').textContent = `Карточка ${flashcardsData.currentIndex + 1} из ${flashcardsData.queue.length}`;
-            document.getElementById('flashcardFrontText').textContent = word.word;
-            document.getElementById('flashcardBackText').textContent = word.meaning;
+            document.getElementById('flashcardFrontText').textContent = getField(word, quizPair.q);
+            document.getElementById('flashcardFrontHint').innerHTML = quizHintInnerHtml(word);
+            document.getElementById('flashcardBackText').textContent = getField(word, quizPair.a);
             document.getElementById('flashcardNotesText').textContent = word.notes ? `Заметка: ${word.notes}` : '';
-            if (autoTts) speakWord(word.word);
+            if (autoTts) speakField(word, quizPair.q);
         }
 
         function nextFlashcard() {
@@ -3269,8 +4053,8 @@
         }
 
         function startCategoryFlashcardsFromHome(category) {
-            const pool = getCurrentWords().filter(w => (w.category || 'Общее') === category);
-            if (pool.length === 0) return alert('В этой категории нет слов');
+            const pool = getCurrentWords().filter(w => (w.category || 'Общее') === category && hasPair(w));
+            if (pool.length === 0) return alert('В этой категории нет слов с заполненными языками пары');
             switchNavTab('quiz');
             document.getElementById('quizStartScreen').classList.add('hidden');
             document.getElementById('quizSessionPreviewScreen').classList.add('hidden');
@@ -3295,6 +4079,7 @@
                 // Главный сценарий: сразу запускаем тест после карточек!
                 document.getElementById('quizGameScreen').classList.remove('hidden');
                 updateQuizScore();
+                beginQuizTimer();
                 showNextWord();
             }
         }
@@ -3318,8 +4103,37 @@
             }
         });
 
+        function renderQuizQuestion(speak) {
+            const w = quizData.currentWord;
+            const dir = quizData.currentDirection;
+            const q = quizPair.q, a = quizPair.a;
+            const scoreDisplay = getScoreDisplay(w);
+            const scoreColor = getScoreColor(w);
+            const scoreBadge = `<span style="position: absolute; top: 12px; left: 14px; font-size: 12px; font-weight: 700; color: ${scoreColor}; background: var(--ios-fill); padding: 3px 8px; border-radius: 8px;">${scoreDisplay}</span>`;
+            const optionsHtml = fieldIdx => quizData.options.map((opt, idx) => `<button class="quiz-option" dir="auto" onclick="checkAnswer(${idx})">${escapeHtml(getField(opt, fieldIdx))}</button>`).join('');
+            const audioBtn = `<span class="compact-audio-btn" style="position: absolute; right: 14px; top: 12px;" onclick="speakById(${w.id}, ${q})"><svg class="svg-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>`;
+
+            if (dir === 'listening') {
+                document.getElementById('quizWord').innerHTML = `${scoreBadge}<span class="compact-audio-btn" style="width: 52px; height: 52px;" onclick="speakById(${w.id}, ${q})"><svg class="svg-icon svg-icon-large" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>`;
+                document.getElementById('quizLabel').textContent = 'Прослушайте и выберите:';
+                document.getElementById('quizOptions').innerHTML = optionsHtml(a);
+                if (speak && autoTts) speakField(w, q);
+            } else if (dir === 'wordToMeaning') {
+                document.getElementById('quizWord').innerHTML = `${scoreBadge}<div class="quiz-word-body"><div dir="auto">${escapeHtml(getField(w, q))}</div>${quizHintHtml(w)}</div>${audioBtn}`;
+                document.getElementById('quizLabel').textContent = `Выберите: ${langName(a)}`;
+                document.getElementById('quizOptions').innerHTML = optionsHtml(a);
+                if (speak && autoTts) speakField(w, q);
+            } else {
+                document.getElementById('quizWord').innerHTML = `${scoreBadge}<div class="quiz-word-body"><div dir="auto">${escapeHtml(getField(w, a))}</div>${quizHintHtml(w)}</div>`;
+                document.getElementById('quizLabel').textContent = `Выберите: ${langName(q)}`;
+                document.getElementById('quizOptions').innerHTML = optionsHtml(q);
+            }
+            document.getElementById('quizProgress').textContent = `Вопрос ${quizData.correct + quizData.wrong + 1} из ${quizData.wordQueue.length + quizData.correct + quizData.wrong + 1}`;
+            document.getElementById('remainingCount').textContent = quizData.wordQueue.length;
+        }
+
         function showNextWord() {
-            if (quizData.wordQueue.length === 0) { showResults(); return; }
+            if (quizData.wordQueue.length === 0) { showResults('win'); return; }
             
             const undoBtn = document.getElementById('btnUndoQuiz');
             undoBtn.style.opacity = quizData.lastState ? '1' : '0.35';
@@ -3331,31 +4145,16 @@
             let direction = quizData.direction === 'mixed' ? (Math.random() > 0.5 ? 'wordToMeaning' : 'meaningToWord') : quizData.direction;
             quizData.currentDirection = direction;
             
-            const allWords = getCurrentWords();
-            const wrongOptions = allWords.filter(w => w.id !== quizData.currentWord.id).sort(() => 0.5 - Math.random()).slice(0, 3);
+            // Варианты ответа берём только из слов, у которых заполнены оба языка пары
+            const allWords = getCurrentWords().filter(hasPair);
+            const cur = quizData.currentWord;
+            // Не берём в варианты слова с таким же переводом, чтобы верных ответов не было два
+            const wrongOptions = allWords
+                .filter(w => w.id !== cur.id && getField(w, quizPair.q) !== getField(cur, quizPair.q) && getField(w, quizPair.a) !== getField(cur, quizPair.a))
+                .sort(() => 0.5 - Math.random()).slice(0, 3);
             quizData.options = [quizData.currentWord, ...wrongOptions].sort(() => 0.5 - Math.random());
             
-            const scoreDisplay = getScoreDisplay(quizData.currentWord);
-            const scoreColor = getScoreColor(quizData.currentWord);
-            const scoreBadge = `<span style="position: absolute; top: 12px; left: 14px; font-size: 12px; font-weight: 700; color: ${scoreColor}; background: var(--ios-fill); padding: 3px 8px; border-radius: 8px;">${scoreDisplay}</span>`;
-
-            if (direction === 'listening') {
-                document.getElementById('quizWord').innerHTML = `${scoreBadge}<span class="compact-audio-btn" style="width: 52px; height: 52px;" onclick="speakWord('${escapeHtml(quizData.currentWord.word)}')"><svg class="svg-icon svg-icon-large" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>`;
-                document.getElementById('quizLabel').textContent = 'Прослушайте и выберите:';
-                document.getElementById('quizOptions').innerHTML = quizData.options.map((opt, idx) => `<button class="quiz-option" onclick="checkAnswer(${idx})">${escapeHtml(opt.meaning)}</button>`).join('');
-                if (autoTts) speakWord(quizData.currentWord.word);
-            } else if (direction === 'wordToMeaning') {
-                document.getElementById('quizWord').innerHTML = `${scoreBadge}${escapeHtml(quizData.currentWord.word)} <span class="compact-audio-btn" style="position: absolute; right: 14px; top: 12px;" onclick="speakWord('${escapeHtml(quizData.currentWord.word)}')"><svg class="svg-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>`;
-                document.getElementById('quizLabel').textContent = 'Выберите перевод:';
-                document.getElementById('quizOptions').innerHTML = quizData.options.map((opt, idx) => `<button class="quiz-option" onclick="checkAnswer(${idx})">${escapeHtml(opt.meaning)}</button>`).join('');
-                if (autoTts) speakWord(quizData.currentWord.word);
-            } else {
-                document.getElementById('quizWord').innerHTML = `${scoreBadge}${escapeHtml(quizData.currentWord.meaning)}`;
-                document.getElementById('quizLabel').textContent = 'Выберите слово:';
-                document.getElementById('quizOptions').innerHTML = quizData.options.map((opt, idx) => `<button class="quiz-option" onclick="checkAnswer(${idx})">${escapeHtml(opt.word)}</button>`).join('');
-            }
-            document.getElementById('quizProgress').textContent = `Вопрос ${quizData.correct + quizData.wrong + 1} из ${quizData.wordQueue.length + quizData.correct + quizData.wrong + 1}`;
-            document.getElementById('remainingCount').textContent = quizData.wordQueue.length;
+            renderQuizQuestion(true);
         }
         
         function checkAnswer(selectedIndex) {
@@ -3389,7 +4188,9 @@
             });
             if (!sessionWordIds.includes(quizData.currentWord.id)) { sessionWordIds.push(quizData.currentWord.id); saveSessionWordIds(); }
 
-            if (autoTts && quizData.currentDirection === 'meaningToWord') { speakWord(quizData.currentWord.word); }
+            // Если вопрос был на языке ответа, произносим слово на языке «Вопрос» и ждём, пока договорит
+            let answerSpeech = null;
+            if (autoTts && quizData.currentDirection === 'meaningToWord') { answerSpeech = speakField(quizData.currentWord, quizPair.q); }
 
             if (isCorrect) {
                 quizData.correct++;
@@ -3430,11 +4231,33 @@
             if (newlyLearned) quizData.learnedCount++;
             updateQuizScore();
             document.getElementById('btnUndoQuiz').style.opacity = '1';
-            quizData.nextTimeout = setTimeout(() => { showNextWord(); }, 140);
+            const seq = ++quizAdvanceSeq;
+            if (gt) gtPause();
+            // Переход к следующему вопросу занимает не больше 1 секунды: ждём, пока договорит ответ (до 0,8 с), плюс короткая пауза
+            const answeredAt = performance.now();
+            const waitBeforeNext = answerSpeech
+                ? Promise.race([answerSpeech, new Promise(r => setTimeout(r, 800))])
+                    .then(() => new Promise(r => setTimeout(r, Math.max(0, Math.min(200, 1000 - (performance.now() - answeredAt))))))
+                : new Promise(r => setTimeout(r, 140));
+            waitBeforeNext
+                .then(() => {
+                    if (seq !== quizAdvanceSeq) return;
+                    if (gt) {
+                        gtResume();
+                        const answered = quizData.correct + quizData.wrong;
+                        if (!gt.expired && answered % TIMER_ROUND === 0 && quizData.wordQueue.length > 0) {
+                            gtRoundDone();
+                            quizData.lastState = null; // через границу раунда вернуться нельзя
+                        }
+                    }
+                    showNextWord();
+                });
         }
 
         function undoQuizStep() {
             if (!quizData.lastState) return;
+            quizAdvanceSeq++;
+            if (gt && !gt.expired) gtResume();
             if (quizData.nextTimeout) clearTimeout(quizData.nextTimeout);
             
             if (quizData.currentWord && quizData.currentWord.id !== quizData.lastState.word.id) {
@@ -3457,28 +4280,11 @@
             updateQuizScore();
             quizData.currentWord = quizData.lastState.word;
             quizData.options = quizData.lastState.options;
+            quizData.currentDirection = quizData.lastState.direction;
             quizData.lastState = null;
             document.getElementById('btnUndoQuiz').style.opacity = '0.35';
             
-            const scoreDisplay = getScoreDisplay(quizData.currentWord);
-            const scoreColor = getScoreColor(quizData.currentWord);
-            const scoreBadge = `<span style="position: absolute; top: 12px; left: 14px; font-size: 12px; font-weight: 700; color: ${scoreColor}; background: var(--ios-fill); padding: 3px 8px; border-radius: 8px;">${scoreDisplay}</span>`;
-
-            if (quizData.currentDirection === 'listening') {
-                document.getElementById('quizWord').innerHTML = `${scoreBadge}<span class="compact-audio-btn" style="width: 52px; height: 52px;" onclick="speakWord('${escapeHtml(quizData.currentWord.word)}')"><svg class="svg-icon svg-icon-large" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>`;
-                document.getElementById('quizLabel').textContent = 'Прослушайте и выберите:';
-                document.getElementById('quizOptions').innerHTML = quizData.options.map((opt, idx) => `<button class="quiz-option" onclick="checkAnswer(${idx})">${escapeHtml(opt.meaning)}</button>`).join('');
-            } else if (quizData.currentDirection === 'wordToMeaning') {
-                document.getElementById('quizWord').innerHTML = `${scoreBadge}${escapeHtml(quizData.currentWord.word)} <span class="compact-audio-btn" style="position: absolute; right: 14px; top: 12px;" onclick="speakWord('${escapeHtml(quizData.currentWord.word)}')"><svg class="svg-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>`;
-                document.getElementById('quizLabel').textContent = 'Выберите перевод:';
-                document.getElementById('quizOptions').innerHTML = quizData.options.map((opt, idx) => `<button class="quiz-option" onclick="checkAnswer(${idx})">${escapeHtml(opt.meaning)}</button>`).join('');
-            } else {
-                document.getElementById('quizWord').innerHTML = `${scoreBadge}${escapeHtml(quizData.currentWord.meaning)}`;
-                document.getElementById('quizLabel').textContent = 'Выберите слово:';
-                document.getElementById('quizOptions').innerHTML = quizData.options.map((opt, idx) => `<button class="quiz-option" onclick="checkAnswer(${idx})">${escapeHtml(opt.word)}</button>`).join('');
-            }
-            document.getElementById('quizProgress').textContent = `Вопрос ${quizData.correct + quizData.wrong + 1} из ${quizData.wordQueue.length + quizData.correct + quizData.wrong + 1}`;
-            document.getElementById('remainingCount').textContent = quizData.wordQueue.length;
+            renderQuizQuestion(false);
         }
 
         function updateQuizScore() {
@@ -3489,9 +4295,19 @@
         function finishQuizEarly() {
             if (!confirm('Завершить тест досрочно?')) return;
             if (quizData.nextTimeout) clearTimeout(quizData.nextTimeout);
-            showResults();
+            showResults('manual');
         }
-        function showResults() {
+        function showResults(reason) {
+            quizAdvanceSeq++;
+            const timerInfo = (gt && gt.kind === 'quiz') ? gtSnapshot() : null;
+            gtDispose();
+            let timerBanner = '';
+            if (timerInfo) {
+                const title = reason === 'timeup' ? 'Время вышло' : (reason === 'manual' ? 'Тест остановлен' : 'Все слова пройдены');
+                const color = reason === 'timeup' ? 'var(--ios-red)' : (reason === 'manual' ? 'var(--ios-orange)' : 'var(--ios-green)');
+                timerBanner = `<div style="font-size: 16px; font-weight: 700; color: ${color}; margin-bottom: 4px;">${title}</div>
+                    <div style="font-size: 14px; color: var(--ios-text-secondary); margin-bottom: 6px;">Время: ${fmtDuration(timerInfo.elapsedMs)}</div>`;
+            }
             const total = quizData.correct + quizData.wrong;
             const percentage = total > 0 ? Math.round(quizData.correct / total * 100) : 0;
             
@@ -3510,12 +4326,12 @@
                             <div class="compact-item">
                                 <div class="compact-word">
                                     <span style="font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: ${scoreCol}; background: var(--ios-fill); padding: 2px 6px; border-radius: 6px; min-width: 22px; text-align: center;">${scoreDisp}</span>
-                                    <span class="compact-audio-btn" onclick="speakWord('${escapeHtml(fresh.word)}'); event.stopPropagation();">
+                                    <span class="compact-audio-btn" onclick="speakById(${fresh.id}, ${quizPair.q}); event.stopPropagation();">
                                         <svg class="svg-icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
                                     </span>
-                                    ${escapeHtml(fresh.word)}
+                                    <span dir="auto">${escapeHtml(getField(fresh, quizPair.q))}</span>
                                 </div>
-                                <div class="compact-meaning">${escapeHtml(fresh.meaning)}</div>
+                                <div class="compact-meaning"><span dir="auto">${escapeHtml(getField(fresh, quizPair.a))}</span></div>
                             </div>`;
                         }).join('')}
                     </div>
@@ -3527,6 +4343,7 @@
 
             document.getElementById('quizResultsScreen').innerHTML = `
                 <div style="font-size: 20px; font-weight: 700; font-family: var(--font-display); margin-bottom: 10px;">Результаты теста</div>
+                ${timerBanner}
                 <div style="font-size: 52px; font-weight: 800; color: var(--ios-blue); font-family: var(--font-mono); margin: 10px 0;">${percentage}%</div>
                 <div style="display: flex; gap: 8px; justify-content: center; margin: 16px 0;">
                     <div class="stat-card" style="flex: 1;"><div class="stat-value" style="color: var(--ios-green);">${quizData.correct}</div><div class="stat-label">Верно</div></div>
@@ -3554,6 +4371,7 @@
             document.getElementById('quizResultsScreen').classList.add('hidden');
             document.getElementById('quizGameScreen').classList.remove('hidden');
             updateQuizScore();
+            beginQuizTimer();
             showNextWord();
         }
 
@@ -3561,22 +4379,68 @@
         function startMatchingQuiz() {
             let pool = getAllPoolWords();
             if (pool.length < 4) return alert('Нужно минимум 4 слова');
+            if (matchingData && matchingData.timerInterval) clearInterval(matchingData.timerInterval);
+            gtDispose();
 
             matchingData = {
                 pool: [...pool].sort(() => 0.5 - Math.random()),
+                total: pool.length,
                 batch: [],
                 leftItems: [], rightItems: [],
                 selectedLeft: null, selectedRight: null,
-                matchedTotal: 0, mistakes: 0,
+                matchedTotal: 0, mistakes: 0, batchMatched: 0,
                 startTime: Date.now(), timerInterval: null, isLocked: false
             };
 
-            if (matchingData.timerInterval) clearInterval(matchingData.timerInterval);
-            matchingData.timerInterval = setInterval(updateMatchingTimer, 1000);
+            document.getElementById('matchingTime').textContent = '00:00';
+            document.getElementById('matchingStopwatch').classList.toggle('hidden', quizTimerOn);
+            if (quizTimerOn) {
+                gtStart(pool.length, 'matching', () => finishMatchingQuiz('timeup'));
+            } else {
+                matchingData.timerInterval = setInterval(updateMatchingTimer, 1000);
+            }
 
             document.getElementById('quizStartScreen').classList.add('hidden');
+            document.getElementById('quizResultsScreen').classList.add('hidden');
             document.getElementById('quizMatchingScreen').classList.remove('hidden');
             loadNextMatchingBatch();
+        }
+
+        function finishMatchingQuiz(reason) {
+            if (typeof reason !== 'string') {
+                if (!confirm('Завершить игру?')) return;
+                reason = 'manual';
+            }
+            const snap = (gt && gt.kind === 'matching') ? gtSnapshot() : null;
+            const elapsed = snap ? snap.elapsedMs : Date.now() - matchingData.startTime;
+            if (matchingData.timerInterval) clearInterval(matchingData.timerInterval);
+            gtDispose();
+
+            const matched = matchingData.matchedTotal;
+            const mistakes = matchingData.mistakes;
+            const total = matchingData.total || matched;
+            const title = reason === 'timeup' ? 'Время вышло' : (reason === 'win' ? 'Все слова сопоставлены' : 'Игра остановлена');
+            const color = reason === 'timeup' ? 'var(--ios-red)' : (reason === 'win' ? 'var(--ios-green)' : 'var(--ios-orange)');
+            document.getElementById('quizResultsScreen').innerHTML = `
+                <div style="font-size: 20px; font-weight: 700; font-family: var(--font-display); margin-bottom: 4px;">Сопоставление</div>
+                <div style="font-size: 16px; font-weight: 700; color: ${color}; margin-bottom: 10px;">${title}</div>
+                <div style="font-size: 52px; font-weight: 800; color: var(--ios-blue); font-family: var(--font-mono); margin: 10px 0;">${matched}<span style="font-size: 22px; color: var(--ios-text-secondary);"> из ${total}</span></div>
+                <div style="display: flex; gap: 8px; justify-content: center; margin: 16px 0;">
+                    <div class="stat-card" style="flex: 1;"><div class="stat-value" style="color: var(--ios-green);">${matched}</div><div class="stat-label">Пар</div></div>
+                    <div class="stat-card" style="flex: 1;"><div class="stat-value" style="color: var(--ios-red);">${mistakes}</div><div class="stat-label">Ошибок</div></div>
+                    <div class="stat-card" style="flex: 1;"><div class="stat-value" style="color: var(--ios-purple);">${fmtDuration(elapsed)}</div><div class="stat-label">Время</div></div>
+                </div>
+                <button class="btn-primary" onclick="restartMatching()">Ещё раз</button>
+                <button class="btn-primary" onclick="openQuizScreen()" style="background: var(--ios-fill); color: var(--ios-text); box-shadow: none; margin-top: 8px;">Назад</button>`;
+            document.getElementById('quizGameScreen').classList.add('hidden');
+            document.getElementById('quizMatchingScreen').classList.add('hidden');
+            document.getElementById('quizFlashcardsScreen').classList.add('hidden');
+            document.getElementById('quizResultsScreen').classList.remove('hidden');
+        }
+
+        function restartMatching() {
+            document.getElementById('quizResultsScreen').classList.add('hidden');
+            startMatchingQuiz();
         }
 
         function updateMatchingTimer() {
@@ -3588,14 +4452,16 @@
 
         function loadNextMatchingBatch() {
             if (matchingData.pool.length === 0) {
-                finishMatchingQuiz();
+                finishMatchingQuiz('win');
                 return;
             }
+            // Закончился раунд из 10 слов: оставшиеся секунды становятся бонусом на следующий раунд
+            if (gt && gt.kind === 'matching' && matchingData.batch.length > 0) gtRoundDone();
 
             const batch = matchingData.pool.splice(0, 10);
             matchingData.batch = batch;
-            matchingData.leftItems = batch.map(w => ({ id: w.id, text: w.word })).sort(() => 0.5 - Math.random());
-            matchingData.rightItems = batch.map(w => ({ id: w.id, text: w.meaning })).sort(() => 0.5 - Math.random());
+            matchingData.leftItems = batch.map(w => ({ id: w.id, text: getField(w, quizPair.q) })).sort(() => 0.5 - Math.random());
+            matchingData.rightItems = batch.map(w => ({ id: w.id, text: getField(w, quizPair.a) })).sort(() => 0.5 - Math.random());
             matchingData.batchMatched = 0;
 
             document.getElementById('matchingProgress').textContent = `Сопоставлено: ${matchingData.matchedTotal} слов (Осталось в очереди: ${matchingData.pool.length + batch.length})`;
@@ -3668,6 +4534,7 @@
         document.getElementById('ruleEditModal').addEventListener('click', function(e) { if (e.target === this) closeRuleEditModal(); });
         document.getElementById('bulkImportRulesModal').addEventListener('click', function(e) { if (e.target === this) closeBulkImportRules(); });
         document.getElementById('fabMenuModal').addEventListener('click', function(e) { if (e.target === this) closeFabMenu(); });
+        document.getElementById('dictSettingsModal').addEventListener('click', function(e) { if (e.target === this) closeDictSettings(); });
     </script>
 </body>
-</html>
+    </html>
