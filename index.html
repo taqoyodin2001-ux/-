@@ -1284,6 +1284,51 @@
         .app-dialog-btn:active { opacity: 0.75; transform: scale(0.98); }
         @keyframes appDialogFade { from { opacity: 0; } to { opacity: 1; } }
         @keyframes appDialogPop { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
+
+        .header-controls { display: flex; align-items: center; gap: 8px; }
+
+        body.sepia-theme {
+            --ios-bg: #F4ECD8; --ios-card: rgba(251, 245, 231, 0.85); --ios-card-solid: #FBF5E7;
+            --ios-card-hover: rgba(240, 230, 205, 0.95); --ios-separator: rgba(92, 70, 40, 0.2);
+            --ios-border: rgba(92, 70, 40, 0.12); --ios-border-bright: rgba(92, 70, 40, 0.25);
+            --ios-text: #4B3B26; --ios-text-secondary: rgba(75, 59, 38, 0.7); --ios-text-tertiary: rgba(75, 59, 38, 0.4);
+            --ios-fill: rgba(120, 90, 50, 0.14); --ios-fill-secondary: rgba(120, 90, 50, 0.09);
+        }
+        body.sepia-theme .ambient-sphere { opacity: 0.25; }
+        body.black-theme {
+            --ios-bg: #000000; --ios-card: rgba(12, 12, 12, 0.8); --ios-card-solid: #0B0B0B;
+            --ios-card-hover: rgba(26, 26, 26, 0.9); --ios-border: rgba(255, 255, 255, 0.08);
+        }
+        body.black-theme .ambient-sphere { display: none; }
+        .theme-card-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+        .theme-card-row + .theme-card-row { margin-top: 14px; }
+        .accent-dots { display: flex; gap: 10px; }
+        .accent-dot { width: 30px; height: 30px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; padding: 0; box-shadow: 0 0 0 2px var(--ios-border); }
+        .accent-dot.active { border-color: var(--ios-text); }
+
+        .theme-card-block { margin-top: 18px; }
+        .theme-card-label { font-size: 15px; font-weight: 600; margin-bottom: 10px; }
+        .accent-dots { display: flex; flex-wrap: wrap; gap: 12px; }
+        .accent-dot { width: 34px; height: 34px; }
+        .lang-menu { position: fixed; z-index: 4501; display: flex; flex-direction: column; gap: 8px; }
+        .lang-menu-item { min-width: 180px; cursor: pointer; }
+        .lang-menu-item.active { outline: 2px solid var(--ios-blue); }
+        .lang-code { font-weight: 800; font-size: 13px; width: 30px; color: var(--ios-blue); }
+
+        body.black-theme {
+            --ios-bg: #000000; --ios-card: rgba(0, 0, 0, 0.85); --ios-card-solid: #000000; --ios-card-hover: rgba(22, 22, 22, 0.9);
+            --ios-border: rgba(255, 255, 255, 0.16); --ios-border-bright: rgba(255, 255, 255, 0.3);
+            --ios-fill: rgba(255, 255, 255, 0.1); --ios-fill-secondary: rgba(255, 255, 255, 0.06); --ios-separator: rgba(255, 255, 255, 0.18);
+        }
+        .lang-menu-btn { display: flex; align-items: center; justify-content: center; border-radius: 50%; cursor: pointer;
+            font-size: 13px; font-weight: 800; color: var(--ios-text); background: var(--ios-card-solid);
+            border: 1.5px solid var(--ios-border-bright); box-shadow: var(--ios-shadow-card); }
+        .lang-menu-btn.active { border-color: var(--ios-blue); color: var(--ios-blue); }
+        body.night-theme {
+            --ios-bg: #0E131C; --ios-card: rgba(26, 34, 48, 0.7); --ios-card-solid: #1A2230; --ios-card-hover: rgba(35, 45, 64, 0.8);
+            --ios-border: rgba(150, 175, 220, 0.14); --ios-separator: rgba(110, 130, 170, 0.3);
+        }
+        html[dir="rtl"] .words-list, html[dir="rtl"] .lang-col-head { direction: ltr; }
     </style>
 </head>
 <body>
@@ -1301,7 +1346,8 @@
                     <h1 id="homeBrandTitle">Личный словарь</h1>
                 </div>
                 <div class="header-controls">
-                    <button class="icon-btn-header" onclick="toggleTheme()" title="Сменить тему">
+                    <button class="icon-btn-header ui-lang-btn" onclick="openLangMenu(this)" style="font-size:13px;font-weight:800;" title="Язык интерфейса"></button>
+                    <button class="icon-btn-header" onclick="openThemeMenu(this)" title="Сменить тему">
                         <svg class="svg-icon theme-toggle-icon" id="themeIcon" viewBox="0 0 24 24"></svg>
                     </button>
                 </div>
@@ -1352,7 +1398,8 @@
                     <h1>Словари</h1>
                 </div>
                 <div class="header-controls">
-                    <button class="icon-btn-header" onclick="toggleTheme()" title="Сменить тему">
+                    <button class="icon-btn-header ui-lang-btn" onclick="openLangMenu(this)" style="font-size:13px;font-weight:800;" title="Язык интерфейса"></button>
+                    <button class="icon-btn-header" onclick="openThemeMenu(this)" title="Сменить тему">
                         <svg class="svg-icon theme-toggle-icon" viewBox="0 0 24 24"></svg>
                     </button>
                 </div>
@@ -1378,7 +1425,8 @@
                     <h1>Изучение</h1>
                 </div>
                 <div class="header-controls">
-                    <button class="icon-btn-header" onclick="toggleTheme()" title="Сменить тему">
+                    <button class="icon-btn-header ui-lang-btn" onclick="openLangMenu(this)" style="font-size:13px;font-weight:800;" title="Язык интерфейса"></button>
+                    <button class="icon-btn-header" onclick="openThemeMenu(this)" title="Сменить тему">
                         <svg class="svg-icon theme-toggle-icon" viewBox="0 0 24 24"></svg>
                     </button>
                 </div>
@@ -1628,7 +1676,8 @@
                     <h1>Настройки</h1>
                 </div>
                 <div class="header-controls">
-                    <button class="icon-btn-header" onclick="toggleTheme()" title="Сменить тему">
+                    <button class="icon-btn-header ui-lang-btn" onclick="openLangMenu(this)" style="font-size:13px;font-weight:800;" title="Язык интерфейса"></button>
+                    <button class="icon-btn-header" onclick="openThemeMenu(this)" title="Сменить тему">
                         <svg class="svg-icon theme-toggle-icon" viewBox="0 0 24 24"></svg>
                     </button>
                 </div>
@@ -1978,7 +2027,7 @@
             overlay.className = 'app-dialog-overlay';
             overlay.setAttribute('role', isConfirm ? 'alertdialog' : 'dialog');
             overlay.innerHTML = '<div class="app-dialog"><div class="app-dialog-msg" dir="auto"></div><div class="app-dialog-actions"></div></div>';
-            overlay.querySelector('.app-dialog-msg').textContent = opts.message;
+            overlay.querySelector('.app-dialog-msg').textContent = trText(opts.message);
             const actions = overlay.querySelector('.app-dialog-actions');
             let done = false;
             function close(result) {
@@ -2690,14 +2739,15 @@
             const icons = document.querySelectorAll('.theme-toggle-icon');
             const sunHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
             const moonHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
-            icons.forEach(icon => { icon.innerHTML = isDay ? sunHTML : moonHTML; });
+            let mode = null; try { mode = themeMode; } catch (e) {}
+            const bookHTML = '<path d="M2 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H2zM22 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8z"></path>';
+            const dotHTML = '<circle cx="12" cy="12" r="7" fill="currentColor"></circle>';
+            icons.forEach(icon => { icon.innerHTML = mode === 'sepia' ? bookHTML : mode === 'black' ? dotHTML : (isDay ? sunHTML : moonHTML); });
         }
         updateThemeIcon();
 
         function toggleTheme() {
-            document.body.classList.toggle('day-theme');
-            try { localStorage.setItem('theme', document.body.classList.contains('day-theme') ? 'day' : 'night'); } catch (e) {}
-            updateThemeIcon();
+            applyTheme(document.body.classList.contains('day-theme') ? 'night' : 'day');
         }
 
         function changeFontSize() {
@@ -4629,6 +4679,227 @@
         document.getElementById('bulkImportRulesModal').addEventListener('click', function(e) { if (e.target === this) closeBulkImportRules(); });
         document.getElementById('fabMenuModal').addEventListener('click', function(e) { if (e.target === this) closeFabMenu(); });
         document.getElementById('dictSettingsModal').addEventListener('click', function(e) { if (e.target === this) closeDictSettings(); });
+    
+        // ===== Язык интерфейса: ru / en / tr / ar =====
+        const I18N = {"Всего слов":["Total words","Toplam kelime","إجمالي الكلمات"],"Сегодня":["Today","Bugün","اليوم"],"За неделю":["This week","Bu hafta","هذا الأسبوع"],"Все":["All","Tümü","الكل"],"Список":["List","Liste","القائمة"],"Правила":["Rules","Kurallar","القواعد"],"Поиск":["Search","Ara","بحث"],"Добавить":["Add","Ekle","إضافة"],"Главная":["Home","Ana sayfa","الرئيسية"],"Словари":["Dictionaries","Sözlükler","القواميس"],"Изучение":["Study","Çalışma","التعلّم"],"Настройки":["Settings","Ayarlar","الإعدادات"],"Личный словарь":["My Dictionary","Kişisel Sözlük","قاموسي الشخصي"],"Создать новый словарь":["Create new dictionary","Yeni sözlük oluştur","إنشاء قاموس جديد"],"Название словаря...":["Dictionary name...","Sözlük adı...","اسم القاموس..."],"Создать":["Create","Oluştur","إنشاء"],"Ваши словари":["Your dictionaries","Sözlükleriniz","قواميسك"],"Изучено":["Learned","Öğrenildi","تم تعلّمها"],"Ошибки":["Mistakes","Hatalar","الأخطاء"],"Новых":["New","Yeni","جديدة"],"Режим тренировки":["Practice mode","Alıştırma modu","وضع التدريب"],"Все слова":["All words","Tüm kelimeler","كل الكلمات"],"По темам":["By topic","Konuya göre","حسب الموضوع"],"Начать":["Start","Başla","ابدأ"],"Назад":["Back","Geri","رجوع"],"← Назад":["← Back","← Geri","رجوع →"],"Оформление":["Appearance","Görünüm","المظهر"],"Размер шрифта":["Font size","Yazı boyutu","حجم الخط"],"Мелкий":["Small","Küçük","صغير"],"Средний":["Medium","Orta","متوسط"],"Крупный":["Large","Büyük","كبير"],"Озвучка":["Speech","Seslendirme","النطق"],"Язык речи по умолчанию":["Default speech language","Varsayılan konuşma dili","لغة النطق الافتراضية"],"Резервная копия (JSON)":["Backup (JSON)","Yedek (JSON)","نسخة احتياطية (JSON)"],"Экспорт всех словарей":["Export all dictionaries","Tüm sözlükleri dışa aktar","تصدير كل القواميس"],"Импорт из телефона":["Import from phone","Telefondan içe aktar","استيراد من الهاتف"],"Таблицы Excel (CSV)":["Excel tables (CSV)","Excel tabloları (CSV)","جداول Excel (CSV)"],"Экспорт в Excel":["Export to Excel","Excel'e aktar","تصدير إلى Excel"],"Импорт из Excel":["Import from Excel","Excel'den içe aktar","استيراد من Excel"],"Удалить слово":["Delete word","Kelimeyi sil","حذف الكلمة"],"Удалить правило":["Delete rule","Kuralı sil","حذف القاعدة"],"Сохранить":["Save","Kaydet","حفظ"],"Редактировать":["Edit","Düzenle","تعديل"],"Завершить":["Finish","Bitir","إنهاء"],"Отмена":["Cancel","İptal","إلغاء"],"Удалить":["Delete","Sil","حذف"],"Сбросить":["Reset","Sıfırla","إعادة ضبط"],"Заменить всё":["Replace all","Hepsini değiştir","استبدال الكل"],"Сменить тему":["Change theme","Temayı değiştir","تغيير السمة"],"Таймер":["Timer","Zamanlayıcı","المؤقّت"],"Подсказка":["Hint","İpucu","تلميح"],"Вперемешку":["Shuffled","Karışık","عشوائي"],"Обычно":["Normal","Normal","عادي"],"На слух":["Listening","Dinleme","بالسماع"],"Смешанный":["Mixed","Karma","مختلط"],"Количество слов":["Number of words","Kelime sayısı","عدد الكلمات"],"Весь рейтинг":["Reset all ratings","Tüm puanları sıfırla","كل التقييمات"],"Изученные → Новые":["Learned → New","Öğrenilen → Yeni","المتعلَّمة ← الجديدة"],"Выберите раздел для изучения":["Choose a section to study","Çalışılacak bölümü seçin","اختر قسمًا للتعلّم"],"Экспресс повторение":["Quick review","Hızlı tekrar","مراجعة سريعة"],"Начать сессию":["Start session","Oturumu başlat","ابدأ الجلسة"],"Список слов":["Word list","Kelime listesi","قائمة الكلمات"],"Настройка теста":["Test setup","Test ayarları","إعداد الاختبار"],"Слово → Перевод":["Word → Translation","Kelime → Çeviri","الكلمة ← الترجمة"],"Перевод → Слово":["Translation → Word","Çeviri → Kelime","الترجمة ← الكلمة"],"Тип теста":["Test type","Test türü","نوع الاختبار"],"🧩 Сопоставление":["🧩 Matching","🧩 Eşleştirme","🧩 مطابقة"],"Категория":["Category","Kategori","التصنيف"],"Заметки":["Notes","Notlar","ملاحظات"],"Слово":["Word","Kelime","الكلمة"],"Перевод":["Translation","Çeviri","الترجمة"],"Вопрос":["Question","Soru","السؤال"],"Ответ":["Answer","Cevap","الجواب"],"Языки":["Languages","Diller","اللغات"],"Как задавать":["How to ask","Nasıl sorulsun","طريقة السؤال"],"Язык интерфейса":["Interface language","Arayüz dili","لغة الواجهة"],"Удалить это слово?":["Delete this word?","Bu kelime silinsin mi?","حذف هذه الكلمة؟"],"Удалить это правило?":["Delete this rule?","Bu kural silinsin mi?","حذف هذه القاعدة؟"],"Завершить игру?":["End the game?","Oyun bitirilsin mi?","إنهاء اللعبة؟"],"Завершить тест досрочно?":["End the test early?","Test erken bitirilsin mi?","إنهاء الاختبار مبكرًا؟"],"Файл JSON сохранён":["JSON file saved","JSON dosyası kaydedildi","تم حفظ ملف JSON"],"Импорт завершён":["Import complete","İçe aktarma tamamlandı","اكتمل الاستيراد"],"Ошибка файла":["File error","Dosya hatası","خطأ في الملف"],"Словарь пуст":["The dictionary is empty","Sözlük boş","القاموس فارغ"],"Статистика сброшена":["Statistics reset","İstatistikler sıfırlandı","تمت إعادة ضبط الإحصائيات"],"Нельзя удалить единственный словарь":["You cannot delete the only dictionary","Tek sözlük silinemez","لا يمكن حذف القاموس الوحيد"],"Введите название словаря":["Enter a dictionary name","Sözlük adını girin","أدخل اسم القاموس"],"Заполните слово и значение":["Fill in the word and its meaning","Kelimeyi ve anlamını doldurun","املأ الكلمة ومعناها"],"Слово уже существует":["The word already exists","Kelime zaten var","الكلمة موجودة بالفعل"],"Файл Excel (CSV) сохранён":["Excel (CSV) file saved","Excel (CSV) dosyası kaydedildi","تم حفظ ملف Excel (CSV)"],"Перенести изученные слова в новые?":["Move learned words to new?","Öğrenilen kelimeler yeniye taşınsın mı?","نقل الكلمات المتعلَّمة إلى الجديدة؟"],"Сбросить весь рейтинг слов и прогресс сессии?":["Reset all word ratings and session progress?","Tüm kelime puanları ve oturum ilerlemesi sıfırlansın mı?","إعادة ضبط كل تقييمات الكلمات وتقدّم الجلسة؟"]};
+        Object.assign(I18N, {"Языки словаря":["Dictionary languages","Sözlük dilleri","لغات القاموس"],"Язык слова":["Word language","Kelime dili","لغة الكلمة"],"Язык перевода":["Translation language","Çeviri dili","لغة الترجمة"],"Третий язык":["Third language","Üçüncü dil","اللغة الثالثة"],"Название языка":["Language name","Dil adı","اسم اللغة"],"Настройки словаря":["Dictionary settings","Sözlük ayarları","إعدادات القاموس"],"Импорт слов":["Import words","Kelime içe aktar","استيراد الكلمات"],"Импорт правил":["Import rules","Kuralları içe aktar","استيراد القواعد"],"Добавить правила":["Add rules","Kural ekle","إضافة قواعد"],"Добавить новые слова":["Add new words","Yeni kelime ekle","إضافة كلمات جديدة"],"Массовый импорт правил":["Bulk rules import","Toplu kural aktarımı","استيراد القواعد دفعة واحدة"],"Список правил":["Rules list","Kural listesi","قائمة القواعد"],"Текст правила":["Rule text","Kural metni","نص القاعدة"],"Тема / Название правила":["Rule topic / title","Kural konusu / başlığı","موضوع / عنوان القاعدة"],"Правило":["Rule","Kural","قاعدة"],"Категория по умолчанию":["Default category","Varsayılan kategori","التصنيف الافتراضي"],"Все категории":["All categories","Tüm kategoriler","كل التصنيفات"],"Название":["Name","Ad","الاسم"],"Предпросмотр":["Preview","Önizleme","معاينة"],"Словарь":["Dictionary","Sözlük","القاموس"],"Значение / Перевод":["Meaning / Translation","Anlam / Çeviri","المعنى / الترجمة"],"Картинка":["Picture","Resim","صورة"],"Выбрать картинку":["Choose picture","Resim seç","اختيار صورة"],"Поменять местами":["Swap","Yer değiştir","تبديل"],"Выберите перевод:":["Choose the translation:","Çeviriyi seçin:","اختر الترجمة:"],"Шаг назад":["Step back","Bir adım geri","خطوة للخلف"],"Дальше →":["Next →","İleri →","التالي ←"],"Бонус":["Bonus","Bonus","مكافأة"],"Осталось:":["Left:","Kalan:","المتبقي:"],"Ошибок:":["Mistakes:","Hata:","الأخطاء:"],"Доступно слов:":["Words available:","Mevcut kelime:","الكلمات المتاحة:"],"Будет в сессии:":["In this session:","Oturumda:","في الجلسة:"],"Слово (нажмите чтобы перевернуть)":["Word (tap to flip)","Kelime (çevirmek için dokunun)","الكلمة (انقر للقلب)"],"Примеры использования...":["Usage examples...","Kullanım örnekleri...","أمثلة على الاستخدام..."],"Опишите правило, исключения и примеры...":["Describe the rule, exceptions and examples...","Kuralı, istisnaları ve örnekleri açıklayın...","صف القاعدة والاستثناءات والأمثلة..."],"например: дом":["e.g. house","örn: ev","مثال: بيت"],"например: Еда":["e.g. Food","örn: Yemek","مثال: طعام"],"Другой…":["Other…","Diğer…","أخرى…"],"Настроить языки текущего словаря":["Set up languages of this dictionary","Bu sözlüğün dillerini ayarla","ضبط لغات هذا القاموس"],"Двойной тап по карточке — посмотреть список слов":["Double-tap a card to see the word list","Kelime listesini görmek için karta çift dokunun","انقر مرتين على البطاقة لعرض قائمة الكلمات"],"40 с на 10 слов, бонус за скорость":["40 s per 10 words, speed bonus","10 kelime için 40 sn, hız bonusu","40 ثانية لكل 10 كلمات، مع مكافأة السرعة"],"Русский":["Russian","Rusça","الروسية"],"Турецкий":["Turkish","Türkçe","التركية"],"Арабский":["Arabic","Arapça","العربية"],"Английский":["English","İngilizce","الإنجليزية"],"Немецкий":["German","Almanca","الألمانية"],"Французский":["French","Fransızca","الفرنسية"],"Испанский":["Spanish","İspanyolca","الإسبانية"],"Озвучка выбирается по языку словаря. «Язык речи по умолчанию» нужен только для языков, которых нет в списке.":["Speech is chosen by the dictionary language. \"Default speech language\" is only needed for languages not in the list.","Seslendirme sözlüğün diline göre seçilir. «Varsayılan konuşma dili» yalnızca listede olmayan diller için gerekir.","يُختار النطق حسب لغة القاموس. «لغة النطق الافتراضية» مطلوبة فقط للغات غير الموجودة في القائمة."],"Слова, рейтинг и уже введённые переводы не удаляются. Язык нужен для названий полей и для озвучки.":["Words, ratings and entered translations are not deleted. The language is used for field names and speech.","Kelimeler, puanlar ve girilmiş çeviriler silinmez. Dil, alan adları ve seslendirme için gereklidir.","لا تُحذف الكلمات والتقييمات والترجمات المُدخلة. اللغة مطلوبة لأسماء الحقول وللنطق."]});
+        Object.assign(I18N, {"Глагол":["Verb","Fiil","فعل"],"Существительное":["Noun","İsim","اسم"],"Прилагательное":["Adjective","Sıfat","صفة"],"Наречие":["Adverb","Zarf","ظرف"],"Местоимение":["Pronoun","Zamir","ضمير"],"Предлог":["Preposition","Edat","حرف جر"],"Союз":["Conjunction","Bağlaç","حرف عطف"],"Числительное":["Numeral","Sayı sıfatı","اسم عدد"],"Частица":["Particle","Parçacık","أداة"],"Междометие":["Interjection","Ünlem","أداة تعجّب"],"Общее":["General","Genel","عام"],"Еда":["Food","Yemek","طعام"],"Семья":["Family","Aile","عائلة"],"Дом":["Home","Ev","منزل"],"Время":["Time","Zaman","وقت"],"Цвета":["Colors","Renkler","ألوان"],"Числа":["Numbers","Sayılar","أرقام"],"Одежда":["Clothes","Giysiler","ملابس"],"Тело":["Body","Vücut","جسم"],"Природа":["Nature","Doğa","طبيعة"],"Животные":["Animals","Hayvanlar","حيوانات"],"Работа":["Work","İş","عمل"],"Учёба":["Study","Eğitim","دراسة"],"Путешествия":["Travel","Seyahat","سفر"],"Город":["City","Şehir","مدينة"],"Погода":["Weather","Hava durumu","طقس"],"Здоровье":["Health","Sağlık","صحة"],"Религия":["Religion","Din","دين"],"Грамматика":["Grammar","Dilbilgisi","قواعد اللغة"],"Фразы":["Phrases","İfadeler","عبارات"],"Приветствия":["Greetings","Selamlar","تحيات"],"Вопросы":["Questions","Sorular","أسئلة"],"Эмоции":["Emotions","Duygular","مشاعر"],"Транспорт":["Transport","Ulaşım","مواصلات"],"Магазин":["Shop","Mağaza","متجر"]});
+        const I18N_PATS = [["^Вопрос (\\d+) из (\\d+)$",["Question $1 of $2","Soru $1 / $2","السؤال $1 من $2"]],["^Карточка (\\d+) из (\\d+)$",["Card $1 of $2","Kart $1 / $2","البطاقة $1 من $2"]],["^Сопоставлено: (\\d+) слов$",["Matched: $1 words","Eşleşen: $1 kelime","تمت مطابقة $1 كلمة"]],["^Будет выбрано слов: (\\d+)$",["Words selected: $1","Seçilecek kelime: $1","الكلمات المختارة: $1"]],["^Добавлено новых слов: (\\d+)\\.$",["New words added: $1.","Eklenen yeni kelime: $1.","أُضيفت كلمات جديدة: $1."]],["^Добавлено (\\d+) слов\\.$",["Added $1 words.","$1 kelime eklendi.","أُضيفت $1 كلمة."]]].map(p => [new RegExp(p[0]), p[1], p[2]]);
+        const UI_LANGS = [['ar', 'العربية'], ['tr', 'Türkçe'], ['ru', 'Русский'], ['en', 'English']];
+        const UI_IDX = { en: 0, tr: 1, ar: 2 };
+        let uiLang = 'ru';
+        try { uiLang = localStorage.getItem('uiLang') || 'ru'; } catch (e) {}
+        if (!UI_LANGS.some(l => l[0] === uiLang)) uiLang = 'ru';
+        function trText0(s) {
+            if (uiLang === 'ru') return s;
+            const k = String(s).trim(), e = I18N[k];
+            if (e) return String(s).replace(k, e[UI_IDX[uiLang]]);
+            for (const [re, tpl, inner] of I18N_PATS) { const m = k.match(re); if (m) return String(s).replace(k, tpl[UI_IDX[uiLang]].replace(/\$(\d)/g, (_, i) => inner ? trInner(m[i]) : m[i])); }
+            return s;
+        }
+
+        Object.assign(I18N, {"Новое слово":["New word","Yeni kelime","كلمة جديدة"],"Редактировать слово":["Edit word","Kelimeyi düzenle","تعديل الكلمة"],"Новое правило":["New rule","Yeni kural","قاعدة جديدة"],"Редактировать правило":["Edit rule","Kuralı düzenle","تعديل القاعدة"]});
+        I18N_PATS.push(...[["^(.+) \\((\\d+) слов\\)$",["$1 ($2 words)","$1 ($2 kelime)","$1 ($2 كلمة)"],false],["^например: (.+)$",["e.g. $1","örn: $1","مثال: $1"],true],["^(.+) \\[Категория\\]$",["$1 [Category]","$1 [Kategori]","$1 [التصنيف]"],true],["^Формат строки: (.+) \\[Категория\\]\\. Пропустить язык можно пустым местом между тире\\.?$",["Line format: $1 [Category]. To skip a language, leave the space between the dashes empty.","Satır biçimi: $1 [Kategori]. Bir dili atlamak için tireler arasını boş bırakın.","صيغة السطر: $1 [التصنيف]. لتخطي لغة اترك المكان فارغًا بين الشرطتين."],true]].map(p => [new RegExp(p[0]), p[1], p[2]]));
+        Object.assign(I18N, {"Итальянский":["Italian","İtalyanca","الإيطالية"],"Португальский":["Portuguese","Portekizce","البرتغالية"],"Персидский":["Persian","Farsça","الفارسية"],"Китайский":["Chinese","Çince","الصينية"],"Японский":["Japanese","Japonca","اليابانية"],"Корейский":["Korean","Korece","الكورية"],"Мелко под вопросом":["Shown small under the question","Sorunun altında küçük yazılır","يظهر بخط صغير تحت السؤال"],"Такое имя уже занято":["This name is already taken","Bu ad zaten kullanılıyor","هذا الاسم مستخدم بالفعل"],"Такой словарь уже есть":["This dictionary already exists","Bu sözlük zaten var","هذا القاموس موجود بالفعل"],"Укажите названия языков":["Enter the language names","Dil adlarını girin","أدخل أسماء اللغات"],"Укажите название третьего языка":["Enter the third language name","Üçüncü dilin adını girin","أدخل اسم اللغة الثالثة"],"Новое":["New","Yeni","جديد"],"Изученные":["Learned","Öğrenilenler","المتعلَّمة"],"Новые":["New","Yeni","الجديدة"],"Картинка выбрана":["Picture selected","Resim seçildi","تم اختيار الصورة"],"Картинка добавлена":["Picture added","Resim eklendi","تمت إضافة الصورة"],"Ничего не найдено":["Nothing found","Hiçbir şey bulunamadı","لم يتم العثور على شيء"],"В словаре пока нет слов":["There are no words in this dictionary yet","Sözlükte henüz kelime yok","لا توجد كلمات في القاموس بعد"],"Правил пока нет":["No rules yet","Henüz kural yok","لا توجد قواعد بعد"],"Заполните тему и текст правила":["Fill in the rule topic and text","Kural konusunu ve metnini doldurun","املأ موضوع القاعدة ونصها"],"Заметки:":["Notes:","Notlar:","ملاحظات:"],"Вставьте список правил для импорта":["Paste a list of rules to import","İçe aktarılacak kural listesini yapıştırın","الصق قائمة القواعد للاستيراد"],"Вставьте список слов для импорта":["Paste a list of words to import","İçe aktarılacak kelime listesini yapıştırın","الصق قائمة الكلمات للاستيراد"],"Не удалось распознать правила.":["Could not recognize the rules.","Kurallar tanınamadı.","تعذّر التعرف على القواعد."],"Не удалось распознать слова.":["Could not recognize the words.","Kelimeler tanınamadı.","تعذّر التعرف على الكلمات."],"Не удалось распознать строку":["Could not recognize the line","Satır tanınamadı","تعذّر التعرف على السطر"],"Нет новых правил для добавления.":["No new rules to add.","Eklenecek yeni kural yok.","لا توجد قواعد جديدة للإضافة."],"Нет новых слов для добавления.":["No new words to add.","Eklenecek yeni kelime yok.","لا توجد كلمات جديدة للإضافة."],"Категории:":["Categories:","Kategoriler:","التصنيفات:"],"Список пуст":["The list is empty","Liste boş","القائمة فارغة"],"Новых слов не обнаружено":["No new words found","Yeni kelime bulunamadı","لم يتم العثور على كلمات جديدة"],"Ошибка чтения CSV файла":["Error reading the CSV file","CSV dosyası okunamadı","خطأ في قراءة ملف CSV"],"Доступно:":["Available:","Mevcut:","المتاح:"],"Нет слов":["No words","Kelime yok","لا توجد كلمات"],"Нет слов с заполненными языками пары":["No words with the pair languages filled in","Çift dilleri dolu kelime yok","لا توجد كلمات بلغتَي الزوج المملوءتين"],"В этой категории нет слов с заполненными языками пары":["No words in this category with the pair languages filled in","Bu kategoride çift dilleri dolu kelime yok","لا توجد كلمات في هذا التصنيف بلغتَي الزوج المملوءتين"],"Недостаточно слов":["Not enough words","Yeterli kelime yok","لا توجد كلمات كافية"],"Нужно минимум 4 слова":["At least 4 words are needed","En az 4 kelime gerekli","يلزم 4 كلمات على الأقل"],"Прослушайте и выберите:":["Listen and choose:","Dinleyin ve seçin:","استمع ثم اختر:"],"Время вышло":["Time's up","Süre doldu","انتهى الوقت"],"Тест остановлен":["Test stopped","Test durduruldu","توقف الاختبار"],"Все слова пройдены":["All words completed","Tüm kelimeler tamamlandı","تم إنهاء كل الكلمات"],"Все слова сопоставлены":["All words matched","Tüm kelimeler eşleşti","تمت مطابقة كل الكلمات"],"Игра остановлена":["Game stopped","Oyun durduruldu","توقفت اللعبة"],"В разделе \"Изученные\" нет слов":["There are no words in \"Learned\"","\"Öğrenilenler\" bölümünde kelime yok","لا توجد كلمات في قسم \"المتعلَّمة\""],"Файл сохранён в «Загрузки». Чтобы отправить его в WhatsApp/Telegram: откройте уведомление о загрузке (или папку «Загрузки»), нажмите на файл и выберите «Поделиться».":["The file was saved to Downloads. To send it via WhatsApp/Telegram: open the download notification (or the Downloads folder), tap the file and choose Share.","Dosya İndirilenler klasörüne kaydedildi. WhatsApp/Telegram ile göndermek için: indirme bildirimini (veya İndirilenler klasörünü) açın, dosyaya dokunun ve Paylaş'ı seçin.","تم حفظ الملف في «التنزيلات». لإرساله عبر واتساب/تيليجرام: افتح إشعار التنزيل (أو مجلد التنزيلات)، اضغط على الملف واختر «مشاركة»."]});
+        I18N_PATS.unshift(...[["^Подсказка: (.+)$",["Hint: $1","İpucu: $1","تلميح: $1"],true],["^Осталось в круге: (\\d+)$",["Left in round: $1","Turda kalan: $1","المتبقي في الجولة: $1"]],["^Бонус \\+(\\d+) с$",["Bonus +$1 s","Bonus +$1 sn","مكافأة +$1 ث"]],["^Найдено правил: (\\d+)$",["Rules found: $1","Bulunan kural: $1","القواعد الموجودة: $1"]],["^Добавлено (\\d+) правил\\.$",["Added $1 rules.","$1 kural eklendi.","أُضيفت $1 قاعدة."]],["^Дополнить: (\\d+)$",["To complete: $1","Tamamlanacak: $1","للإكمال: $1"]],["^Дополнит слово: (.+)$",["Will complete the word: $1","Kelimeyi tamamlayacak: $1","سيُكمل الكلمة: $1"]],["^Словарь \"(.+)\" \\((\\d+) слов\\) сохранён$",["Dictionary \"$1\" ($2 words) saved","\"$1\" sözlüğü ($2 kelime) kaydedildi","تم حفظ القاموس \"$1\" ($2 كلمة)"]],["^Успешно импортировано (\\d+) слов из CSV$",["Imported $1 words from CSV","CSV'den $1 kelime içe aktarıldı","تم استيراد $1 كلمة من CSV"]],["^Успешно импортировано (\\d+) слов из CSV, дополнено переводом: (\\d+)$",["Imported $1 words from CSV, completed with translation: $2","CSV'den $1 kelime aktarıldı, çeviri tamamlandı: $2","تم استيراد $1 كلمة من CSV، وأُكملت ترجمة $2"]],["^Раздел: (.+)$",["Section: $1","Bölüm: $1","القسم: $1"],true],["^В разделе \"(.+)\" нет слов$",["No words in \"$1\"","\"$1\" bölümünde kelime yok","لا توجد كلمات في قسم \"$1\""],true],["^Все слова раздела \"(.+)\" пройдены \\((.+)\\)$",["All words in \"$1\" are completed ($2)","\"$1\" bölümündeki tüm kelimeler tamamlandı ($2)","تم إنهاء كل كلمات قسم \"$1\" ($2)"],true],["^(\\d+) слов перенесено в раздел \"Новые\"$",["$1 words moved to \"New\"","$1 kelime \"Yeni\" bölümüne taşındı","تم نقل $1 كلمة إلى قسم \"الجديدة\""]],["^Нужно минимум 4 слова\\. Доступно: (\\d+)$",["At least 4 words are needed. Available: $1","En az 4 kelime gerekli. Mevcut: $1","يلزم 4 كلمات على الأقل. المتاح: $1"]],["^Нужно минимум 4 слова с заполненными языками пары\\. Доступно: (\\d+)$",["At least 4 words with the pair languages filled in are needed. Available: $1","Çift dilleri dolu en az 4 kelime gerekli. Mevcut: $1","يلزم 4 كلمات على الأقل بلغتَي الزوج المملوءتين. المتاح: $1"]],["^(Изучено|Ошибки|Новые) \\((\\d+)\\)$",["$1 ($2)","$1 ($2)","$1 ($2)"],true],["^Заметка: (.+)$",["Note: $1","Not: $1","ملاحظة: $1"]],["^Выберите: (.+)$",["Choose: $1","Seçin: $1","اختر: $1"]],["^Сопоставлено: (\\d+) слов \\(Осталось в очереди: (\\d+)\\)$",["Matched: $1 words (left in queue: $2)","Eşleşen: $1 kelime (kuyrukta kalan: $2)","تمت مطابقة $1 كلمة (المتبقي في الطابور: $2)"]],["^Дополнено переводом: (\\d+)\\.?$",["Completed with translation: $1.","Çeviri tamamlandı: $1.","أُكملت ترجمة: $1."]],["^Дополнено: (\\d+)\\.$",["Completed: $1.","Tamamlandı: $1.","تم الإكمال: $1."]],["^Пропущено \\(дубли/ошибки\\): (\\d+)\\.$",["Skipped (duplicates/errors): $1.","Atlandı (tekrar/hata): $1.","تم التخطي (مكرر/أخطاء): $1."]],["^Уже было в словаре \\(рейтинг сохранён\\): (\\d+)\\.$",["Already in the dictionary (rating kept): $1.","Zaten sözlükte (puan korundu): $1.","موجودة سابقًا (حُفظ التقييم): $1."]],["^Добавлено новых слов: (\\d+)\\.$",["New words added: $1.","Eklenen yeni kelime: $1.","أُضيفت كلمات جديدة: $1."]],["^Это резервная копия ВСЕХ словарей \\((\\d+) словарей, (\\d+) слов\\)\\.[\\s\\S]*Продолжить\\?$",["This is a backup of ALL dictionaries ($1 dictionaries, $2 words).\n\nIt will completely replace all dictionaries currently on this phone. The current data will be permanently deleted.\n\nContinue?","Bu, TÜM sözlüklerin yedeğidir ($1 sözlük, $2 kelime).\n\nTelefondaki tüm sözlüklerin yerini tamamen alacak. Mevcut veriler kalıcı olarak silinecek.\n\nDevam edilsin mi?","هذه نسخة احتياطية لكل القواميس ($1 قاموسًا، $2 كلمة).\n\nستحل محل كل القواميس الموجودة على هذا الهاتف بالكامل، وسيتم حذف البيانات الحالية نهائيًا.\n\nهل تريد المتابعة؟"]]].map(p => [new RegExp(p[0]), p[1], p[2]]));
+        I18N_PATS.unshift([/^Удалить "(.+)"\?$/, ['Delete "$1"?', '"$1" silinsin mi?', 'حذف "$1"؟']]);
+        const I18N_LOW = {};
+        ['Русский', 'Турецкий', 'Арабский', 'Английский', 'Немецкий', 'Французский', 'Испанский', 'Слово', 'Перевод'].forEach(n => { I18N_LOW[n.toLowerCase()] = I18N[n]; });
+        function trInner(x) {
+            return String(x).split(' — ').map(p => { const k = p.trim(), e = I18N[k] || I18N_LOW[k]; return e ? p.replace(k, e[UI_IDX[uiLang]]) : p; }).join(' — ');
+        }
+        function trText(s) {
+            if (uiLang === 'ru') return s;
+            let out = trText0(s);
+            if (out === s) {
+                if (s.indexOf('\n') > -1) out = s.split('\n').map(l => trText(l)).join('\n');
+                else if (s.indexOf(' — ') > -1) out = trInner(s);
+                else if (/\.\s+\S/.test(s)) out = s.split(/(?<=\.)\s+/).map(x => trText(x)).join(' ');
+            }
+            return uiLang === 'ar' ? out.replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]) : out;
+        }
+        function i18nAttrs(n) {
+            ['placeholder', 'title'].forEach(a => {
+                if (!n.hasAttribute(a)) return;
+                const v = n.getAttribute(a);
+                n.__ra = n.__ra || {};
+                const src = (n.__ra[a] && n.__ra[a].tr === v) ? n.__ra[a].ru : v;
+                const out = trText(src);
+                if (out !== v) { n.__ra[a] = { ru: src, tr: out }; n.setAttribute(a, out); }
+            });
+        }
+        function i18nNode(n) {
+            if (n.nodeType === 3) {
+                const p = n.parentNode;
+                if (!p || /^(SCRIPT|STYLE|TEXTAREA)$/.test(p.nodeName) || (p.closest && p.closest('[dir="auto"]'))) return;
+                const v = n.nodeValue;
+                if (!v.trim()) return;
+                const src = (n.__tr === v) ? n.__ru : v;
+                const out = trText(src);
+                if (out !== v) { n.__ru = src; n.__tr = out; n.nodeValue = out; }
+            } else if (n.nodeType === 1) {
+                if (/^(SCRIPT|STYLE)$/.test(n.nodeName)) return;
+                i18nAttrs(n);
+                n.childNodes.forEach(i18nNode);
+            }
+        }
+        function applyUiLang() {
+            document.documentElement.lang = uiLang;
+            document.documentElement.dir = uiLang === 'ar' ? 'rtl' : 'ltr';
+            i18nNode(document.body);
+            document.title = trText('Личный словарь');
+            document.querySelectorAll('.ui-lang-btn').forEach(b => { b.textContent = uiLang.toUpperCase(); });
+            const sel = document.getElementById('uiLangSelect');
+            if (sel) sel.value = uiLang;
+        }
+        function cycleUiLang() {
+            const i = UI_LANGS.findIndex(l => l[0] === uiLang);
+            setUiLang(UI_LANGS[(i + 1) % UI_LANGS.length][0]);
+        }
+        function setUiLang(code) {
+            uiLang = code;
+            try { localStorage.setItem('uiLang', code); } catch (e) {}
+            applyUiLang();
+        }
+        (function initUiLang() {
+            const page = document.getElementById('pageSettings');
+            if (page) {
+                const card = document.createElement('div');
+                card.className = 'ios-settings-card';
+                card.innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;"><div style="font-size:15px;font-weight:600;">Язык интерфейса</div><select class="form-input" id="uiLangSelect" dir="auto" style="width:auto;min-width:130px;" onchange="setUiLang(this.value)">' + UI_LANGS.map(l => '<option value="' + l[0] + '">' + l[1] + '</option>').join('') + '</select></div>';
+                const first = page.querySelector('.ios-settings-card');
+                if (first) first.parentNode.insertBefore(card, first); else page.appendChild(card);
+            }
+            new MutationObserver(ms => ms.forEach(m => {
+                if (m.type === 'attributes') i18nAttrs(m.target);
+                else if (m.type === 'characterData') i18nNode(m.target);
+                else m.addedNodes.forEach(i18nNode);
+            })).observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['placeholder', 'title'] });
+            applyUiLang();
+        })();
+    
+
+        // ===== Темы: день / ночь / сепия / чёрный / вручную =====
+        const THEMES = ['day', 'night', 'sepia', 'black', 'manual'];
+        const THEME_NAMES = { day: 'День', night: 'Ночь', sepia: 'Сепия', black: 'Чёрный', manual: 'Вручную' };
+        const THEME_BAR = { day: '#F2F2F7', sepia: '#F4ECD8', night: '#0E131C', black: '#000000' };
+        const ACCENTS = { blue: null, teal: ['#25B8D6', '37, 184, 214'], green: ['#2FBF5B', '47, 191, 91'], orange: ['#FF8A00', '255, 138, 0'], red: ['#FF453A', '255, 69, 58'], pink: ['#FF4F8B', '255, 79, 139'], purple: ['#A259F7', '162, 89, 247'], indigo: ['#6E6BF2', '110, 107, 242'] };
+        // [оттенок, насыщенность %, d — тёмный / l — светлый]
+        const BGS = { graphite: [0, 0, 'd'], navy: [220, 40, 'd'], teal: [185, 40, 'd'], green: [140, 35, 'd'], purple: [270, 35, 'd'], wine: [340, 35, 'd'], cool: [215, 45, 'l'], mint: [145, 40, 'l'], warm: [35, 50, 'l'] };
+        let themeMode = 'night', accentName = 'blue', bgName = 'navy';
+        try {
+            let m = localStorage.getItem('themeMode') || localStorage.getItem('theme');
+            if (m === 'auto') m = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'day' : 'night';
+            if (THEMES.includes(m)) themeMode = m;
+            const a = localStorage.getItem('accent'); if (a in ACCENTS) accentName = a;
+            const g = localStorage.getItem('bgColor'); if (g in BGS) bgName = g;
+        } catch (e) {}
+        function bgSwatch(n) { const p = BGS[n]; return 'hsl(' + p[0] + ',' + p[1] + '%,' + (p[2] === 'd' ? 12 : 92) + '%)'; }
+        function applyTheme(mode) {
+            themeMode = mode;
+            try { localStorage.setItem('themeMode', mode); } catch (e) {}
+            const man = mode === 'manual', b = document.body, light = man ? BGS[bgName][2] === 'l' : (mode === 'day' || mode === 'sepia');
+            b.classList.toggle('day-theme', light);
+            b.classList.toggle('sepia-theme', mode === 'sepia');
+            b.classList.toggle('black-theme', mode === 'black');
+            b.classList.toggle('night-theme', mode === 'night');
+            const meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute('content', man ? (light ? '#F2F2F7' : '#000000') : THEME_BAR[mode]);
+            paintCustom();
+            updateThemeIcon();
+            const sel = document.getElementById('themeModeSelect'); if (sel) sel.value = mode;
+            const blocks = document.getElementById('themeManualBlocks'); if (blocks) blocks.style.display = man ? '' : 'none';
+        }
+        function paintCustom() {
+            const man = themeMode === 'manual', b = document.body, c = ACCENTS[accentName], p = BGS[bgName];
+            const set = (k, v) => b.style.setProperty(k, v), clear = k => b.style.removeProperty(k);
+            if (man && c) { set('--ios-blue', c[0]); set('--ios-blue-rgb', c[1]); set('--ios-shadow-glow', '0 8px 24px rgba(' + c[1] + ', 0.35)'); }
+            else ['--ios-blue', '--ios-blue-rgb', '--ios-shadow-glow'].forEach(clear);
+            if (man) {
+                const h = p[0], s = p[1], d = p[2] === 'd';
+                set('--ios-bg', d ? 'hsl(' + h + ',' + s + '%,6%)' : 'hsl(' + h + ',' + s + '%,94%)');
+                set('--ios-card', d ? 'hsla(' + h + ',' + s * 0.8 + '%,11%,0.7)' : 'hsla(' + h + ',' + s + '%,99%,0.75)');
+                set('--ios-card-solid', d ? 'hsl(' + h + ',' + s * 0.8 + '%,11%)' : 'hsl(' + h + ',' + s + '%,99%)');
+                set('--ios-card-hover', d ? 'hsla(' + h + ',' + s * 0.8 + '%,16%,0.8)' : 'hsla(' + h + ',' + s + '%,92%,0.9)');
+            } else ['--ios-bg', '--ios-card', '--ios-card-solid', '--ios-card-hover'].forEach(clear);
+            document.querySelectorAll('.accent-dot[data-accent]').forEach(x => x.classList.toggle('active', x.dataset.accent === accentName));
+            document.querySelectorAll('.accent-dot[data-bg]').forEach(x => x.classList.toggle('active', x.dataset.bg === bgName));
+        }
+        function applyAccent(name) { accentName = name; try { localStorage.setItem('accent', name); } catch (e) {} applyTheme(themeMode); }
+        function applyBg(name) { bgName = name; try { localStorage.setItem('bgColor', name); } catch (e) {} applyTheme(themeMode); }
+        function closeLangMenu() {
+            const o = document.getElementById('langMenuOverlay'); if (o) o.remove();
+            document.querySelectorAll('.header-controls').forEach(p => { p.style.transform = ''; });
+        }
+        // Веер из трёх кружков. slide=true: пара кнопок съезжает внутрь экрана, кружки появляются в освободившемся месте
+        function openFan(btn, spots, slide) {
+            closeLangMenu();
+            const pill = btn.closest('.header-controls') || btn, hdr = btn.closest('.header');
+            const P = pill.getBoundingClientRect(), B = btn.getBoundingClientRect();
+            const s = Math.round(B.height), cy = P.top + P.height / 2;
+            const inward = (P.left + P.width / 2) < window.innerWidth / 2 ? 1 : -1, out = -inward;
+            const nxt = hdr && hdr.nextElementSibling;
+            const lim = nxt ? nxt.getBoundingClientRect().top - 6 : cy + 1.3 * s;   // кружки не заходят на карточки ниже шапки
+            const k = Math.min(1.15 * s, Math.max(0.65 * s, lim - cy - s / 2));
+            let pts;
+            if (slide) {
+                const D = Math.round(2.2 * s), xz = inward < 0 ? P.right - D / 2 : P.left + D / 2;
+                pill.style.transition = 'transform 0.22s ease';
+                pill.style.transform = 'translateX(' + (inward * D) + 'px)';
+                pts = [[xz - out * 0.5 * s, -k], [xz + out * 0.55 * s, 0], [xz - out * 0.5 * s, k]];
+            } else {
+                const bx = B.left + B.width / 2, kk = Math.min(k, 0.8 * s);
+                pts = [[bx + inward * 1.4 * s, -kk], [bx + inward * 2.4 * s, 0], [bx + inward * 1.4 * s, kk]];
+            }
+            const ov = document.createElement('div');
+            ov.id = 'langMenuOverlay';
+            ov.style.cssText = 'position:fixed;inset:0;z-index:4500;';
+            ov.onclick = closeLangMenu;
+            const els = spots.map((sp, i) => {
+                const x = Math.min(Math.max(pts[i][0], 8 + s / 2), window.innerWidth - 8 - s / 2), y = Math.max(cy + pts[i][1], 8 + s / 2);
+                const el = document.createElement('div');
+                el.className = 'lang-menu-btn';
+                el.style.cssText = 'position:fixed;width:' + s + 'px;height:' + s + 'px;left:' + (x - s / 2) + 'px;top:' + (y - s / 2) + 'px;opacity:0;transform:scale(0.4);transition:transform 0.2s ease,opacity 0.2s ease;' + (sp.style || '');
+                if (sp.html) el.innerHTML = sp.html; else el.textContent = sp.text;
+                el.onclick = e => { e.stopPropagation(); closeLangMenu(); sp.run(); };
+                ov.appendChild(el);
+                return el;
+            });
+            document.body.appendChild(ov);
+            requestAnimationFrame(() => els.forEach(e => { e.style.opacity = '1'; e.style.transform = 'scale(1)'; }));
+        }
+        function openLangMenu(btn) {
+            const i = UI_LANGS.findIndex(l => l[0] === uiLang), n = UI_LANGS.length;
+            openFan(btn, [(i + n - 1) % n, (i + 2) % n, (i + 1) % n].map(k => ({ text: UI_LANGS[k][0].toUpperCase(), run: () => setUiLang(UI_LANGS[k][0]) })), false);
+        }
+        const _ico = d => '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>';
+        const THEME_ICONS = {
+            day: { html: _ico('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'), style: 'background:#FFFFFF;color:#1C1C1E;border-color:rgba(0,0,0,0.15);' },
+            night: { html: _ico('<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>'), style: 'background:#1A2230;color:#FFFFFF;' },
+            sepia: { html: _ico('<path d="M2 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H2zM22 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8z"/>'), style: 'background:#F4ECD8;color:#6B4F2A;border-color:rgba(92,70,40,0.35);' },
+            black: { html: _ico('<circle cx="12" cy="12" r="7" fill="currentColor"/>'), style: 'background:#000000;color:#FFFFFF;border-color:rgba(255,255,255,0.5);' }
+        };
+        function openThemeMenu(btn) {
+            const fixed = ['day', 'night', 'sepia', 'black'], i = fixed.indexOf(themeMode), n = fixed.length;
+            const pick = i < 0 ? ['day', 'night', 'sepia'] : [fixed[(i + n - 1) % n], fixed[(i + 2) % n], fixed[(i + 1) % n]];
+            openFan(btn, pick.map(k => ({ html: THEME_ICONS[k].html, style: THEME_ICONS[k].style, run: () => applyTheme(k) })), true);
+        }
+        (function initThemes() {
+            const page = document.getElementById('pageSettings');
+            if (page) {
+                const card = document.createElement('div');
+                card.className = 'ios-settings-card';
+                const dotColor = n => ACCENTS[n] ? ACCENTS[n][0] : '#0A84FF';
+                card.innerHTML = '<div class="theme-card-row"><div style="font-size:15px;font-weight:600;">Тема</div><select class="form-input" id="themeModeSelect" style="width:auto;min-width:130px;" onchange="applyTheme(this.value)">' + THEMES.map(k => '<option value="' + k + '">' + THEME_NAMES[k] + '</option>').join('') + '</select></div>' +
+                    '<div id="themeManualBlocks"><div class="theme-card-block"><div class="theme-card-label">Цвет акцента</div><div class="accent-dots">' + Object.keys(ACCENTS).map(n => '<button type="button" class="accent-dot" data-accent="' + n + '" style="background:' + dotColor(n) + ';" onclick="applyAccent(\'' + n + '\')"></button>').join('') + '</div></div>' +
+                    '<div class="theme-card-block"><div class="theme-card-label">Цвет фона</div><div class="accent-dots">' + Object.keys(BGS).map(n => '<button type="button" class="accent-dot" data-bg="' + n + '" style="background:' + bgSwatch(n) + ';" onclick="applyBg(\'' + n + '\')"></button>').join('') + '</div></div></div>';
+                const first = page.querySelector('.ios-settings-card');
+                if (first) first.parentNode.insertBefore(card, first); else page.appendChild(card);
+            }
+            applyTheme(themeMode);
+        })();
+        Object.assign(I18N, {"Вручную":["Manual","Manuel","يدوي"],"Цвет фона":["Background color","Arka plan rengi","لون الخلفية"],"Тема":["Theme","Tema","السمة"],"Авто":["Auto","Otomatik","تلقائي"],"День":["Day","Gündüz","نهار"],"Ночь":["Night","Gece","ليل"],"Сепия":["Sepia","Sepya","بنّي دافئ"],"Чёрный":["Black","Siyah","أسود"],"Цвет акцента":["Accent color","Vurgu rengi","لون التمييز"]});
+        applyUiLang();
     </script>
 </body>
-    </html>
+                    </html>
