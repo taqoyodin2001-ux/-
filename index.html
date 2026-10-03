@@ -1246,6 +1246,44 @@
         .timer-bar > div { height: 100%; width: 100%; background: var(--ios-blue); border-radius: 3px; transition: width 0.2s linear, background 0.2s ease; }
         .timer-bar > div.low { background: var(--ios-red); }
         .hidden { display: none !important; }
+
+        /* ===== Собственные диалоги приложения (вместо системных alert/confirm) ===== */
+        .app-dialog-overlay {
+            position: fixed; inset: 0; z-index: 5000;
+            display: flex; align-items: center; justify-content: center;
+            padding: 24px;
+            background: rgba(0, 0, 0, 0.55);
+            -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+            animation: appDialogFade 0.15s ease;
+        }
+        .app-dialog {
+            width: 100%; max-width: 340px;
+            background: var(--ios-card-solid);
+            border: 1px solid var(--ios-border-bright);
+            border-radius: 20px;
+            box-shadow: var(--ios-shadow-glass);
+            padding: 22px 20px 16px;
+            color: var(--ios-text);
+            animation: appDialogPop 0.18s ease;
+        }
+        .app-dialog-msg {
+            font-size: 16px; line-height: 1.45; text-align: center;
+            white-space: pre-line; word-break: break-word;
+            user-select: text; -webkit-user-select: text;
+            padding: 4px 4px 18px;
+        }
+        .app-dialog-actions { display: flex; gap: 10px; }
+        .app-dialog-btn {
+            flex: 1; border: none; cursor: pointer;
+            padding: 13px 10px; border-radius: 14px;
+            font-size: 16px; font-weight: 600; font-family: inherit;
+            background: var(--ios-fill); color: var(--ios-text);
+        }
+        .app-dialog-btn.primary { background: var(--ios-blue); color: #fff; }
+        .app-dialog-btn.danger { background: var(--ios-red); color: #fff; }
+        .app-dialog-btn:active { opacity: 0.75; transform: scale(0.98); }
+        @keyframes appDialogFade { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes appDialogPop { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body>
@@ -1924,6 +1962,60 @@
     </div>
 
     <script>
+
+        // ===== Собственные диалоги: убирают системную надпись «Подтвердите действие на ...» =====
+        const _dlgQueue = [];
+        let _dlgActive = false;
+        function appDialog(opts) {
+            return new Promise(resolve => { _dlgQueue.push({ opts, resolve }); _dlgNext(); });
+        }
+        function _dlgNext() {
+            if (_dlgActive || !_dlgQueue.length) return;
+            _dlgActive = true;
+            const { opts, resolve } = _dlgQueue.shift();
+            const isConfirm = !!opts.confirm;
+            const overlay = document.createElement('div');
+            overlay.className = 'app-dialog-overlay';
+            overlay.setAttribute('role', isConfirm ? 'alertdialog' : 'dialog');
+            overlay.innerHTML = '<div class="app-dialog"><div class="app-dialog-msg" dir="auto"></div><div class="app-dialog-actions"></div></div>';
+            overlay.querySelector('.app-dialog-msg').textContent = opts.message;
+            const actions = overlay.querySelector('.app-dialog-actions');
+            let done = false;
+            function close(result) {
+                if (done) return;
+                done = true;
+                document.removeEventListener('keydown', onKey, true);
+                overlay.remove();
+                _dlgActive = false;
+                resolve(result);
+                _dlgNext();
+            }
+            function onKey(e) {
+                if (e.key === 'Escape') { e.preventDefault(); close(isConfirm ? false : true); }
+                else if (e.key === 'Enter') { e.preventDefault(); close(true); }
+            }
+            if (isConfirm) {
+                const cancel = document.createElement('button');
+                cancel.className = 'app-dialog-btn';
+                cancel.textContent = opts.cancelText || 'Отмена';
+                cancel.onclick = () => close(false);
+                actions.appendChild(cancel);
+            }
+            const ok = document.createElement('button');
+            ok.className = 'app-dialog-btn ' + (opts.danger ? 'danger' : 'primary');
+            ok.textContent = opts.okText || 'OK';
+            ok.onclick = () => close(true);
+            actions.appendChild(ok);
+            overlay.addEventListener('click', e => { if (e.target === overlay) close(isConfirm ? false : true); });
+            document.addEventListener('keydown', onKey, true);
+            document.body.appendChild(overlay);
+            ok.focus();
+        }
+        function appConfirm(message, opts) {
+            return appDialog(Object.assign({ message: String(message), confirm: true }, opts || {}));
+        }
+        // Все старые вызовы alert(...) теперь показывают окно приложения
+        window.alert = function (message) { appDialog({ message: String(message) }); };
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./service-worker.js')
@@ -2951,17 +3043,18 @@
             renderMainContent();
         }
 
-        function deleteRule(id) {
-            if (!confirm('Удалить это правило?')) return;
+        async function deleteRule(id) {
+            if (!(await appConfirm('Удалить это правило?', { danger: true, okText: 'Удалить' }))) return;
             data.rules = (data.rules || []).filter(r => r.id !== id);
             saveData();
             updateCategories();
             renderMainContent();
         }
 
-        function deleteRuleFromEdit() {
-            if (!editingRuleId || !confirm('Удалить это правило?')) return;
-            data.rules = (data.rules || []).filter(r => r.id !== editingRuleId);
+        async function deleteRuleFromEdit() {
+            const ruleId = editingRuleId;
+            if (!ruleId || !(await appConfirm('Удалить это правило?', { danger: true, okText: 'Удалить' }))) return;
+            data.rules = (data.rules || []).filter(r => r.id !== ruleId);
             saveData();
             closeRuleEditModal();
             updateCategories();
@@ -3054,9 +3147,9 @@
             openDictSettings(oldName);
         }
 
-        function deleteDictionary(name) {
+        async function deleteDictionary(name) {
             if (Object.keys(data.dictionaries).length === 1) return alert('Нельзя удалить единственный словарь');
-            if (!confirm(`Удалить "${name}"?`)) return;
+            if (!(await appConfirm(`Удалить "${name}"?`, { danger: true, okText: 'Удалить' }))) return;
             delete data.dictionaries[name];
             if (data.dictSettings) delete data.dictSettings[name];
             if (data.currentDictionary === name) data.currentDictionary = Object.keys(data.dictionaries)[0];
@@ -3158,10 +3251,11 @@
             setCurrentWords(words); closeWordModal(); renderMainContent(); updateStats(); updateCategories(); setTimeout(changeFontSize, 50);
         }
 
-        function deleteWordFromEdit() {
-            if (!editingWordId || !confirm('Удалить это слово?')) return;
-            let words = getCurrentWords().filter(w => w.id !== editingWordId);
-            setCurrentWords(words); sessionWordIds = sessionWordIds.filter(id => id !== editingWordId); saveSessionWordIds();
+        async function deleteWordFromEdit() {
+            const wordId = editingWordId;
+            if (!wordId || !(await appConfirm('Удалить это слово?', { danger: true, okText: 'Удалить' }))) return;
+            let words = getCurrentWords().filter(w => w.id !== wordId);
+            setCurrentWords(words); sessionWordIds = sessionWordIds.filter(id => id !== wordId); saveSessionWordIds();
             closeWordModal(); renderMainContent(); updateStats(); updateCategories();
         }
 
@@ -3200,8 +3294,8 @@
 
         function closeWordDetail() { document.getElementById('wordDetailModal').classList.remove('active'); }
         
-        function deleteWord(id) {
-            if (!confirm('Удалить это слово?')) return;
+        async function deleteWord(id) {
+            if (!(await appConfirm('Удалить это слово?', { danger: true, okText: 'Удалить' }))) return;
             let words = getCurrentWords().filter(w => w.id !== id);
             setCurrentWords(words); sessionWordIds = sessionWordIds.filter(sid => sid !== id); saveSessionWordIds();
             renderMainContent(); updateStats(); updateCategories();
@@ -3552,13 +3646,13 @@
                 const file = e.target.files[0];
                 if (!file) return;
                 const reader = new FileReader();
-                reader.onload = ev => {
+                reader.onload = async ev => {
                     try {
                         const imported = JSON.parse(ev.target.result);
                         if (imported.allDictionaries && imported.dictionaries) {
                             const dictCount = Object.keys(imported.dictionaries).length;
                             const wordCount = Object.values(imported.dictionaries).reduce((s, arr) => s + (Array.isArray(arr) ? arr.length : 0), 0);
-                            const ok = confirm(`Это резервная копия ВСЕХ словарей (${dictCount} словарей, ${wordCount} слов).\n\nОна полностью заменит все словари, которые сейчас есть на телефоне. Текущие данные будут удалены безвозвратно.\n\nПродолжить?`);
+                            const ok = await appConfirm(`Это резервная копия ВСЕХ словарей (${dictCount} словарей, ${wordCount} слов).\n\nОна полностью заменит все словари, которые сейчас есть на телефоне. Текущие данные будут удалены безвозвратно.\n\nПродолжить?`, { danger: true, okText: 'Заменить всё' });
                             if (!ok) return;
                             data.dictionaries = imported.dictionaries;
                             data.dictSettings = imported.dictSettings || {};
@@ -3828,16 +3922,16 @@
             document.getElementById('statCardNew').classList.toggle('active-pool', selectedPoolFilter === 'new');
         }
 
-        function resetQuizStats() {
-            if (!confirm('Сбросить весь рейтинг слов и прогресс сессии?')) return;
+        async function resetQuizStats() {
+            if (!(await appConfirm('Сбросить весь рейтинг слов и прогресс сессии?', { danger: true, okText: 'Сбросить' }))) return;
             getCurrentWords().forEach(w => { w.score = null; });
             setCurrentWords(getCurrentWords()); resetSessionWordIds();
             updateQuizStats(); updateQuizCounter(); renderMainContent();
             alert('Статистика сброшена');
         }
 
-        function resetLearnedToNew() {
-            if (!confirm('Перенести изученные слова в новые?')) return;
+        async function resetLearnedToNew() {
+            if (!(await appConfirm('Перенести изученные слова в новые?'))) return;
             const words = getCurrentWords();
             let count = 0;
             words.forEach(w => {
@@ -3967,7 +4061,7 @@
                     const hasErrors = isWeakWord(word);
                     const delay = (Math.min(idx, 14) * 0.035).toFixed(3);
                     return `<div class="swipe-item-wrapper word-fab-card" style="animation-delay: ${delay}s;">
-                        <div class="swipe-item-actions" onclick="deleteWord(${word.id}); openWordsListModal('${status}');">
+                        <div class="swipe-item-actions" onclick="deleteWord(${word.id}).then(() => openWordsListModal('${status}'));">
                             <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                         </div>
                         <div class="compact-item ${hasErrors ? 'has-errors' : ''}" onclick="closeWordsListModal(); showWordDetail(${word.id});">${wordRowInnerHtml(word)}</div>
@@ -4292,8 +4386,8 @@
             document.getElementById('wrongCount').textContent = quizData.wrong;
             document.getElementById('sessionLearnedCount').textContent = quizData.learnedCount;
         }
-        function finishQuizEarly() {
-            if (!confirm('Завершить тест досрочно?')) return;
+        async function finishQuizEarly() {
+            if (!(await appConfirm('Завершить тест досрочно?', { okText: 'Завершить' }))) return;
             if (quizData.nextTimeout) clearTimeout(quizData.nextTimeout);
             showResults('manual');
         }
@@ -4406,9 +4500,9 @@
             loadNextMatchingBatch();
         }
 
-        function finishMatchingQuiz(reason) {
+        async function finishMatchingQuiz(reason) {
             if (typeof reason !== 'string') {
-                if (!confirm('Завершить игру?')) return;
+                if (!(await appConfirm('Завершить игру?', { okText: 'Завершить' }))) return;
                 reason = 'manual';
             }
             const snap = (gt && gt.kind === 'matching') ? gtSnapshot() : null;
