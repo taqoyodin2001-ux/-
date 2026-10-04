@@ -1330,6 +1330,22 @@
         }
         .header #homeBrandTitle { white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.15; }
         .header #homeBrandTitle.brand-multi { font-size: 22px; }
+        body.sepia-theme { --ios-blue: #A9552B; --ios-blue-rgb: 169, 85, 43; --ios-shadow-glow: 0 8px 24px rgba(169, 85, 43, 0.3); }
+        body.black-theme { --ios-blue: #FFFFFF; --ios-blue-rgb: 255, 255, 255; --ios-shadow-glow: 0 6px 20px rgba(255, 255, 255, 0.12); }
+        body.black-theme .category-chip.active, body.black-theme .category-chip.active *, body.black-theme .search-add-quick-btn,
+        body.black-theme .btn-primary, body.black-theme .quiz-mode-btn.active, body.black-theme .quiz-direction-btn.active,
+        body.black-theme .app-dialog-btn.primary { color: #000000; }
+        body.black-theme .tab-center-btn, body.black-theme .tab-center-btn svg { color: #000000; stroke: #000000; }
+        .accent-dots { flex-wrap: nowrap; justify-content: space-between; gap: 8px; }
+        .accent-dot { width: auto; height: auto; flex: 0 1 34px; min-width: 0; aspect-ratio: 1 / 1; }
+        body.accent-light .category-chip.active, body.accent-light .category-chip.active *, body.accent-light .search-add-quick-btn,
+        body.accent-light .btn-primary, body.accent-light .quiz-mode-btn.active, body.accent-light .quiz-direction-btn.active,
+        body.accent-light .app-dialog-btn.primary { color: #000000; }
+        body.accent-light .tab-center-btn, body.accent-light .tab-center-btn svg { color: #000000; stroke: #000000; }
+        .wheel-wrap { position: relative; width: 240px; height: 240px; margin: 14px auto 4px; }
+        .wheel-wrap canvas { width: 100%; height: 100%; border-radius: 50%; touch-action: none; display: block; box-shadow: 0 0 0 2px var(--ios-border-bright); }
+        .wheel-marker { position: absolute; width: 22px; height: 22px; border: 3px solid #fff; border-radius: 50%; box-shadow: 0 0 0 1.5px rgba(0,0,0,0.55); transform: translate(-50%, -50%); pointer-events: none; }
+        .wheel-actions { display: flex; gap: 10px; margin: 10px 0 4px; }
         html[dir="rtl"] .words-list, html[dir="rtl"] .lang-col-head { direction: ltr; }
     </style>
 </head>
@@ -4795,21 +4811,35 @@
         const THEMES = ['day', 'night', 'sepia', 'black', 'manual'];
         const THEME_NAMES = { day: 'День', night: 'Ночь', sepia: 'Сепия', black: 'Чёрный', manual: 'Вручную' };
         const THEME_BAR = { day: '#F2F2F7', sepia: '#F4ECD8', night: '#0E131C', black: '#000000' };
-        const ACCENTS = { blue: null, teal: ['#25B8D6', '37, 184, 214'], green: ['#2FBF5B', '47, 191, 91'], orange: ['#FF8A00', '255, 138, 0'], red: ['#FF453A', '255, 69, 58'], pink: ['#FF4F8B', '255, 79, 139'], purple: ['#A259F7', '162, 89, 247'], indigo: ['#6E6BF2', '110, 107, 242'] };
-        // [оттенок, насыщенность %, d — тёмный / l — светлый]
-        const BGS = { graphite: [0, 0, 'd'], navy: [220, 40, 'd'], teal: [185, 40, 'd'], green: [140, 35, 'd'], purple: [270, 35, 'd'], wine: [340, 35, 'd'], cool: [215, 45, 'l'], mint: [145, 40, 'l'], warm: [35, 50, 'l'] };
-        let themeMode = 'night', accentName = 'blue', bgName = 'navy';
+        const ACCENTS = { blue: null, green: ['#2FBF5B', '47, 191, 91'], orange: ['#FF8A00', '255, 138, 0'], red: ['#FF453A', '255, 69, 58'], pink: ['#FF4F8B', '255, 79, 139'], purple: ['#A259F7', '162, 89, 247'] };
+        // фоны: [оттенок, насыщенность %, тип: d — тёмный, m — средний, l — светлый]
+        const BGS = { graphite: [0, 0, 'd'], navy: [220, 60, 'd'], slate: [215, 28, 'm'], sage: [150, 24, 'm'], cool: [215, 45, 'l'], cream: [35, 50, 'l'] };
+        let themeMode = 'night', accentName = 'blue', bgName = 'navy', accentCustom = null, bgCustom = null;
+        const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+        const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
+        function hslRgb(h, s, l) {
+            s /= 100; l /= 100;
+            const k = n => (n + h / 30) % 12, a = s * Math.min(l, 1 - l), f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+            return [Math.round(f(0) * 255), Math.round(f(8) * 255), Math.round(f(4) * 255)];
+        }
+        const hslHex = (h, s, l) => '#' + hslRgb(h, s, l).map(v => v.toString(16).padStart(2, '0')).join('');
+        const hexRgb = x => [1, 3, 5].map(i => parseInt(x.slice(i, i + 2), 16));
+        const lumOf = x => { const [r, g, b] = hexRgb(x).map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
         try {
-            let m = localStorage.getItem('themeMode') || localStorage.getItem('theme');
+            let m = lsGet('themeMode') || lsGet('theme');
             if (m === 'auto') m = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'day' : 'night';
             if (THEMES.includes(m)) themeMode = m;
-            const a = localStorage.getItem('accent'); if (a in ACCENTS) accentName = a;
-            const g = localStorage.getItem('bgColor'); if (g in BGS) bgName = g;
+            const ac = lsGet('accentCustom'); if (ac && /^#[0-9a-f]{6}$/i.test(ac)) accentCustom = ac;
+            try { const bc = JSON.parse(lsGet('bgCustom')); if (bc && 'dml'.includes(bc.t)) { bgCustom = bc; BGS.custom = [bc.h, bc.s, bc.t]; } } catch (e) {}
+            const a = lsGet('accent'); if (a in ACCENTS || (a === 'custom' && accentCustom)) accentName = a;
+            const g = lsGet('bgColor'); if (g in BGS) bgName = g;
         } catch (e) {}
-        function bgSwatch(n) { const p = BGS[n]; return 'hsl(' + p[0] + ',' + p[1] + '%,' + (p[2] === 'd' ? 12 : 92) + '%)'; }
+        const RAINBOW = 'conic-gradient(#ff3b30, #ffcc00, #34c759, #00c7be, #007aff, #af52de, #ff3b30)';
+        const dotColor = n => n === 'custom' ? (accentCustom || RAINBOW) : (ACCENTS[n] ? ACCENTS[n][0] : '#0A84FF');
+        function bgSwatch(n) { const p = BGS[n]; if (!p) return RAINBOW; return 'hsl(' + p[0] + ',' + p[1] + '%,' + ({ d: 16, m: 32, l: 92 })[p[2]] + '%)'; }
         function applyTheme(mode) {
             themeMode = mode;
-            try { localStorage.setItem('themeMode', mode); } catch (e) {}
+            lsSet('themeMode', mode);
             const man = mode === 'manual', b = document.body, light = man ? BGS[bgName][2] === 'l' : (mode === 'day' || mode === 'sepia');
             b.classList.toggle('day-theme', light);
             b.classList.toggle('sepia-theme', mode === 'sepia');
@@ -4823,22 +4853,84 @@
             const blocks = document.getElementById('themeManualBlocks'); if (blocks) blocks.style.display = man ? '' : 'none';
         }
         function paintCustom() {
-            const man = themeMode === 'manual', b = document.body, c = ACCENTS[accentName], p = BGS[bgName];
+            const man = themeMode === 'manual', b = document.body, p = BGS[bgName];
+            const c = accentName === 'custom' && accentCustom ? [accentCustom, hexRgb(accentCustom).join(', ')] : ACCENTS[accentName];
             const set = (k, v) => b.style.setProperty(k, v), clear = k => b.style.removeProperty(k);
             if (man && c) { set('--ios-blue', c[0]); set('--ios-blue-rgb', c[1]); set('--ios-shadow-glow', '0 8px 24px rgba(' + c[1] + ', 0.35)'); }
             else ['--ios-blue', '--ios-blue-rgb', '--ios-shadow-glow'].forEach(clear);
+            b.classList.toggle('accent-light', !!(man && c && lumOf(c[0]) > 0.45));
             if (man) {
-                const h = p[0], s = p[1], d = p[2] === 'd';
-                set('--ios-bg', d ? 'hsl(' + h + ',' + s + '%,6%)' : 'hsl(' + h + ',' + s + '%,94%)');
-                set('--ios-card', d ? 'hsla(' + h + ',' + s * 0.8 + '%,11%,0.7)' : 'hsla(' + h + ',' + s + '%,99%,0.75)');
-                set('--ios-card-solid', d ? 'hsl(' + h + ',' + s * 0.8 + '%,11%)' : 'hsl(' + h + ',' + s + '%,99%)');
-                set('--ios-card-hover', d ? 'hsla(' + h + ',' + s * 0.8 + '%,16%,0.8)' : 'hsla(' + h + ',' + s + '%,92%,0.9)');
+                const h = p[0], s = p[1], ty = p[2], lt = ty === 'l', cs = lt ? s : s * 0.8, T = ({ d: [7, 13, 18], m: [24, 31, 37], l: [94, 99, 92] })[ty];
+                set('--ios-bg', 'hsl(' + h + ',' + s + '%,' + T[0] + '%)');
+                set('--ios-card', 'hsla(' + h + ',' + cs + '%,' + T[1] + '%,' + (lt ? 0.75 : 0.7) + ')');
+                set('--ios-card-solid', 'hsl(' + h + ',' + cs + '%,' + T[1] + '%)');
+                set('--ios-card-hover', 'hsla(' + h + ',' + cs + '%,' + T[2] + '%,' + (lt ? 0.9 : 0.8) + ')');
             } else ['--ios-bg', '--ios-card', '--ios-card-solid', '--ios-card-hover'].forEach(clear);
-            document.querySelectorAll('.accent-dot[data-accent]').forEach(x => x.classList.toggle('active', x.dataset.accent === accentName));
-            document.querySelectorAll('.accent-dot[data-bg]').forEach(x => x.classList.toggle('active', x.dataset.bg === bgName));
+            document.querySelectorAll('.accent-dot[data-accent]').forEach(x => { x.classList.toggle('active', x.dataset.accent === accentName); if (x.dataset.accent === 'custom') x.style.background = dotColor('custom'); });
+            document.querySelectorAll('.accent-dot[data-bg]').forEach(x => { x.classList.toggle('active', x.dataset.bg === bgName); if (x.dataset.bg === 'custom') x.style.background = bgSwatch('custom'); });
         }
-        function applyAccent(name) { accentName = name; try { localStorage.setItem('accent', name); } catch (e) {} applyTheme(themeMode); }
-        function applyBg(name) { bgName = name; try { localStorage.setItem('bgColor', name); } catch (e) {} applyTheme(themeMode); }
+        function applyAccent(name) { accentName = name; lsSet('accent', name); applyTheme(themeMode); }
+        function applyBg(name) { bgName = name; lsSet('bgColor', name); applyTheme(themeMode); }
+        // ----- цветовой круг: белый центр, насыщенный цвет в середине, тёмный край -----
+        function drawWheel(cv) {
+            const n = cv.width, R = n / 2, ctx = cv.getContext('2d'), img = ctx.createImageData(n, n);
+            for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
+                const dx = (x + 0.5 - R) / R, dy = (y + 0.5 - R) / R, r = Math.hypot(dx, dy), i = (y * n + x) * 4;
+                if (r > 1) continue;
+                const c = hslRgb((Math.atan2(dy, dx) * 180 / Math.PI + 360) % 360, 100, 100 * (1 - 0.75 * r));
+                img.data[i] = c[0]; img.data[i + 1] = c[1]; img.data[i + 2] = c[2]; img.data[i + 3] = 255;
+            }
+            ctx.putImageData(img, 0, 0);
+        }
+        let _wheelSnap = null;
+        function closeWheels() { document.querySelectorAll('.wheel-box').forEach(x => { x.style.display = 'none'; }); _wheelSnap = null; }
+        function toggleWheel(kind) {
+            const w = document.getElementById('wheel_' + kind), show = w.style.display === 'none';
+            closeWheels();
+            if (!show) return;
+            _wheelSnap = { kind: kind, accentName: accentName, accentCustom: accentCustom, bgName: bgName, bgCustom: bgCustom ? Object.assign({}, bgCustom) : null };
+            w.style.display = '';
+            const cv = w.querySelector('canvas'); if (!w.dataset.drawn) { drawWheel(cv); w.dataset.drawn = '1'; }
+            if (kind === 'accent' && accentCustom) applyAccent('custom');
+            if (kind === 'bg' && BGS.custom) applyBg('custom');
+        }
+        function wheelDone() { closeWheels(); }
+        function wheelCancel() {
+            const s = _wheelSnap;
+            if (!s) { closeWheels(); return; }
+            if (s.kind === 'accent') {
+                accentName = s.accentName; accentCustom = s.accentCustom; lsSet('accent', accentName);
+                if (accentCustom) lsSet('accentCustom', accentCustom); else { try { localStorage.removeItem('accentCustom'); } catch (e) {} }
+            } else {
+                bgName = s.bgName; bgCustom = s.bgCustom; lsSet('bgColor', bgName);
+                if (bgCustom) { BGS.custom = [bgCustom.h, bgCustom.s, bgCustom.t]; lsSet('bgCustom', JSON.stringify(bgCustom)); }
+                else { delete BGS.custom; try { localStorage.removeItem('bgCustom'); } catch (e) {} }
+            }
+            closeWheels();
+            applyTheme(themeMode);
+        }
+        function presetAccent(n) { closeWheels(); applyAccent(n); }
+        function presetBg(n) { closeWheels(); applyBg(n); }
+        let _wheelDrag = false;
+        function wheelDown(e, k) { _wheelDrag = true; e.target.setPointerCapture(e.pointerId); wheelPick(e, k); }
+        function wheelMove(e, k) { if (_wheelDrag) wheelPick(e, k); }
+        function wheelUp() { _wheelDrag = false; }
+        function wheelPick(e, k) {
+            const cv = e.target, rc = cv.getBoundingClientRect();
+            let x = (e.clientX - rc.left) / rc.width * 2 - 1, y = (e.clientY - rc.top) / rc.height * 2 - 1;
+            const raw = Math.hypot(x, y), r = Math.min(1, raw);
+            if (raw > 0) { x = x / raw * r; y = y / raw * r; }
+            const hue = (Math.atan2(y, x) * 180 / Math.PI + 360) % 360, L = 1 - 0.75 * r;
+            const mk = cv.parentNode.querySelector('.wheel-marker');
+            mk.style.display = ''; mk.style.left = ((x + 1) / 2 * 100) + '%'; mk.style.top = ((y + 1) / 2 * 100) + '%';
+            if (k === 'accent') { accentCustom = hslHex(hue, 100, L * 100); accentName = 'custom'; lsSet('accentCustom', accentCustom); lsSet('accent', 'custom'); }
+            else {
+                const ty = L < 0.4 ? 'd' : (L < 0.7 ? 'm' : 'l'), s = ty === 'd' ? 60 : (ty === 'm' ? 30 : 45);
+                bgCustom = { h: Math.round(hue), s: s, t: ty }; BGS.custom = [bgCustom.h, s, ty]; bgName = 'custom';
+                lsSet('bgCustom', JSON.stringify(bgCustom)); lsSet('bgColor', 'custom');
+            }
+            applyTheme(themeMode);
+        }
         function closeLangMenu() {
             const o = document.getElementById('langMenuOverlay'); if (o) o.remove();
             document.querySelectorAll('.header-controls').forEach(p => { p.style.transform = ''; });
@@ -4901,17 +4993,18 @@
             if (page) {
                 const card = document.createElement('div');
                 card.className = 'ios-settings-card';
-                const dotColor = n => ACCENTS[n] ? ACCENTS[n][0] : '#0A84FF';
-                card.innerHTML = '<div class="theme-card-row"><div style="font-size:15px;font-weight:600;">Тема</div><select class="form-input" id="themeModeSelect" style="width:auto;min-width:130px;" onchange="applyTheme(this.value)">' + THEMES.map(k => '<option value="' + k + '">' + THEME_NAMES[k] + '</option>').join('') + '</select></div>' +
-                    '<div id="themeManualBlocks"><div class="theme-card-block"><div class="theme-card-label">Цвет акцента</div><div class="accent-dots">' + Object.keys(ACCENTS).map(n => '<button type="button" class="accent-dot" data-accent="' + n + '" style="background:' + dotColor(n) + ';" onclick="applyAccent(\'' + n + '\')"></button>').join('') + '</div></div>' +
-                    '<div class="theme-card-block"><div class="theme-card-label">Цвет фона</div><div class="accent-dots">' + Object.keys(BGS).map(n => '<button type="button" class="accent-dot" data-bg="' + n + '" style="background:' + bgSwatch(n) + ';" onclick="applyBg(\'' + n + '\')"></button>').join('') + '</div></div></div>';
+                const dots = (attr, keys, colorFn, fn) => keys.map(n => '<button type="button" class="accent-dot' + (n === 'custom' ? ' rainbow' : '') + '" data-' + attr + '="' + n + '" style="background:' + colorFn(n) + ';" onclick="' + (n === 'custom' ? "toggleWheel('" + attr + "')" : fn + "('" + n + "')") + '"></button>').join('');
+                const wheel = k => `<div class="wheel-box" id="wheel_${k}" style="display:none"><div class="wheel-wrap"><canvas width="240" height="240" onpointerdown="wheelDown(event,'${k}')" onpointermove="wheelMove(event,'${k}')" onpointerup="wheelUp()" onpointercancel="wheelUp()"></canvas><div class="wheel-marker" style="display:none"></div></div><div class="wheel-actions"><button type="button" class="app-dialog-btn" onclick="wheelCancel()">Отмена</button><button type="button" class="app-dialog-btn primary" onclick="wheelDone()">Готово</button></div></div>`;
+                card.innerHTML = `<div class="theme-card-row"><div style="font-size:15px;font-weight:600;">Тема</div><select class="form-input" id="themeModeSelect" style="width:auto;min-width:130px;" onchange="applyTheme(this.value)">${THEMES.map(k => '<option value="' + k + '">' + THEME_NAMES[k] + '</option>').join('')}</select></div>` +
+                    `<div id="themeManualBlocks"><div class="theme-card-block"><div class="theme-card-label">Цвет акцента</div><div class="accent-dots">${dots('accent', [...Object.keys(ACCENTS), 'custom'], dotColor, 'presetAccent')}</div>${wheel('accent')}</div>` +
+                    `<div class="theme-card-block"><div class="theme-card-label">Цвет фона</div><div class="accent-dots">${dots('bg', [...Object.keys(BGS).filter(k => k !== 'custom'), 'custom'], bgSwatch, 'presetBg')}</div>${wheel('bg')}</div></div>`;
                 const first = page.querySelector('.ios-settings-card');
                 if (first) first.parentNode.insertBefore(card, first); else page.appendChild(card);
             }
             applyTheme(themeMode);
         })();
-        Object.assign(I18N, {"Вручную":["Manual","Manuel","يدوي"],"Цвет фона":["Background color","Arka plan rengi","لون الخلفية"],"Тема":["Theme","Tema","السمة"],"Авто":["Auto","Otomatik","تلقائي"],"День":["Day","Gündüz","نهار"],"Ночь":["Night","Gece","ليل"],"Сепия":["Sepia","Sepya","بنّي دافئ"],"Чёрный":["Black","Siyah","أسود"],"Цвет акцента":["Accent color","Vurgu rengi","لون التمييز"]});
+        Object.assign(I18N, {"Готово":["Done","Tamam","تم"],"Вручную":["Manual","Manuel","يدوي"],"Цвет фона":["Background color","Arka plan rengi","لون الخلفية"],"Тема":["Theme","Tema","السمة"],"Авто":["Auto","Otomatik","تلقائي"],"День":["Day","Gündüz","نهار"],"Ночь":["Night","Gece","ليل"],"Сепия":["Sepia","Sepya","بنّي دافئ"],"Чёрный":["Black","Siyah","أسود"],"Цвет акцента":["Accent color","Vurgu rengi","لون التمييز"]});
         applyUiLang();
     </script>
 </body>
-                    </html>
+    </html>
