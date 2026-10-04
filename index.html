@@ -1346,6 +1346,7 @@
         .wheel-wrap canvas { width: 100%; height: 100%; border-radius: 50%; touch-action: none; display: block; box-shadow: 0 0 0 2px var(--ios-border-bright); }
         .wheel-marker { position: absolute; width: 22px; height: 22px; border: 3px solid #fff; border-radius: 50%; box-shadow: 0 0 0 1.5px rgba(0,0,0,0.55); transform: translate(-50%, -50%); pointer-events: none; }
         .wheel-actions { display: flex; gap: 10px; margin: 10px 0 4px; }
+        html:not([dir="rtl"]) #uiLangSelect, html:not([dir="rtl"]) #uiLangSelect option { direction: ltr; text-align: left; unicode-bidi: normal; }
         html[dir="rtl"] .words-list, html[dir="rtl"] .lang-col-head { direction: ltr; }
     </style>
 </head>
@@ -4778,7 +4779,7 @@
             document.title = trText('Личный словарь');
             document.querySelectorAll('.ui-lang-btn').forEach(b => { b.textContent = uiLang.toUpperCase(); });
             const sel = document.getElementById('uiLangSelect');
-            if (sel) sel.value = uiLang;
+            if (sel) { sel.value = uiLang; sel.dir = uiLang === 'ar' ? 'rtl' : 'ltr'; }
         }
         function cycleUiLang() {
             const i = UI_LANGS.findIndex(l => l[0] === uiLang);
@@ -4794,7 +4795,7 @@
             if (page) {
                 const card = document.createElement('div');
                 card.className = 'ios-settings-card';
-                card.innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;"><div style="font-size:15px;font-weight:600;">Язык интерфейса</div><select class="form-input" id="uiLangSelect" data-no-i18n style="width:auto;min-width:130px;" onchange="setUiLang(this.value)">' + UI_LANGS.map(l => '<option value="' + l[0] + '">' + l[1] + '</option>').join('') + '</select></div>';
+                card.innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;"><div style="font-size:15px;font-weight:600;">Язык интерфейса</div><select class="form-input" id="uiLangSelect" data-no-i18n dir="ltr" style="width:auto;min-width:130px;" onchange="setUiLang(this.value)">' + UI_LANGS.map(l => '<option value="' + l[0] + '">' + l[1] + '</option>').join('') + '</select></div>';
                 const first = page.querySelector('.ios-settings-card');
                 if (first) first.parentNode.insertBefore(card, first); else page.appendChild(card);
             }
