@@ -4759,7 +4759,7 @@
         function i18nNode(n) {
             if (n.nodeType === 3) {
                 const p = n.parentNode;
-                if (!p || /^(SCRIPT|STYLE|TEXTAREA)$/.test(p.nodeName) || (p.closest && p.closest('[dir="auto"]'))) return;
+                if (!p || /^(SCRIPT|STYLE|TEXTAREA)$/.test(p.nodeName) || (p.closest && p.closest('[dir="auto"],[data-no-i18n]'))) return;
                 const v = n.nodeValue;
                 if (!v.trim()) return;
                 const src = (n.__tr === v) ? n.__ru : v;
@@ -4794,7 +4794,7 @@
             if (page) {
                 const card = document.createElement('div');
                 card.className = 'ios-settings-card';
-                card.innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;"><div style="font-size:15px;font-weight:600;">Язык интерфейса</div><select class="form-input" id="uiLangSelect" dir="auto" style="width:auto;min-width:130px;" onchange="setUiLang(this.value)">' + UI_LANGS.map(l => '<option value="' + l[0] + '">' + l[1] + '</option>').join('') + '</select></div>';
+                card.innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;"><div style="font-size:15px;font-weight:600;">Язык интерфейса</div><select class="form-input" id="uiLangSelect" data-no-i18n style="width:auto;min-width:130px;" onchange="setUiLang(this.value)">' + UI_LANGS.map(l => '<option value="' + l[0] + '">' + l[1] + '</option>').join('') + '</select></div>';
                 const first = page.querySelector('.ios-settings-card');
                 if (first) first.parentNode.insertBefore(card, first); else page.appendChild(card);
             }
