@@ -1715,6 +1715,11 @@
             </div>
             
             <div class="ios-settings-card">
+                <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Приложение</div>
+                <button class="btn-primary" onclick="shareApp()">Поделиться приложением</button>
+            </div>
+
+            <div class="ios-settings-card">
                 <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Озвучка</div>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span style="font-size: 15px; font-weight: 500;">Язык речи по умолчанию</span>
@@ -5090,6 +5095,15 @@ async function shareDictionary(name) {
             document.getElementById('sendPreview').value = r.text;
             document.getElementById('sendCount').textContent = fileWordsTag(r.n).replace(/[()]/g, '').trim();
         }
+        async function shareApp() {
+            const url = location.origin + location.pathname.replace(/index\.html$/, '');
+            const title = 'Мой словарь';
+            try {
+                if (navigator.share) { await navigator.share({ title: title, text: title, url: url }); return; }
+            } catch (e) { if (e && e.name === 'AbortError') return; }
+            try { await navigator.clipboard.writeText(url); } catch (e) {}
+            alert('Ссылка скопирована. Откройте её в браузере и нажмите «Установить» или «Добавить на главный экран».');
+        }
         async function sendTextTo(kind) {
             const text = buildSendText().text;
             if (!text) return alert('Список пуст');
@@ -5109,9 +5123,9 @@ async function shareDictionary(name) {
             }
             window.open(url, '_blank');
         }
-        Object.assign(I18N, {"Третий язык":["Third language","Üçüncü dil","اللغة الثالثة"],"Отправить текстом":["Send as text","Metin olarak gönder","إرسال كنص"],"Отправить":["Send","Gönder","إرسال"],"Что отправить":["What to send","Ne gönderilsin","ماذا تريد أن ترسل"],"Языки в сообщении":["Languages in the message","Mesajdaki diller","اللغات في الرسالة"],"Копировать":["Copy","Kopyala","نسخ"],"Поделиться":["Share","Paylaş","مشاركة"],"Текст скопирован":["Text copied","Metin kopyalandı","تم نسخ النص"],"Список пуст":["The list is empty","Liste boş","القائمة فارغة"],"Текст скопирован. Вставьте его в чат.":["Text copied. Paste it into the chat.","Metin kopyalandı. Sohbete yapıştırın.","تم نسخ النص. الصقه في المحادثة."],"Текст скопирован. Вставьте его в чат: приложение само разобьёт его на сообщения.":["Text copied. Paste it into the chat: the app will split it into messages itself.","Metin kopyalandı. Sohbete yapıştırın: uygulama onu kendisi mesajlara böler.","تم نسخ النص. الصقه في المحادثة: سيقسمه التطبيق إلى رسائل تلقائيًا."]});
+        Object.assign(I18N, {"Третий язык":["Third language","Üçüncü dil","اللغة الثالثة"],"Отправить текстом":["Send as text","Metin olarak gönder","إرسال كنص"],"Отправить":["Send","Gönder","إرسال"],"Что отправить":["What to send","Ne gönderilsin","ماذا تريد أن ترسل"],"Языки в сообщении":["Languages in the message","Mesajdaki diller","اللغات في الرسالة"],"Приложение":["App","Uygulama","التطبيق"],"Поделиться приложением":["Share the app","Uygulamayı paylaş","مشاركة التطبيق"],"Ссылка скопирована. Откройте её в браузере и нажмите «Установить» или «Добавить на главный экран».":["Link copied. Open it in a browser and tap “Install” or “Add to Home screen”.","Bağlantı kopyalandı. Tarayıcıda açıp «Yükle» veya «Ana ekrana ekle» seçeneğine dokunun.","تم نسخ الرابط. افتحه في المتصفح واضغط «تثبيت» أو «إضافة إلى الشاشة الرئيسية»."],"Копировать":["Copy","Kopyala","نسخ"],"Поделиться":["Share","Paylaş","مشاركة"],"Текст скопирован":["Text copied","Metin kopyalandı","تم نسخ النص"],"Список пуст":["The list is empty","Liste boş","القائمة فارغة"],"Текст скопирован. Вставьте его в чат.":["Text copied. Paste it into the chat.","Metin kopyalandı. Sohbete yapıştırın.","تم نسخ النص. الصقه في المحادثة."],"Текст скопирован. Вставьте его в чат: приложение само разобьёт его на сообщения.":["Text copied. Paste it into the chat: the app will split it into messages itself.","Metin kopyalandı. Sohbete yapıştırın: uygulama onu kendisi mesajlara böler.","تم نسخ النص. الصقه في المحادثة: سيقسمه التطبيق إلى رسائل تلقائيًا."]});
         I18N_PATS.unshift(...[["^Весь словарь \\((\\d+)\\)$",["Whole dictionary ($1)","Tüm sözlük ($1)","القاموس كله ($1)"]]].map(p => [new RegExp(p[0]), p[1], p[2]]));
         applyUiLang();
     </script>
 </body>
-    </html>
+                    </html>
