@@ -1823,6 +1823,33 @@
         </div>
     </div>
 
+    <!-- Отправка слов текстом -->
+    <div class="modal" id="sendTextModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Отправить текстом</h2>
+                <button class="modal-close" onclick="closeSendText()">
+                    <svg class="svg-icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Что отправить</label>
+                <select class="form-input" id="sendScope" onchange="updateSendText()"></select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Языки в сообщении</label>
+                <div id="sendLangs" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Предпросмотр</label>
+                <textarea class="form-textarea" id="sendPreview" dir="auto" readonly style="min-height: 180px; font-size: 14px;"></textarea>
+                <div class="lang-hint-line" id="sendCount" style="margin: 8px 0 0;"></div>
+            </div>
+            <button class="btn-primary" onclick="sendTextTo('share')" style="margin-top: 8px;">Поделиться</button>
+            <button class="btn-primary" onclick="sendTextTo('copy')" style="background: var(--ios-fill); color: var(--ios-text); margin-top: 8px; box-shadow: none;">Копировать</button>
+        </div>
+    </div>
+
     <!-- Модалка просмотра правила -->
     <div class="modal" id="ruleDetailModal">
         <div class="modal-content">
@@ -3199,6 +3226,9 @@ async function shareDictionary(name) {
                         <div style="font-size: 12px; color: var(--ios-text-tertiary);">${count} слов</div>
                     </div>
                     <div style="display: flex; gap: 8px;" onclick="event.stopPropagation()">
+                        <button class="compact-action-btn" title="Отправить текстом" onclick="openSendText('${name.replace(/'/g, "\\'")}')">
+                            <svg class="svg-icon" style="width: 15px; height: 15px; color: #25D366;" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        </button>
                         <button class="compact-action-btn" title="Экспорт" onclick="shareDictionary('${name.replace(/'/g, "\\'")}')">
                             <svg class="svg-icon" style="width: 15px; height: 15px; color: var(--ios-green);" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
                         </button>
@@ -5012,6 +5042,75 @@ async function shareDictionary(name) {
             applyTheme(themeMode);
         })();
         Object.assign(I18N, {"Готово":["Done","Tamam","تم"],"Вручную":["Manual","Manuel","يدوي"],"Цвет фона":["Background color","Arka plan rengi","لون الخلفية"],"Тема":["Theme","Tema","السمة"],"Авто":["Auto","Otomatik","تلقائي"],"День":["Day","Gündüz","نهار"],"Ночь":["Night","Gece","ليل"],"Сепия":["Sepia","Sepya","بنّي دافئ"],"Чёрный":["Black","Siyah","أسود"],"Цвет акцента":["Accent color","Vurgu rengi","لون التمييز"]});
+        applyUiLang();
+    
+        // ===== Отправка слов текстом (WhatsApp / Telegram / «Поделиться») =====
+        let sendLangSel = [0, 1, 2], sendDict = null;
+        function sendLangIdx(name) {
+            const s = getDictSettings(name), act = activeLangIdx(s);
+            if (!act.includes(2) && (data.dictionaries[name] || []).some(w => w.meaning2)) act.push(2);
+            return act;
+        }
+        try { const s = JSON.parse(localStorage.getItem('sendLangs')); if (Array.isArray(s) && s.length) sendLangSel = s; } catch (e) {}
+        function openSendText(name) {
+            sendDict = name || data.currentDictionary;
+            const words = data.dictionaries[sendDict] || [];
+            if (!words.length) return alert('Словарь пуст');
+            const cats = {};
+            words.forEach(w => { const c = w.category || 'Общее'; cats[c] = (cats[c] || 0) + 1; });
+            const sc = document.getElementById('sendScope');
+            sc.innerHTML = '<option value="__all__">Весь словарь (' + words.length + ')</option>' + Object.keys(cats).map(c => '<option value="' + escapeHtml(c) + '">' + escapeHtml(c) + ' (' + cats[c] + ')</option>').join('');
+            sc.value = (sendDict === data.currentDictionary && currentCategory !== 'all' && cats[currentCategory]) ? currentCategory : '__all__';
+            const act = sendLangIdx(sendDict), ss = getDictSettings(sendDict);
+            sendLangSel = sendLangSel.filter(i => act.includes(i));
+            if (!sendLangSel.length) sendLangSel = act.slice();
+            document.getElementById('sendLangs').innerHTML = act.map(i => '<button type="button" class="lang-chip" data-i="' + i + '" onclick="toggleSendLang(' + i + ')">' + escapeHtml(langName(i, ss) || 'Третий язык') + '</button>').join('');
+            document.getElementById('sendTextModal').classList.add('active');
+            updateSendText();
+        }
+        function closeSendText() { document.getElementById('sendTextModal').classList.remove('active'); }
+        function toggleSendLang(i) {
+            const has = sendLangSel.includes(i);
+            if (has && sendLangSel.length === 1) return;   // хотя бы один язык
+            sendLangSel = has ? sendLangSel.filter(x => x !== i) : sendLangSel.concat(i).sort();
+            try { localStorage.setItem('sendLangs', JSON.stringify(sendLangSel)); } catch (e) {}
+            updateSendText();
+        }
+        function buildSendText() {
+            const scope = document.getElementById('sendScope').value;
+            let words = data.dictionaries[sendDict] || [];
+            if (scope !== '__all__') words = words.filter(w => (w.category || 'Общее') === scope);
+            const fields = ['word', 'meaning', 'meaning2'], one = s => String(s || '').replace(/\s*\n\s*/g, ' ').trim();
+            const lines = words.map(w => sendLangSel.map(i => one(w[fields[i]])).filter(Boolean).join(' — ')).filter(Boolean);
+            return { text: (scope !== '__all__' ? scope + '\n\n' : '') + lines.join('\n'), n: lines.length };
+        }
+        function updateSendText() {
+            document.querySelectorAll('#sendLangs .lang-chip').forEach(b => b.classList.toggle('active', sendLangSel.includes(+b.dataset.i)));
+            const r = buildSendText();
+            document.getElementById('sendPreview').value = r.text;
+            document.getElementById('sendCount').textContent = fileWordsTag(r.n).replace(/[()]/g, '').trim();
+        }
+        async function sendTextTo(kind) {
+            const text = buildSendText().text;
+            if (!text) return alert('Список пуст');
+            const copy = async () => { try { await navigator.clipboard.writeText(text); return true; } catch (e) { const ta = document.getElementById('sendPreview'); ta.removeAttribute('readonly'); ta.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (e2) {} ta.setAttribute('readonly', ''); return ok; } };
+            if (kind === 'copy') { await copy(); return alert('Текст скопирован'); }
+            if (kind === 'share') {
+                if (navigator.share) { try { await navigator.share({ text: text }); } catch (e) {} return; }
+                await copy(); return alert('Текст скопирован. Вставьте его в чат.');
+            }
+            const enc = encodeURIComponent(text);
+            const url = kind === 'whatsapp' ? 'https://wa.me/?text=' + enc : 'https://t.me/share/url?url=%20&text=' + enc;
+            if (enc.length > 6000) {   // слишком длинная ссылка: копируем текст и открываем приложение
+                await copy();
+                alert('Текст скопирован. Вставьте его в чат: приложение само разобьёт его на сообщения.');
+                window.open(kind === 'whatsapp' ? 'https://wa.me/' : 'https://t.me/', '_blank');
+                return;
+            }
+            window.open(url, '_blank');
+        }
+        Object.assign(I18N, {"Третий язык":["Third language","Üçüncü dil","اللغة الثالثة"],"Отправить текстом":["Send as text","Metin olarak gönder","إرسال كنص"],"Отправить":["Send","Gönder","إرسال"],"Что отправить":["What to send","Ne gönderilsin","ماذا تريد أن ترسل"],"Языки в сообщении":["Languages in the message","Mesajdaki diller","اللغات في الرسالة"],"Копировать":["Copy","Kopyala","نسخ"],"Поделиться":["Share","Paylaş","مشاركة"],"Текст скопирован":["Text copied","Metin kopyalandı","تم نسخ النص"],"Список пуст":["The list is empty","Liste boş","القائمة فارغة"],"Текст скопирован. Вставьте его в чат.":["Text copied. Paste it into the chat.","Metin kopyalandı. Sohbete yapıştırın.","تم نسخ النص. الصقه في المحادثة."],"Текст скопирован. Вставьте его в чат: приложение само разобьёт его на сообщения.":["Text copied. Paste it into the chat: the app will split it into messages itself.","Metin kopyalandı. Sohbete yapıştırın: uygulama onu kendisi mesajlara böler.","تم نسخ النص. الصقه في المحادثة: سيقسمه التطبيق إلى رسائل تلقائيًا."]});
+        I18N_PATS.unshift(...[["^Весь словарь \\((\\d+)\\)$",["Whole dictionary ($1)","Tüm sözlük ($1)","القاموس كله ($1)"]]].map(p => [new RegExp(p[0]), p[1], p[2]]));
         applyUiLang();
     </script>
 </body>
