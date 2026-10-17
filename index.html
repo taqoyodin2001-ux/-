@@ -1421,15 +1421,17 @@
 #splash{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 45%,#16264a 0%,#0a1426 60%,#060b18 100%);direction:ltr;transition:opacity .4s ease;touch-action:manipulation}
 #splash.out{opacity:0;pointer-events:none}
 #splash svg{width:min(86vw,420px);height:auto;overflow:visible}
-#splash .sp-book{animation:spBook .5s ease-out both}
-#splash .sp-cover{transform-origin:-55px 0;animation:spCover 2.6s ease-in-out both}
-#splash .sp-front{animation:spFront 2.6s step-end both}
-#splash .sp-back{animation:spBack 2.6s step-end both}
-#splash .sp-b{transform:translate(var(--x),var(--y));animation:spOut .7s cubic-bezier(.2,1.25,.4,1) var(--d) both}
-#splash .sp-bi{filter:drop-shadow(0 0 7px rgba(255,255,255,.18));animation:spPop .6s cubic-bezier(.2,1.5,.4,1) var(--d) both}
-#splash .sp-r1{stroke-dasharray:955;animation:spRing .8s ease-out 1.35s both}
-#splash .sp-r2{stroke-dasharray:867;animation:spRing2 .8s ease-out 1.5s both}
-#splash .sp-glow{animation:spGlow 2.6s ease-in-out both}
+#splash.go .sp-book{animation:spBook .5s ease-out both}
+#splash.go .sp-cover{transform-origin:-55px 0;animation:spCover 2.6s ease-in-out both}
+#splash.go .sp-front{animation:spFront 2.6s step-end both}
+#splash.go .sp-back{animation:spBack 2.6s step-end both}
+#splash .sp-b{transform:translate(var(--x),var(--y))}
+#splash.go .sp-b{animation:spOut .7s cubic-bezier(.2,1.25,.4,1) var(--d) both}
+#splash:not(.go) .sp-b,#splash:not(.go) .sp-r1,#splash:not(.go) .sp-r2{opacity:0}
+#splash.go .sp-bi{filter:drop-shadow(0 0 7px rgba(255,255,255,.18));animation:spPop .6s cubic-bezier(.2,1.5,.4,1) var(--d) both}
+#splash.go .sp-r1{stroke-dasharray:955;animation:spRing .8s ease-out 1.35s both}
+#splash.go .sp-r2{stroke-dasharray:867;animation:spRing2 .8s ease-out 1.5s both}
+#splash.go .sp-glow{animation:spGlow 2.6s ease-in-out both}
 @keyframes spBook{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
 @keyframes spCover{0%,19%{transform:scaleX(1)}40%,75%{transform:scaleX(-1)}92%,100%{transform:scaleX(1)}}
 @keyframes spFront{0%{opacity:1}29.8%{opacity:0}83.7%{opacity:1}100%{opacity:1}}
@@ -1476,11 +1478,13 @@
 (function(){var s=document.getElementById('splash');if(!s)return;
 var skip=false;try{skip=localStorage.getItem('noSplash')==='1'||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)}catch(e){}
 if(skip){s.remove();return}
-var quick=false;try{var d=new Date().toDateString();quick=localStorage.getItem('splashDay')===d;localStorage.setItem('splashDay',d)}catch(e){}
+var quick=false;try{var now=Date.now(),last=+localStorage.getItem('splashAt')||0;quick=now-last<1800000;localStorage.setItem('splashAt',now)}catch(e){}
 if(quick)s.classList.add('quick');
 var done=false;function end(){if(done)return;done=true;s.classList.add('out');setTimeout(function(){if(s.parentNode)s.parentNode.removeChild(s)},450)}
 s.addEventListener('pointerdown',end);
-setTimeout(end,quick?900:2950);
+function start(){requestAnimationFrame(function(){requestAnimationFrame(function(){s.classList.add('go');setTimeout(end,quick?900:2800)})})}
+if(document.readyState!=='loading')start();else document.addEventListener('DOMContentLoaded',start);
+setTimeout(end,9000);
 })();
 </script>
     <div class="ambient-sphere sphere-1"></div>
