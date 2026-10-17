@@ -1420,27 +1420,34 @@
 <style>
 #splash{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 45%,#16264a 0%,#0a1426 60%,#060b18 100%);direction:ltr;transition:opacity .4s ease;touch-action:manipulation}
 #splash.out{opacity:0;pointer-events:none}
-#splash svg{width:min(86vw,420px);height:auto;overflow:visible}
-#splash.go .sp-book{animation:spBook .5s ease-out both}
-#splash.go .sp-cover{transform-origin:-55px 0;animation:spCover 2.6s ease-in-out both}
-#splash.go .sp-front{animation:spFront 2.6s step-end both}
-#splash.go .sp-back{animation:spBack 2.6s step-end both}
+#splash svg{width:min(86vw,420px);height:auto;overflow:visible;transform:scale(.74)}
 #splash .sp-b{transform:translate(var(--x),var(--y))}
-#splash.go .sp-b{animation:spOut .7s cubic-bezier(.2,1.25,.4,1) var(--d) both}
-#splash:not(.go) .sp-b,#splash:not(.go) .sp-r1,#splash:not(.go) .sp-r2{opacity:0}
-#splash.go .sp-bi{filter:drop-shadow(0 0 7px rgba(255,255,255,.18));animation:spPop .6s cubic-bezier(.2,1.5,.4,1) var(--d) both}
-#splash.go .sp-r1{stroke-dasharray:955;animation:spRing .8s ease-out 1.35s both}
-#splash.go .sp-r2{stroke-dasharray:867;animation:spRing2 .8s ease-out 1.5s both}
-#splash.go .sp-glow{animation:spGlow 2.6s ease-in-out both}
-@keyframes spBook{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
-@keyframes spCover{0%,19%{transform:scaleX(1)}40%,75%{transform:scaleX(-1)}92%,100%{transform:scaleX(1)}}
-@keyframes spFront{0%{opacity:1}29.8%{opacity:0}83.7%{opacity:1}100%{opacity:1}}
-@keyframes spBack{0%{opacity:0}29.8%{opacity:1}83.7%{opacity:0}100%{opacity:0}}
-@keyframes spOut{from{transform:translate(0,0)}}
+#splash .sp-bi{filter:drop-shadow(0 0 7px rgba(255,255,255,.18))}
+#splash .sp-r1{stroke-dasharray:955}
+#splash .sp-r2{stroke-dasharray:867}
+#splash .sp-cover{transform-origin:-55px 0}
+#splash .sp-back{opacity:0}
+#splash.go svg{transform-origin:50% 50%;animation:spZoom 3.5s ease-in-out both}
+#splash.go .sp-cover{animation:spCover 3.5s ease-in-out both}
+#splash.go .sp-front{animation:spFront 3.5s step-end both}
+#splash.go .sp-back{animation:spBack 3.5s step-end both}
+#splash.go .sp-glow{animation:spGlow 3.5s ease-in-out both}
+#splash.go .sp-b{animation:spIn .55s ease-in var(--c) both,spOut .7s cubic-bezier(.2,1.25,.4,1) var(--d) forwards}
+#splash.go .sp-bi{animation:spInI .55s ease-in var(--c) both,spPop .6s cubic-bezier(.2,1.5,.4,1) var(--d) forwards}
+#splash.go .sp-r1{animation:spRingOut .45s ease-in .4s both,spRing .8s ease-out 2.15s forwards}
+#splash.go .sp-r2{animation:spRingOut .45s ease-in .4s both,spRing2 .8s ease-out 2.3s forwards}
+@keyframes spZoom{0%,11%{transform:scale(.74)}32%,100%{transform:scale(1)}}
+@keyframes spCover{0%,37%{transform:scaleX(1)}53%,78.6%{transform:scaleX(-1)}91.4%,100%{transform:scaleX(1)}}
+@keyframes spFront{0%{opacity:1}45%{opacity:0}85%{opacity:1}100%{opacity:1}}
+@keyframes spBack{0%{opacity:0}45%{opacity:1}85%{opacity:0}100%{opacity:0}}
+@keyframes spIn{to{transform:translate(0,0)}}
+@keyframes spInI{to{opacity:0;transform:scale(.1)}}
+@keyframes spOut{from{transform:translate(0,0)}to{transform:translate(var(--x),var(--y))}}
 @keyframes spPop{from{opacity:0;transform:scale(.1)}to{opacity:1;transform:scale(1)}}
+@keyframes spRingOut{to{opacity:0}}
 @keyframes spRing{from{stroke-dashoffset:955;opacity:0}20%{opacity:1}to{stroke-dashoffset:0}}
 @keyframes spRing2{from{stroke-dashoffset:867;opacity:0}20%{opacity:.5}to{stroke-dashoffset:0;opacity:.5}}
-@keyframes spGlow{0%,15%{opacity:0}35%,70%{opacity:.95}100%{opacity:.3}}
+@keyframes spGlow{0%{opacity:.3}12%,37%{opacity:0}53%,80%{opacity:.95}100%{opacity:.3}}
 #splash.quick *{animation:none!important}
 </style>
 <svg viewBox="-200 -200 400 400" role="img">
@@ -1471,7 +1478,7 @@
 </g>
 </g>
 </g>
-<g class="sp-b" style="--x:0.0px;--y:-152.0px;--d:0.78s"><g class="sp-bi" style="--d:0.78s"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(0)" fill="url(#sg0)"/><circle r="31" fill="url(#sg0)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="-11" font-size="10" font-weight="700">AR</text><text y="14" font-size="25" font-weight="700">ض</text></g></g></g><g class="sp-b" style="--x:107.5px;--y:-107.5px;--d:0.85s"><g class="sp-bi" style="--d:0.85s"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(45)" fill="url(#sg1)"/><circle r="31" fill="url(#sg1)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="-11" font-size="10" font-weight="700">ZH</text><text y="14" font-size="25" font-weight="700">中</text></g></g></g><g class="sp-b" style="--x:152.0px;--y:0.0px;--d:0.92s"><g class="sp-bi" style="--d:0.92s"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(90)" fill="url(#sg2)"/><circle r="31" fill="url(#sg2)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="8" font-size="24" font-weight="800">Ñ</text></g></g></g><g class="sp-b" style="--x:107.5px;--y:107.5px;--d:0.99s"><g class="sp-bi" style="--d:0.99s"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(135)" fill="url(#sg3)"/><circle r="31" fill="url(#sg3)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="8" font-size="24" font-weight="800">FR</text></g></g></g><g class="sp-b" style="--x:0.0px;--y:152.0px;--d:1.06s"><g class="sp-bi" style="--d:1.06s"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(180)" fill="url(#sg4)"/><circle r="31" fill="url(#sg4)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="8" font-size="24" font-weight="800">EN</text></g></g></g><g class="sp-b" style="--x:-107.5px;--y:107.5px;--d:1.13s"><g class="sp-bi" style="--d:1.13s"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(225)" fill="url(#sg5)"/><circle r="31" fill="url(#sg5)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="8" font-size="24" font-weight="800">RU</text></g></g></g><g class="sp-b" style="--x:-152.0px;--y:0.0px;--d:1.20s"><g class="sp-bi" style="--d:1.20s"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(270)" fill="url(#sg6)"/><circle r="31" fill="url(#sg6)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="8" font-size="24" font-weight="800">Tr</text></g></g></g><g class="sp-b" style="--x:-107.5px;--y:-107.5px;--d:1.27s"><g class="sp-bi" style="--d:1.27s"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(-45)" fill="url(#sg7)"/><circle r="31" fill="url(#sg7)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="-11" font-size="10" font-weight="700">HI</text><text y="14" font-size="25" font-weight="700">अ</text></g></g></g>
+<g class="sp-b" style="--x:0.0px;--y:-152.0px;--c:0.40s;--d:1.58s"><g class="sp-bi"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(0)" fill="url(#sg0)"/><circle r="31" fill="url(#sg0)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="-11" font-size="10" font-weight="700">AR</text><text y="14" font-size="25" font-weight="700">ض</text></g></g></g><g class="sp-b" style="--x:107.5px;--y:-107.5px;--c:0.43s;--d:1.65s"><g class="sp-bi"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(45)" fill="url(#sg1)"/><circle r="31" fill="url(#sg1)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="-11" font-size="10" font-weight="700">ZH</text><text y="14" font-size="25" font-weight="700">中</text></g></g></g><g class="sp-b" style="--x:152.0px;--y:0.0px;--c:0.46s;--d:1.72s"><g class="sp-bi"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(90)" fill="url(#sg2)"/><circle r="31" fill="url(#sg2)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="8" font-size="24" font-weight="800">Ñ</text></g></g></g><g class="sp-b" style="--x:107.5px;--y:107.5px;--c:0.49s;--d:1.79s"><g class="sp-bi"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(135)" fill="url(#sg3)"/><circle r="31" fill="url(#sg3)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="8" font-size="24" font-weight="800">FR</text></g></g></g><g class="sp-b" style="--x:0.0px;--y:152.0px;--c:0.52s;--d:1.86s"><g class="sp-bi"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(180)" fill="url(#sg4)"/><circle r="31" fill="url(#sg4)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="8" font-size="24" font-weight="800">EN</text></g></g></g><g class="sp-b" style="--x:-107.5px;--y:107.5px;--c:0.55s;--d:1.93s"><g class="sp-bi"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(225)" fill="url(#sg5)"/><circle r="31" fill="url(#sg5)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="8" font-size="24" font-weight="800">RU</text></g></g></g><g class="sp-b" style="--x:-152.0px;--y:0.0px;--c:0.58s;--d:2.00s"><g class="sp-bi"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(270)" fill="url(#sg6)"/><circle r="31" fill="url(#sg6)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="8" font-size="24" font-weight="800">Tr</text></g></g></g><g class="sp-b" style="--x:-107.5px;--y:-107.5px;--c:0.61s;--d:2.07s"><g class="sp-bi"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(-45)" fill="url(#sg7)"/><circle r="31" fill="url(#sg7)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="-11" font-size="10" font-weight="700">HI</text><text y="14" font-size="25" font-weight="700">अ</text></g></g></g>
 </svg>
 </div>
 <script>
@@ -1482,7 +1489,7 @@ var quick=false;try{var now=Date.now(),last=+localStorage.getItem('splashAt')||0
 if(quick)s.classList.add('quick');
 var done=false;function end(){if(done)return;done=true;s.classList.add('out');setTimeout(function(){if(s.parentNode)s.parentNode.removeChild(s)},450)}
 s.addEventListener('pointerdown',end);
-function start(){requestAnimationFrame(function(){requestAnimationFrame(function(){s.classList.add('go');setTimeout(end,quick?900:2800)})})}
+function start(){requestAnimationFrame(function(){requestAnimationFrame(function(){s.classList.add('go');setTimeout(end,quick?900:3800)})})}
 if(document.readyState!=='loading')start();else document.addEventListener('DOMContentLoaded',start);
 setTimeout(end,9000);
 })();
@@ -2775,7 +2782,7 @@ setTimeout(end,9000);
             quizPair = { q: act.includes(p.q) ? p.q : 0, a: act.includes(p.a) ? p.a : 1 };
             if (quizPair.q === quizPair.a) quizPair = { q: 0, a: 1 };
             quizHowMode = ['normal', 'mixed', 'listening', 'marathon', ...WRITE_MODES].includes(p.mode) ? p.mode : 'normal';
-            quizMarathon.picked = Array.isArray(p.mex) ? p.mex.filter(m => MARATHON_ORDER.includes(m)) : MARATHON_ORDER.slice();
+            quizMarathon.picked = MARATHON_ORDER.slice();
             quizHint = p.hint !== false;
             quizTimerOn = p.timer === true;
             quizCount = p.count === 'all' ? Infinity : ((p.count === 100) ? 100 : 50);
@@ -2825,7 +2832,7 @@ setTimeout(end,9000);
             document.getElementById('modeAssemble').classList.toggle('active', quizHowMode === 'assemble');
             [['modeMarathon', 'marathon'], ['modeDictation', 'dictation'], ['modeTf', 'tf'], ['modeCloze', 'cloze'], ['modeSentence', 'sentence']].forEach(([id, m]) => document.getElementById(id).classList.toggle('active', quizHowMode === m));
             const mp = document.getElementById('marathonPick');
-            mp.classList.toggle('hidden', quizHowMode !== 'marathon');
+            mp.classList.add('hidden');
             mp.innerHTML = MARATHON_ORDER.map(m => `<button class="quiz-direction-btn m-chip ${quizMarathon.picked.includes(m) ? 'on' : ''}" onclick="toggleMarathonEx('${m}')">${modeIconSvg(m, 'mode-ico')}${MARATHON_NAMES[m]}</button>`).join('');
             const hIdx = getHintLangIdx();
             document.getElementById('hintRow').classList.toggle('hidden', hIdx === null || quizHowMode === 'listening' || quizHowMode === 'dictation');
