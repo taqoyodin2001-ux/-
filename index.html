@@ -8,10 +8,14 @@
     <meta name="navigation-bar-color" content="#000000">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Словарь">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&family=Nunito:wght@500;600;700;800&family=Cairo:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         * { 
             margin: 0; 
@@ -92,6 +96,33 @@
             position: relative;
         }
 
+        /* ===== Стиль языка: каждому языку интерфейса свои цвета, шрифт и узор ===== */
+        body::before { content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; background-color: var(--ios-text); opacity: 0.045;
+            -webkit-mask-repeat: repeat; mask-repeat: repeat; }
+        body.lang-ru { --font-display: "Manrope", "Plus Jakarta Sans", -apple-system, "Segoe UI", sans-serif; --font-body: "Manrope", -apple-system, "Segoe UI", sans-serif;
+            --ios-bg: #0A0F1E; --ios-card: rgba(24, 32, 56, 0.62); --ios-card-solid: #182038; --ios-card-hover: rgba(36, 48, 82, 0.75);
+            --ios-blue: #4F8DFF; --ios-blue-rgb: 79, 141, 255; --ios-shadow-glow: 0 8px 24px rgba(79, 141, 255, 0.35); --ios-purple: #8B7BFF; --ios-teal: #5CC8FF; --ios-orange: #F5B63D; }
+        body.lang-ru::before { -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48' fill='none' stroke='black' stroke-width='1.4'%3E%3Cpath d='M24 6L42 24L24 42L6 24Z'/%3E%3Ccircle cx='24' cy='24' r='2.4'/%3E%3Cpath d='M24 14L34 24L24 34L14 24Z'/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48' fill='none' stroke='black' stroke-width='1.4'%3E%3Cpath d='M24 6L42 24L24 42L6 24Z'/%3E%3Ccircle cx='24' cy='24' r='2.4'/%3E%3Cpath d='M24 14L34 24L24 34L14 24Z'/%3E%3C/svg%3E"); -webkit-mask-size: 48px; mask-size: 48px; }
+        body.lang-ru.day-theme { --ios-bg: #F1F4FB; --ios-card: rgba(255, 255, 255, 0.78); --ios-card-solid: #FFFFFF; --ios-card-hover: rgba(232, 238, 250, 0.95);
+            --ios-blue: #1F5FD6; --ios-blue-rgb: 31, 95, 214; --ios-shadow-glow: 0 8px 24px rgba(31, 95, 214, 0.25); --ios-orange: #D98E04; }
+        body.lang-en { --font-display: "Inter", -apple-system, "Segoe UI", sans-serif; --font-body: "Inter", -apple-system, "Segoe UI", sans-serif;
+            --ios-bg: #0E1114; --ios-card: rgba(30, 34, 40, 0.65); --ios-card-solid: #1E2228; --ios-card-hover: rgba(44, 50, 58, 0.75);
+            --ios-blue: #1E9BCF; --ios-blue-rgb: 30, 155, 207; --ios-shadow-glow: 0 8px 24px rgba(30, 155, 207, 0.35); --ios-purple: #6C8CF5; --ios-teal: #7FD8E8; }
+        body.lang-en::before { -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.4'%3E%3Ccircle cx='2' cy='2' r='1' fill='black' stroke='none'/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.4'%3E%3Ccircle cx='2' cy='2' r='1' fill='black' stroke='none'/%3E%3C/svg%3E"); -webkit-mask-size: 24px; mask-size: 24px; opacity: 0.06; }
+        body.lang-en.day-theme { --ios-bg: #F4F5F7; --ios-card: rgba(255, 255, 255, 0.8); --ios-card-solid: #FFFFFF; --ios-card-hover: rgba(236, 239, 243, 0.95);
+            --ios-blue: #0B7FA8; --ios-blue-rgb: 11, 127, 168; --ios-shadow-glow: 0 8px 24px rgba(11, 127, 168, 0.25); }
+        body.lang-tr { --font-display: "Nunito", -apple-system, "Segoe UI", sans-serif; --font-body: "Nunito", -apple-system, "Segoe UI", sans-serif;
+            --ios-bg: #140A0C; --ios-card: rgba(48, 24, 28, 0.6); --ios-card-solid: #301A1E; --ios-card-hover: rgba(66, 34, 40, 0.75);
+            --ios-blue: #E5384A; --ios-blue-rgb: 229, 56, 74; --ios-shadow-glow: 0 8px 24px rgba(229, 56, 74, 0.35); --ios-purple: #E0527A; --ios-teal: #2EC4B6; --ios-orange: #FFB020; }
+        body.lang-tr::before { -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64' fill='none' stroke='black' stroke-width='1.4'%3E%3Cpath d='M32 12C23 19 23 33 32 40C41 33 41 19 32 12Z'/%3E%3Cpath d='M32 40V56M32 50C26 48 24 44 24 40M32 50C38 48 40 44 40 40'/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64' fill='none' stroke='black' stroke-width='1.4'%3E%3Cpath d='M32 12C23 19 23 33 32 40C41 33 41 19 32 12Z'/%3E%3Cpath d='M32 40V56M32 50C26 48 24 44 24 40M32 50C38 48 40 44 40 40'/%3E%3C/svg%3E"); -webkit-mask-size: 64px; mask-size: 64px; }
+        body.lang-tr.day-theme { --ios-bg: #FFF6F4; --ios-card: rgba(255, 255, 255, 0.82); --ios-card-solid: #FFFFFF; --ios-card-hover: rgba(252, 232, 228, 0.95);
+            --ios-blue: #D62839; --ios-blue-rgb: 214, 40, 57; --ios-shadow-glow: 0 8px 24px rgba(214, 40, 57, 0.25); --ios-teal: #0E9F94; }
+        body.lang-ar { --font-display: "Cairo", "Segoe UI", Tahoma, sans-serif; --font-body: "Cairo", "Segoe UI", Tahoma, sans-serif; letter-spacing: 0;
+            --ios-bg: #06120E; --ios-card: rgba(18, 48, 38, 0.6); --ios-card-solid: #123226; --ios-card-hover: rgba(26, 66, 52, 0.75);
+            --ios-blue: #2DD4A0; --ios-blue-rgb: 45, 212, 160; --ios-shadow-glow: 0 8px 24px rgba(45, 212, 160, 0.3); --ios-purple: #1FA67A; --ios-teal: #5EEAD4; --ios-orange: #E5B93C; }
+        body.lang-ar::before { -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64' fill='none' stroke='black' stroke-width='1.4'%3E%3Crect x='14' y='14' width='36' height='36'/%3E%3Crect x='14' y='14' width='36' height='36' transform='rotate(45 32 32)'/%3E%3Ccircle cx='32' cy='32' r='5'/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64' fill='none' stroke='black' stroke-width='1.4'%3E%3Crect x='14' y='14' width='36' height='36'/%3E%3Crect x='14' y='14' width='36' height='36' transform='rotate(45 32 32)'/%3E%3Ccircle cx='32' cy='32' r='5'/%3E%3C/svg%3E"); -webkit-mask-size: 64px; mask-size: 64px; }
+        body.lang-ar.day-theme { --ios-bg: #F1F7F3; --ios-card: rgba(255, 255, 255, 0.8); --ios-card-solid: #FFFFFF; --ios-card-hover: rgba(226, 240, 232, 0.95);
+            --ios-blue: #0B7A55; --ios-blue-rgb: 11, 122, 85; --ios-shadow-glow: 0 8px 24px rgba(11, 122, 85, 0.25); --ios-orange: #B8860B; }
         .ambient-sphere {
             position: fixed;
             border-radius: 50%;
@@ -987,6 +1018,25 @@
             font-family: var(--font-display);
             transition: all 0.2s ease;
         }
+        .quiz-direction-btn { white-space: nowrap; padding-left: 8px; padding-right: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+        .quiz-direction-btn .mode-ico { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .m-chip { min-width: 0; flex: 0 0 calc(50% - 3px); font-weight: 600; opacity: .55; }
+        .m-chip.on { opacity: 1; background: var(--ios-fill); color: var(--ios-text); border-color: var(--ios-blue); }
+        .m-chip.on::after { content: '✓'; margin-inline-start: 6px; color: var(--ios-blue); font-weight: 800; }
+        /* Тур по приложению */
+        #tourLayer { position: fixed; inset: 0; z-index: 4000; }
+        #tourLayer .tour-block { position: absolute; inset: 0; }
+        #tourLayer .tour-hole { position: fixed; border-radius: 16px; box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.72); border: 2px solid var(--ios-blue); pointer-events: none; transition: all 0.25s ease; }
+        #tourLayer .tour-card { position: fixed; left: 14px; right: 14px; max-width: 420px; margin: 0 auto; background: var(--ios-card, #1c1c1e); color: var(--ios-text, #fff); border: 1px solid var(--ios-border, rgba(255,255,255,.15)); border-radius: 20px; padding: 16px 16px 14px; box-shadow: 0 12px 40px rgba(0,0,0,.5); }
+        #tourLayer .tour-step { font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); letter-spacing: .05em; }
+        #tourLayer .tour-title { font-size: 18px; font-weight: 800; margin: 4px 0 6px; font-family: var(--font-display); }
+        #tourLayer .tour-text { font-size: 14px; line-height: 1.45; color: var(--ios-text-secondary); }
+        #tourLayer .tour-btns { display: flex; gap: 8px; margin-top: 14px; align-items: center; }
+        #tourLayer .tour-btns button { flex: 1; padding: 11px 10px; border-radius: 12px; border: 1px solid var(--ios-border); background: var(--ios-fill); color: var(--ios-text); font-weight: 700; font-size: 14px; cursor: pointer; font-family: var(--font-display); }
+        #tourLayer .tour-btns button.primary { background: var(--ios-blue); color: #fff; border-color: transparent; flex: 1.4; }
+        #tourLayer .tour-btns button:disabled { opacity: .35; }
+        #tourLayer .tour-skip { background: none !important; border: none !important; flex: 0 0 auto !important; color: var(--ios-text-secondary) !important; font-weight: 600 !important; font-size: 13px !important; padding: 6px 4px !important; }
+        .quiz-label-ico { width: 15px; height: 15px; vertical-align: -2px; margin-inline-end: 6px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
         .quiz-direction-btn.active {
             background: var(--ios-blue);
             color: #FFFFFF;
@@ -1348,9 +1398,91 @@
         .wheel-actions { display: flex; gap: 10px; margin: 10px 0 4px; }
         html:not([dir="rtl"]) #uiLangSelect, html:not([dir="rtl"]) #uiLangSelect option { direction: ltr; text-align: left; unicode-bidi: normal; }
         html[dir="rtl"] .words-list, html[dir="rtl"] .lang-col-head { direction: ltr; }
+        .header-controls.fan-slid .help-btn { display: none; }
+        .help-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .help-list li { position: relative; padding-inline-start: 18px; font-size: 15px; line-height: 1.45; color: var(--ios-text); }
+        .help-list li::before { content: ''; position: absolute; inset-inline-start: 2px; top: 0.6em; width: 6px; height: 6px; border-radius: 50%; background: var(--ios-blue); }
+        .help-sec { background: var(--ios-fill); border-radius: 16px; margin-bottom: 10px; overflow: hidden; }
+        .help-sec summary { list-style: none; cursor: pointer; padding: 14px 16px; font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 10px; color: var(--ios-text); }
+        .help-sec summary::-webkit-details-marker { display: none; }
+        .help-sec summary::after { content: ''; margin-inline-start: auto; width: 8px; height: 8px; border-inline-end: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); opacity: 0.5; transition: transform 0.2s; }
+        .help-sec[open] summary::after { transform: rotate(-135deg); }
+        .help-sec-body { padding: 0 16px 16px; color: var(--ios-text); }
+        .help-intro { font-size: 15px; line-height: 1.45; margin-bottom: 12px; }
+        .help-ol { margin: 0; padding-inline-start: 22px; display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 1.45; }
+        html[dir="rtl"] .help-ol { list-style-type: arabic-indic; }
+        .help-note { font-size: 13px; color: var(--ios-text-secondary); margin-top: 12px; line-height: 1.45; }
+        .help-prompt { min-height: 170px; margin-top: 6px; font-family: var(--font-mono); font-size: 12px; }
     </style>
 </head>
 <body>
+<div id="splash" aria-hidden="true">
+<style>
+#splash{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 45%,#16264a 0%,#0a1426 60%,#060b18 100%);direction:ltr;transition:opacity .4s ease;touch-action:manipulation}
+#splash.out{opacity:0;pointer-events:none}
+#splash svg{width:min(86vw,420px);height:auto;overflow:visible}
+#splash .sp-book{animation:spBook .5s ease-out both}
+#splash .sp-cover{transform-origin:-55px 0;animation:spCover 2.6s ease-in-out both}
+#splash .sp-front{animation:spFront 2.6s step-end both}
+#splash .sp-back{animation:spBack 2.6s step-end both}
+#splash .sp-b{transform:translate(var(--x),var(--y));animation:spOut .7s cubic-bezier(.2,1.25,.4,1) var(--d) both}
+#splash .sp-bi{filter:drop-shadow(0 0 7px rgba(255,255,255,.18));animation:spPop .6s cubic-bezier(.2,1.5,.4,1) var(--d) both}
+#splash .sp-r1{stroke-dasharray:955;animation:spRing .8s ease-out 1.35s both}
+#splash .sp-r2{stroke-dasharray:867;animation:spRing2 .8s ease-out 1.5s both}
+#splash .sp-glow{animation:spGlow 2.6s ease-in-out both}
+@keyframes spBook{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+@keyframes spCover{0%,19%{transform:scaleX(1)}40%,75%{transform:scaleX(-1)}92%,100%{transform:scaleX(1)}}
+@keyframes spFront{0%{opacity:1}29.8%{opacity:0}83.7%{opacity:1}100%{opacity:1}}
+@keyframes spBack{0%{opacity:0}29.8%{opacity:1}83.7%{opacity:0}100%{opacity:0}}
+@keyframes spOut{from{transform:translate(0,0)}}
+@keyframes spPop{from{opacity:0;transform:scale(.1)}to{opacity:1;transform:scale(1)}}
+@keyframes spRing{from{stroke-dashoffset:955;opacity:0}20%{opacity:1}to{stroke-dashoffset:0}}
+@keyframes spRing2{from{stroke-dashoffset:867;opacity:0}20%{opacity:.5}to{stroke-dashoffset:0;opacity:.5}}
+@keyframes spGlow{0%,15%{opacity:0}35%,70%{opacity:.95}100%{opacity:.3}}
+#splash.quick *{animation:none!important}
+</style>
+<svg viewBox="-200 -200 400 400" role="img">
+<defs>
+<radialGradient id="spg"><stop offset="0" stop-color="#ffd978" stop-opacity=".85"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient>
+<linearGradient id="spc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22396a"/><stop offset="1" stop-color="#0f1d3b"/></linearGradient>
+<linearGradient id="spgold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6d77a"/><stop offset="1" stop-color="#b98a2c"/></linearGradient>
+<radialGradient id="sg0" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#6fd88a"/><stop offset="1" stop-color="#2fa84f"/></radialGradient><radialGradient id="sg1" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#ffd45e"/><stop offset="1" stop-color="#e0a419"/></radialGradient><radialGradient id="sg2" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#ff9a52"/><stop offset="1" stop-color="#e8481f"/></radialGradient><radialGradient id="sg3" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#5f8cf0"/><stop offset="1" stop-color="#2456d1"/></radialGradient><radialGradient id="sg4" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#9a8cff"/><stop offset="1" stop-color="#5a4fe0"/></radialGradient><radialGradient id="sg5" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#7cc8ff"/><stop offset="1" stop-color="#2a8ee8"/></radialGradient><radialGradient id="sg6" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#ff7a6e"/><stop offset="1" stop-color="#d92f35"/></radialGradient><radialGradient id="sg7" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#dc8cf5"/><stop offset="1" stop-color="#a345d1"/></radialGradient>
+</defs>
+<circle class="sp-glow" r="105" fill="url(#spg)" opacity=".3"/>
+<circle class="sp-r1" r="152" fill="none" stroke="url(#spgold)" stroke-width="2.6" transform="rotate(-90)"/>
+<circle class="sp-r2" r="138" fill="none" stroke="#e4b955" stroke-width="1.2" opacity=".5" transform="rotate(-90)"/>
+<g class="sp-book">
+<rect x="-50" y="-64" width="108" height="140" rx="5" fill="#f1e3bd"/>
+<g stroke="#c9b27a" stroke-width="1"><path d="M-44 -40H52M-44 -26H52M-44 -12H52M-44 2H52M-44 16H52M-44 30H52"/></g>
+<g class="sp-cover">
+<g class="sp-front">
+<rect x="-55" y="-70" width="110" height="140" rx="6" fill="url(#spc)" stroke="url(#spgold)" stroke-width="2.4"/>
+<rect x="-46" y="-61" width="92" height="122" rx="3" fill="none" stroke="#d9ad4a" stroke-width="1"/>
+<rect x="-55" y="-70" width="10" height="140" rx="4" fill="#0b1630"/>
+<path d="M-50 -40v2M-50 -30v2M-50 30v2M-50 40v2" stroke="#e4b955" stroke-width="3"/>
+<g fill="none" stroke="url(#spgold)" stroke-width="2.4" transform="translate(4,0)"><circle r="25"/><ellipse rx="11" ry="25"/><path d="M-25 0H25M-21 -12H21M-21 12H21M0 -25V25"/></g>
+<path d="M44 -70h11v11M44 70h11v-11M-33 -70h-12v0" fill="none" stroke="url(#spgold)" stroke-width="3"/>
+</g>
+<g class="sp-back">
+<rect x="-55" y="-70" width="110" height="140" rx="6" fill="url(#spc)" stroke="url(#spgold)" stroke-width="2.4"/>
+<rect x="-46" y="-61" width="92" height="122" rx="3" fill="none" stroke="#d9ad4a" stroke-width="1"/>
+</g>
+</g>
+</g>
+<g class="sp-b" style="--x:0.0px;--y:-152.0px;--d:0.78s"><g class="sp-bi" style="--d:0.78s"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(0)" fill="url(#sg0)"/><circle r="31" fill="url(#sg0)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="-11" font-size="10" font-weight="700">AR</text><text y="14" font-size="25" font-weight="700">ض</text></g></g></g><g class="sp-b" style="--x:107.5px;--y:-107.5px;--d:0.85s"><g class="sp-bi" style="--d:0.85s"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(45)" fill="url(#sg1)"/><circle r="31" fill="url(#sg1)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="-11" font-size="10" font-weight="700">ZH</text><text y="14" font-size="25" font-weight="700">中</text></g></g></g><g class="sp-b" style="--x:152.0px;--y:0.0px;--d:0.92s"><g class="sp-bi" style="--d:0.92s"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(90)" fill="url(#sg2)"/><circle r="31" fill="url(#sg2)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="8" font-size="24" font-weight="800">Ñ</text></g></g></g><g class="sp-b" style="--x:107.5px;--y:107.5px;--d:0.99s"><g class="sp-bi" style="--d:0.99s"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(135)" fill="url(#sg3)"/><circle r="31" fill="url(#sg3)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="8" font-size="24" font-weight="800">FR</text></g></g></g><g class="sp-b" style="--x:0.0px;--y:152.0px;--d:1.06s"><g class="sp-bi" style="--d:1.06s"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(180)" fill="url(#sg4)"/><circle r="31" fill="url(#sg4)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="8" font-size="24" font-weight="800">EN</text></g></g></g><g class="sp-b" style="--x:-107.5px;--y:107.5px;--d:1.13s"><g class="sp-bi" style="--d:1.13s"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(225)" fill="url(#sg5)"/><circle r="31" fill="url(#sg5)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="8" font-size="24" font-weight="800">RU</text></g></g></g><g class="sp-b" style="--x:-152.0px;--y:0.0px;--d:1.20s"><g class="sp-bi" style="--d:1.20s"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(270)" fill="url(#sg6)"/><circle r="31" fill="url(#sg6)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="8" font-size="24" font-weight="800">Tr</text></g></g></g><g class="sp-b" style="--x:-107.5px;--y:-107.5px;--d:1.27s"><g class="sp-bi" style="--d:1.27s"><path d="M-9 26 L0 41 L9 26Z" transform="rotate(-45)" fill="url(#sg7)"/><circle r="31" fill="url(#sg7)"/><g fill="#fff" text-anchor="middle" font-family="system-ui,Segoe UI,Roboto,Noto Sans,sans-serif"><text y="-11" font-size="10" font-weight="700">HI</text><text y="14" font-size="25" font-weight="700">अ</text></g></g></g>
+</svg>
+</div>
+<script>
+(function(){var s=document.getElementById('splash');if(!s)return;
+var skip=false;try{skip=localStorage.getItem('noSplash')==='1'||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)}catch(e){}
+if(skip){s.remove();return}
+var quick=false;try{var d=new Date().toDateString();quick=localStorage.getItem('splashDay')===d;localStorage.setItem('splashDay',d)}catch(e){}
+if(quick)s.classList.add('quick');
+var done=false;function end(){if(done)return;done=true;s.classList.add('out');setTimeout(function(){if(s.parentNode)s.parentNode.removeChild(s)},450)}
+s.addEventListener('pointerdown',end);
+setTimeout(end,quick?900:2950);
+})();
+</script>
     <div class="ambient-sphere sphere-1"></div>
     <div class="ambient-sphere sphere-2"></div>
     <div class="container" id="appScrollContainer">
@@ -1369,6 +1501,7 @@
                     <button class="icon-btn-header" onclick="openThemeMenu(this)" title="Сменить тему">
                         <svg class="svg-icon theme-toggle-icon" id="themeIcon" viewBox="0 0 24 24"></svg>
                     </button>
+                    <button class="icon-btn-header help-btn" onclick="openHelp('home')" title="Справка" style="font-size:17px;font-weight:800;">?</button>
                 </div>
             </div>
             <div class="stats-bar">
@@ -1421,6 +1554,7 @@
                     <button class="icon-btn-header" onclick="openThemeMenu(this)" title="Сменить тему">
                         <svg class="svg-icon theme-toggle-icon" viewBox="0 0 24 24"></svg>
                     </button>
+                    <button class="icon-btn-header help-btn" onclick="openHelp('dicts')" title="Справка" style="font-size:17px;font-weight:800;">?</button>
                 </div>
             </div>
             <div class="ios-settings-card">
@@ -1448,6 +1582,7 @@
                     <button class="icon-btn-header" onclick="openThemeMenu(this)" title="Сменить тему">
                         <svg class="svg-icon theme-toggle-icon" viewBox="0 0 24 24"></svg>
                     </button>
+                    <button class="icon-btn-header help-btn" onclick="openHelp('quiz')" title="Справка" style="font-size:17px;font-weight:800;">?</button>
                 </div>
             </div>
             
@@ -1516,6 +1651,22 @@
                         <button class="quiz-direction-btn" id="modeMixed" onclick="setQuizHow('mixed')">Вперемешку</button>
                         <button class="quiz-direction-btn" id="modeListening" onclick="setQuizHow('listening')">На слух</button>
                     </div>
+                    <div class="quiz-direction" style="margin-top: 6px;">
+                        <button class="quiz-direction-btn" id="modeTyping" onclick="setQuizHow('typing')">Напиши ответ</button>
+                        <button class="quiz-direction-btn" id="modeAssemble" onclick="setQuizHow('assemble')">Собери слово</button>
+                    </div>
+                    <div class="quiz-direction" style="margin-top: 6px;">
+                        <button class="quiz-direction-btn" id="modeDictation" onclick="setQuizHow('dictation')">Диктовка</button>
+                        <button class="quiz-direction-btn" id="modeTf" onclick="setQuizHow('tf')">Верно / неверно</button>
+                    </div>
+                    <div class="quiz-direction" style="margin-top: 6px;">
+                        <button class="quiz-direction-btn" id="modeCloze" onclick="setQuizHow('cloze')">Заполни пропуск</button>
+                        <button class="quiz-direction-btn" id="modeSentence" onclick="setQuizHow('sentence')">Составь фразу</button>
+                    </div>
+                    <div class="quiz-direction" style="margin-top: 6px;">
+                        <button class="quiz-direction-btn" id="modeMarathon" onclick="setQuizHow('marathon')">Марафон: все упражнения</button>
+                    </div>
+                    <div class="quiz-direction hidden" id="marathonPick" style="margin-top: 6px;"></div>
                     <div class="hint-row hidden" id="hintRow">
                         <div>
                             <div class="hint-title" id="hintRowLabel">Подсказка</div>
@@ -1699,6 +1850,7 @@
                     <button class="icon-btn-header" onclick="openThemeMenu(this)" title="Сменить тему">
                         <svg class="svg-icon theme-toggle-icon" viewBox="0 0 24 24"></svg>
                     </button>
+                    <button class="icon-btn-header help-btn" onclick="openHelp('settings')" title="Справка" style="font-size:17px;font-weight:800;">?</button>
                 </div>
             </div>
 
@@ -1716,7 +1868,11 @@
             
             <div class="ios-settings-card">
                 <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Приложение</div>
-                <button class="btn-primary" onclick="shareApp()">Поделиться приложением</button>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <button class="btn-primary" onclick="shareApp()" style="margin-top: 0; margin-bottom: 8px; background: var(--ios-fill); color: var(--ios-text); box-shadow: none;">Поделиться приложением</button>
+                    <button class="btn-primary" onclick="startTour()" style="margin-top: 0; margin-bottom: 8px; background: var(--ios-fill); color: var(--ios-text); box-shadow: none;">Тур по приложению</button>
+                    <button class="btn-primary" onclick="openHelp('guide')" style="margin-top: 0; background: var(--ios-fill); color: var(--ios-text); box-shadow: none;">Как пользоваться</button>
+                </div>
             </div>
 
             <div class="ios-settings-card">
@@ -1741,6 +1897,8 @@
                     <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                     Настроить языки текущего словаря
                 </button>
+                <button class="btn-primary" onclick="openFillLang()" style="margin-top: 8px; background: var(--ios-fill); color: var(--ios-text); box-shadow: none;">Дополнить недостающий язык</button>
+                <button class="btn-primary" onclick="fixCapitalization()" style="margin-top: 8px; background: var(--ios-fill); color: var(--ios-text); box-shadow: none;">Исправить заглавные буквы</button>
                 <div style="font-size: 12px; color: var(--ios-text-secondary); margin-top: 8px; line-height: 1.4;">Озвучка выбирается по языку словаря. «Язык речи по умолчанию» нужен только для языков, которых нет в списке.</div>
             </div>
 
@@ -1948,6 +2106,7 @@
             <div class="form-group"><label class="form-label" id="meaningLabel">Значение / Перевод</label><textarea class="form-textarea" id="meaningInput" placeholder="например: дом"></textarea></div>
             <div class="form-group hidden" id="meaning2Group"><label class="form-label" id="meaning2Label">Третий язык</label><input type="text" class="form-input" id="meaning2Input" dir="auto"></div>
             <div class="form-group"><label class="form-label">Категория</label><input type="text" class="form-input" id="categoryInput" list="categoriesList" placeholder="например: Еда"><datalist id="categoriesList"></datalist></div>
+            <div class="form-group"><label class="form-label">Пример предложения</label><textarea class="form-textarea" id="exampleInput" dir="auto" style="min-height:60px;" placeholder="Предложение со словом (для упражнений «Заполни пропуск» и «Составь фразу»)"></textarea></div>
             <div class="form-group"><label class="form-label">Заметки</label><textarea class="form-textarea" id="notesInput" placeholder="Примеры использования..."></textarea></div>
             <div class="form-group">
                 <label class="form-label">Картинка</label>
@@ -2036,6 +2195,9 @@
                     <label class="form-label">Список слов</label>
                     <textarea class="form-textarea" id="bulkImportText" style="min-height: 160px; font-family: var(--font-mono); font-size: 13px;" placeholder="слово — перевод&#10;[Категория] слово — перевод"></textarea>
                     <div class="lang-hint-line" id="bulkImportHint" style="margin: 8px 0 0;"></div>
+                    <div class="lang-hint-line" style="margin: 8px 0 0;"><a href="#" onclick="event.preventDefault(); openHelp('guide', 'ai')" style="color: var(--ios-blue); text-decoration: none; font-weight: 600;">Как добавить слова с фото через нейросеть?</a></div>
+                    <button type="button" class="btn-primary" onclick="openFillLang(document.getElementById('bulkImportDictionary').value)" style="margin-top: 12px; background: var(--ios-fill); color: var(--ios-text); box-shadow: none;">Дополнить недостающий язык</button>
+                    <div class="lang-hint-line" style="margin: 6px 0 0;">Для слов, у которых нет третьего языка: подготовит их список вместе с инструкцией для нейросети.</div>
                 </div>
                 <button class="btn-primary" onclick="previewBulkImport()">Предпросмотр</button>
             </div>
@@ -2045,6 +2207,32 @@
                 <button class="btn-primary" onclick="confirmBulkImport()">Добавить новые слова</button>
                 <button class="btn-primary" onclick="backToBulkImportStep1()" style="background: var(--ios-fill); color: var(--ios-text); margin-top: 8px; box-shadow: none;">Назад</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Дополнить недостающий язык -->
+    <div class="modal" id="fillLangModal" onclick="if (event.target === this) closeFillLang()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="fillTitle" data-no-i18n></h2>
+                <button class="modal-close" onclick="closeFillLang()">
+                    <svg class="svg-icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div id="fillBody" data-no-i18n></div>
+        </div>
+    </div>
+
+    <!-- Справка -->
+    <div class="modal" id="helpModal" onclick="if (event.target === this) closeHelp()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="helpTitle" data-no-i18n></h2>
+                <button class="modal-close" onclick="closeHelp()">
+                    <svg class="svg-icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div id="helpBody" data-no-i18n></div>
         </div>
     </div>
 
@@ -2170,7 +2358,12 @@
         let bulkRulesParsedData = [];
         let editingRuleId = null;
         let quizPair = { q: 0, a: 1 };
-        let quizHowMode = 'normal';   // normal | mixed | listening
+        const MARATHON_ORDER = ['normal', 'listening', 'tf', 'assemble', 'typing', 'dictation', 'cloze', 'sentence'];
+        const MARATHON_NAMES = { normal: 'Обычный тест', listening: 'На слух', tf: 'Верно / неверно', assemble: 'Собери слово', typing: 'Напиши ответ', dictation: 'Диктовка', cloze: 'Заполни пропуск', sentence: 'Составь фразу' };
+        let quizMarathon = { active: false, picked: MARATHON_ORDER.slice(), res: {}, ids: [], round: 0, list: [] };
+        const WRITE_MODES = ['typing', 'assemble', 'dictation', 'tf', 'cloze', 'sentence'];
+        let quizFreeDelay = 0;
+        let quizHowMode = 'normal';   // normal | mixed | listening | typing | assemble
         let quizHint = true;
         let quizTimerOn = false;
         let quizAdvanceSeq = 0;
@@ -2509,7 +2702,66 @@
         }
 
         /* Изучение: языки, режим и подсказка (настройки запоминаются для каждого словаря) */
+        /* Значки режимов */
+
+        const MODE_ICONS = {
+
+            normal: '<circle cx="12" cy="12" r="9"/><polyline points="8 12.5 11 15.5 16 9"/>',
+
+            mixed: '<polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/>',
+
+            listening: '<path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>',
+
+            typing: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+
+            assemble: '<rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><path d="M14 17h6M17 14v6"/>',
+
+            dictation: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><line x1="12" y1="18" x2="12" y2="22"/>',
+
+            tf: '<polyline points="3 12 6.5 15.5 11 8"/><line x1="14" y1="8" x2="21" y2="15"/><line x1="21" y1="8" x2="14" y2="15"/>',
+
+            cloze: '<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="8" y2="18"/><line x1="16" y1="18" x2="21" y2="18"/><line x1="9" y1="12" x2="15" y2="12" stroke-dasharray="1 3"/>',
+
+            marathon: '<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>',
+            sentence: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="13" y2="13"/>'
+
+        };
+
+        const MODE_BTN_IDS = { modeNormal: 'normal', modeMixed: 'mixed', modeListening: 'listening', modeTyping: 'typing', modeAssemble: 'assemble', modeDictation: 'dictation', modeTf: 'tf', modeCloze: 'cloze', modeSentence: 'sentence', modeMarathon: 'marathon' };
+
+        function modeIconSvg(mode, cls) { return `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${MODE_ICONS[mode] || ''}</svg>`; }
+
+        function injectModeIcons() {
+
+            Object.entries(MODE_BTN_IDS).forEach(([id, mode]) => {
+
+                const b = document.getElementById(id);
+
+                if (b && !b.querySelector('.mode-ico')) b.insertAdjacentHTML('afterbegin', modeIconSvg(mode, 'mode-ico'));
+
+            });
+
+        }
+
+        function marathonBadge() {
+            if (!quizMarathon.active) return;
+            const el = document.getElementById('quizProgress');
+            el.textContent = `${quizMarathon.shown}/${quizMarathon.total} · ${el.textContent}`;
+        }
+        function decorateQuizLabel() {
+
+            const el = document.getElementById('quizLabel');
+
+            if (!el || el.querySelector('.quiz-label-ico')) return;
+
+            const mode = quizHowMode;
+
+            el.insertAdjacentHTML('afterbegin', modeIconSvg(mode, 'quiz-label-ico'));
+
+        }
+
         function quizHowDirection() {
+            if (quizHowMode === 'marathon') return 'wordToMeaning';
             return quizHowMode === 'mixed' ? 'mixed' : (quizHowMode === 'listening' ? 'listening' : 'wordToMeaning');
         }
         function loadQuizPrefs() {
@@ -2518,7 +2770,8 @@
             const act = activeLangIdx(s);
             quizPair = { q: act.includes(p.q) ? p.q : 0, a: act.includes(p.a) ? p.a : 1 };
             if (quizPair.q === quizPair.a) quizPair = { q: 0, a: 1 };
-            quizHowMode = ['normal', 'mixed', 'listening'].includes(p.mode) ? p.mode : 'normal';
+            quizHowMode = ['normal', 'mixed', 'listening', 'marathon', ...WRITE_MODES].includes(p.mode) ? p.mode : 'normal';
+            quizMarathon.picked = Array.isArray(p.mex) ? p.mex.filter(m => MARATHON_ORDER.includes(m)) : MARATHON_ORDER.slice();
             quizHint = p.hint !== false;
             quizTimerOn = p.timer === true;
             quizCount = p.count === 'all' ? Infinity : ((p.count === 100) ? 100 : 50);
@@ -2526,7 +2779,7 @@
         function saveQuizPrefs() {
             const name = data.currentDictionary;
             const s = getDictSettings(name);
-            s.quiz = { q: quizPair.q, a: quizPair.a, mode: quizHowMode, hint: quizHint, timer: quizTimerOn, count: quizCount === Infinity ? 'all' : quizCount };
+            s.quiz = { q: quizPair.q, a: quizPair.a, mode: quizMarathon.active ? 'marathon' : quizHowMode, mex: quizMarathon.picked, hint: quizHint, timer: quizTimerOn, count: quizCount === Infinity ? 'all' : quizCount };
             setDictSettings(name, s);
             saveData();
         }
@@ -2564,8 +2817,14 @@
             document.getElementById('modeNormal').classList.toggle('active', quizHowMode === 'normal');
             document.getElementById('modeMixed').classList.toggle('active', quizHowMode === 'mixed');
             document.getElementById('modeListening').classList.toggle('active', quizHowMode === 'listening');
+            document.getElementById('modeTyping').classList.toggle('active', quizHowMode === 'typing');
+            document.getElementById('modeAssemble').classList.toggle('active', quizHowMode === 'assemble');
+            [['modeMarathon', 'marathon'], ['modeDictation', 'dictation'], ['modeTf', 'tf'], ['modeCloze', 'cloze'], ['modeSentence', 'sentence']].forEach(([id, m]) => document.getElementById(id).classList.toggle('active', quizHowMode === m));
+            const mp = document.getElementById('marathonPick');
+            mp.classList.toggle('hidden', quizHowMode !== 'marathon');
+            mp.innerHTML = MARATHON_ORDER.map(m => `<button class="quiz-direction-btn m-chip ${quizMarathon.picked.includes(m) ? 'on' : ''}" onclick="toggleMarathonEx('${m}')">${modeIconSvg(m, 'mode-ico')}${MARATHON_NAMES[m]}</button>`).join('');
             const hIdx = getHintLangIdx();
-            document.getElementById('hintRow').classList.toggle('hidden', hIdx === null || quizHowMode === 'listening');
+            document.getElementById('hintRow').classList.toggle('hidden', hIdx === null || quizHowMode === 'listening' || quizHowMode === 'dictation');
             if (hIdx !== null) {
                 document.getElementById('hintRowLabel').textContent = `Подсказка: ${langName(hIdx, s)}`;
                 document.getElementById('hintSwitch').classList.toggle('on', quizHint);
@@ -2575,6 +2834,12 @@
             document.getElementById('timerSwitch').setAttribute('aria-checked', quizTimerOn ? 'true' : 'false');
             const cnt = quizCount === Infinity ? 'all' : String(quizCount);
             document.querySelectorAll('#quantitySection .quiz-mode-btn[data-count]').forEach(btn => btn.classList.toggle('active', btn.dataset.count === cnt));
+        }
+        function toggleMarathonEx(m) {
+            const i = quizMarathon.picked.indexOf(m);
+            if (i >= 0) { if (quizMarathon.picked.length === 1) return; quizMarathon.picked.splice(i, 1); }
+            else quizMarathon.picked.push(m);
+            saveQuizPrefs(); refreshQuizLanguageUI();
         }
         function setQuizHow(mode) {
             quizHowMode = mode;
@@ -2817,6 +3082,9 @@
             document.getElementById('ttsLangSelect').value = ttsLang;
         } catch (e) {}
 
+        // Словарь с названием по умолчанию показываем на языке интерфейса; названия, которые дал сам пользователь, не трогаем
+        function dictLabel(name) { try { return name === 'Мой словарь' ? trText(name) : name; } catch (e) { return name; } }
+
         function updateStats() {
             const words = getCurrentWords();
             const today = new Date().toDateString();
@@ -2828,7 +3096,7 @@
                 const el = document.getElementById('homeBrandTitle');
                 let name = data.currentDictionary;
                 if (!name) { try { name = trText('Личный словарь'); } catch (e) { name = 'Личный словарь'; } }
-                const parts = name.split(/(?<=[-–—])/);
+                const parts = dictLabel(name).split(/(?<=[-–—])/);
                 el.textContent = '';
                 parts.forEach((p, i) => { if (i) el.appendChild(document.createElement('br')); el.appendChild(document.createTextNode(p)); });
                 el.classList.toggle('brand-multi', parts.length > 1);
@@ -3223,10 +3491,10 @@ async function shareDictionary(name) {
                 const count = data.dictionaries[name].length;
                 const isActive = name === data.currentDictionary;
                 const s = getDictSettings(name);
-                const langLine = activeLangIdx(s).map(i => s.langs[i].n).join(' · ');
+                const langLine = activeLangIdx(s).map(i => trText(s.langs[i].n)).join(' · ');
                 return `<div class="compact-item" onclick="switchToDictionary('${name.replace(/'/g, "\\'")}')">
                     <div>
-                        <div style="font-weight: 600; color: ${isActive ? 'var(--ios-blue)' : 'var(--ios-text)'};">${escapeHtml(name)} ${isActive ? '✓' : ''}</div>
+                        <div style="font-weight: 600; color: ${isActive ? 'var(--ios-blue)' : 'var(--ios-text)'};">${escapeHtml(dictLabel(name))} ${isActive ? '✓' : ''}</div>
                         <div class="dict-lang-line">${escapeHtml(langLine)}</div>
                         <div style="font-size: 12px; color: var(--ios-text-tertiary);">${count} слов</div>
                     </div>
@@ -3313,7 +3581,7 @@ async function shareDictionary(name) {
             document.getElementById('modalTitle').textContent = 'Новое слово';
             document.getElementById('wordInput').value = initialWord; document.getElementById('meaningInput').value = '';
             document.getElementById('meaning2Input').value = '';
-            document.getElementById('categoryInput').value = 'Общее'; document.getElementById('notesInput').value = '';
+            document.getElementById('categoryInput').value = 'Общее'; document.getElementById('notesInput').value = ''; document.getElementById('exampleInput').value = '';
             document.getElementById('imageInput').value = ''; document.getElementById('imagePreview').style.display = 'none';
             document.getElementById('fileInputLabel').textContent = 'Выбрать картинку';
             document.getElementById('deleteWordBtn').classList.add('hidden');
@@ -3336,7 +3604,7 @@ async function shareDictionary(name) {
             document.getElementById('modalTitle').textContent = 'Редактировать слово';
             document.getElementById('wordInput').value = word.word; document.getElementById('meaningInput').value = word.meaning;
             document.getElementById('meaning2Input').value = word.meaning2 || '';
-            document.getElementById('categoryInput').value = word.category || 'Общее'; document.getElementById('notesInput').value = word.notes || '';
+            document.getElementById('categoryInput').value = word.category || 'Общее'; document.getElementById('notesInput').value = word.notes || ''; document.getElementById('exampleInput').value = word.example || '';
             const preview = document.getElementById('imagePreview'); const label = document.getElementById('fileInputLabel');
             if (word.image) { preview.src = word.image; preview.style.display = 'block'; label.textContent = 'Картинка добавлена'; }
             else { preview.style.display = 'none'; label.textContent = 'Выбрать картинку'; }
@@ -3352,20 +3620,21 @@ async function shareDictionary(name) {
             const hasThird = !!getDictSettings().langs[2];
             const category = document.getElementById('categoryInput').value.trim() || 'Общее';
             const notes = document.getElementById('notesInput').value.trim();
+            const example = document.getElementById('exampleInput').value.trim();
             if (!word || (!meaning && !(hasThird && meaning2))) return alert('Заполните слово и значение');
             const words = getCurrentWords();
-            if (words.find(w => w.word.toLowerCase().trim() === word.toLowerCase().trim() && (!isEditing || w.id !== editingWordId))) {
+            if (words.find(w => wordKey(w.word) === wordKey(word) && (!isEditing || w.id !== editingWordId))) {
                 return alert('Слово уже существует');
             }
             if (isEditing) {
                 const idx = words.findIndex(w => w.id === editingWordId);
                 if (idx !== -1) {
-                    Object.assign(words[idx], { word, meaning, category, notes, image: currentImageBase64, updatedAt: new Date().toISOString() });
+                    Object.assign(words[idx], { word, meaning, category, notes, example, image: currentImageBase64, updatedAt: new Date().toISOString() });
                     // Если третий язык выключен, уже введённый перевод не трогаем
                     if (hasThird) words[idx].meaning2 = meaning2;
                 }
             } else {
-                words.push({ id: Date.now(), word, meaning, meaning2: hasThird ? meaning2 : '', category, notes, image: currentImageBase64, createdAt: new Date().toISOString(), lastReviewed: null, score: null });
+                words.push({ id: Date.now(), word, meaning, meaning2: hasThird ? meaning2 : '', category, notes, example, image: currentImageBase64, createdAt: new Date().toISOString(), lastReviewed: null, score: null });
             }
             setCurrentWords(words); closeWordModal(); renderMainContent(); updateStats(); updateCategories(); setTimeout(changeFontSize, 50);
         }
@@ -3402,6 +3671,7 @@ async function shareDictionary(name) {
                     ${transLine(1, 'var(--ios-blue)')}
                     ${transLine(2, 'var(--ios-teal)')}
                     <p style="color: var(--ios-text-secondary); margin-bottom: 6px; font-size: 14px;"><strong style="color: var(--ios-purple);">Категория:</strong> ${escapeHtml(word.category)}</p>
+                    ${word.example ? `<p dir="auto" style="margin-top: 8px; font-size: 15px; line-height: 1.4;"><strong style="color: var(--ios-blue);">${trText('Пример:')}</strong> ${escapeHtml(word.example)}</p>` : ''}
                     ${word.notes ? `<p style="color: var(--ios-text-secondary); margin-top: 8px; font-size: 14px; line-height: 1.4;"><strong style="color: var(--ios-orange);">Заметки:</strong> ${escapeHtml(word.notes)}</p>` : ''}
                     <div style="display: flex; gap: 10px; margin-top: 14px;">
                         <span style="color: ${scoreColor}; font-weight: 600; font-size: 14px; background: var(--ios-fill); padding: 6px 12px; border-radius: 10px;">Рейтинг: ${scoreDisplay} (${scoreLabel})</span>
@@ -3528,7 +3798,7 @@ async function shareDictionary(name) {
             select.innerHTML = Object.keys(data.dictionaries).map(name => {
                 const count = data.dictionaries[name].length;
                 const isCurrent = name === data.currentDictionary;
-                return `<option value="${escapeHtml(name)}" ${isCurrent ? 'selected' : ''}>${escapeHtml(name)} (${count} слов)</option>`;
+                return `<option value="${escapeHtml(name)}" ${isCurrent ? 'selected' : ''}>${escapeHtml(dictLabel(name))} (${count} слов)</option>`;
             }).join('');
             
             document.getElementById('bulkImportStep1').classList.remove('hidden');
@@ -3549,16 +3819,38 @@ async function shareDictionary(name) {
             const s = getDictSettings(name);
             const names = activeLangIdx(s).map(i => s.langs[i].n.toLowerCase());
             const example = names.join(' — ');
+            const exTr = uiLang === 'ru' ? example : trInner(example);
             document.getElementById('bulkImportHint').textContent = `Формат строки: ${example} [Категория]. Пропустить язык можно пустым местом между тире.`;
-            document.getElementById('bulkImportText').placeholder = `${example}\n[Категория] ${example}`;
+            document.getElementById('bulkImportText').placeholder = `${exTr}\n[${trText('Категория')}] ${exTr}`;
+        }
+
+        // Ключ слова для поиска повторов: без учёта регистра и турецких İ/ı
+        function wordKey(s) { return String(s || '').toLowerCase().replace(/\u0307/g, '').replace(/ı/g, 'i').trim(); }
+        // Заглавная первая буква (для турецкого и азербайджанского: i → İ, ı → I). Остальные буквы не трогаем
+        function capFirst(s, code) {
+            s = String(s || '');
+            const m = s.match(/^[^\p{L}\p{N}]*(\p{L})/u);
+            if (!m) return s;
+            const i = m[0].length - m[1].length, ch = s[i];
+            const up = /^(tr|az)/i.test(code || '') ? ch.toLocaleUpperCase('tr') : ch.toUpperCase();
+            return up === ch ? s : s.slice(0, i) + up + s.slice(i + 1);
+        }
+        function capWordFields(w, settings) {
+            const c = i => (settings.langs[i] && settings.langs[i].c) || '';
+            return { word: capFirst(w.word, c(0)), meaning: capFirst(w.meaning, c(1)), meaning2: capFirst(w.meaning2, c(2)) };
         }
 
         function parseLine(line, defaultCategory, opts) {
             opts = opts || {};
             const hasThird = !!opts.hasThird;
             const thirdArabic = !!opts.thirdArabic;
-            line = line.trim();
+            line = cleanImportText(line).trim();
             if (!line) return null;
+            let example = '';
+            const bar = line.indexOf('|');
+            if (bar > 0) { example = line.slice(bar + 1).replace(/\[[^\]]*\]\s*$/, '').trim(); const cat = line.slice(bar + 1).match(/\[([^\]]+)\]\s*$/); line = (line.slice(0, bar).trim() + (cat ? ' [' + cat[1] + ']' : '')).trim(); }
+            // Предложения с пропусками («o.......», «___») из учебных заданий примером не годятся
+            if (/\.{3,}|…|_{2,}/.test(example)) example = '';
             let category = null;
             let processedLine = line;
             // Категория в начале строки: [Категория] слово — перевод
@@ -3582,7 +3874,7 @@ async function shareDictionary(name) {
                 if (!hasThird) {
                     const word = processedLine.substring(0, idx).trim();
                     const meaning = processedLine.substring(idx + sep.length).trim();
-                    if (word && meaning) return { word, meaning, meaning2: '', category };
+                    if (word && meaning) return { word, meaning, meaning2: '', category, example };
                     continue;
                 }
                 // Три языка: слово — перевод — третий язык
@@ -3596,9 +3888,31 @@ async function shareDictionary(name) {
                     meaning2 = meaning;
                     meaning = '';
                 }
-                if (meaning || meaning2) return { word, meaning, meaning2, category };
+                if (meaning || meaning2) return { word, meaning, meaning2, category, example };
             }
             return null;
+        }
+
+        // Нейросеть иногда склеивает строки в сплошной текст или оборачивает список в блок кода: приводим к строкам
+        // Нейросети (Gemini, NotebookLM, ChatGPT, Perplexity) иногда добавляют в текст служебные пометки и ссылки на источники: убираем их до разбора
+        function cleanImportText(t) {
+            return String(t)
+                .replace(/\[span_\d+\]\((?:start|end)_span\)/g, '')
+                .replace(/:contentReference\[[^\]]*\]\{[^}]*\}/g, '')
+                .replace(/【[^】]*】/g, '')
+                .replace(/\[(?:cite|source|sources|ref)[^\]]*\]/gi, '')
+                .replace(/\[\d+(?:\s*,\s*\d+)*\]/g, '')
+                .replace(/[ \t]+$/gm, '').replace(/[ \t]{2,}/g, ' ');
+        }
+
+        function splitImportLines(text) {
+            text = cleanImportText(text).replace(/```[A-Za-z]*[ \t]*\r?\n?/g, '');
+            return text.split(/\r?\n/).flatMap(line => {
+                const t = line.trim();
+                if (!t || t[0] === '[') return [line];
+                const parts = t.split(/(?<=\])\s+(?=[^\s\[|])/);
+                return parts.length > 1 ? parts : [line];
+            });
         }
 
         function previewBulkImport() {
@@ -3610,9 +3924,11 @@ async function shareDictionary(name) {
             const settings = getDictSettings(targetDictionary);
             const hasThird = !!settings.langs[2];
             const thirdArabic = hasThird && /^ar/i.test(settings.langs[2].c || '');
-            const lines = text.split('\n');
+            const lines = splitImportLines(text);
+            // Одинаковые слова с разным смыслом и категорией (Yemek — Еда и Yemek — Есть) считаются разными словами
             const existingWords = new Map();
-            data.dictionaries[targetDictionary].forEach(w => existingWords.set((w.word || '').toLowerCase().trim(), w));
+            const addEx = w => { const k = wordKey(w.word); if (!existingWords.has(k)) existingWords.set(k, []); existingWords.get(k).push(w); };
+            data.dictionaries[targetDictionary].forEach(addEx);
             bulkImportParsedData = [];
             bulkImportTargetDictionary = targetDictionary;
             lines.forEach((line, index) => {
@@ -3621,8 +3937,11 @@ async function shareDictionary(name) {
                 const parsed = parseLine(line, defaultCategory, { hasThird, thirdArabic });
                 const id = Date.now() + index + Math.random();
                 if (parsed) {
-                    const key = parsed.word.toLowerCase().trim();
-                    const existing = existingWords.get(key);
+                    const key = wordKey(parsed.word);
+                    const sameWord = existingWords.get(key) || [];
+                    const cat0 = (parsed.category || 'Общее');
+                    const mean0 = (parsed.meaning || '').trim().toLowerCase();
+                    const existing = sameWord.find(w => (w.category || 'Общее') === cat0) || sameWord.find(w => mean0 && (w.meaning || '').trim().toLowerCase() === mean0);
                     let status = 'new';
                     if (existing) status = (hasThird && parsed.meaning2 && !existing.meaning2) ? 'fill' : 'duplicate';
                     bulkImportParsedData.push({
@@ -3630,11 +3949,13 @@ async function shareDictionary(name) {
                         word: parsed.word,
                         meaning: parsed.meaning,
                         meaning2: parsed.meaning2 || '',
+                        example: parsed.example || '',
                         category: parsed.category,
                         targetDictionary,
                         status
                     });
-                    if (!existing || status === 'fill') existingWords.set(key, { meaning2: parsed.meaning2 || '' });
+                    if (!existing) addEx({ word: parsed.word, meaning: parsed.meaning, meaning2: parsed.meaning2 || '', category: cat0 });
+                    else if (status === 'fill') sameWord[sameWord.indexOf(existing)] = { word: parsed.word, meaning: existing.meaning, meaning2: parsed.meaning2 || '', category: existing.category };
                 } else {
                     bulkImportParsedData.push({
                         id,
@@ -3709,14 +4030,17 @@ async function shareDictionary(name) {
 
             const targetDictionary = bulkImportTargetDictionary;
             const now = new Date().toISOString();
+            const capSt = getDictSettings(targetDictionary);
             newWords.forEach((item, index) => {
+                const cf = capWordFields(item, capSt);
                 data.dictionaries[targetDictionary].push({
                     id: Date.now() + index,
-                    word: item.word,
-                    meaning: item.meaning,
-                    meaning2: item.meaning2 || '',
+                    word: cf.word,
+                    meaning: cf.meaning,
+                    meaning2: cf.meaning2 || '',
                     category: item.category.trim() || 'Общее',
                     notes: '',
+                    example: item.example || '',
                     image: null,
                     createdAt: now,
                     lastReviewed: null,
@@ -3727,14 +4051,21 @@ async function shareDictionary(name) {
             // Слова, которые уже есть: добавляем только недостающий третий язык, остальное не трогаем
             let filled = 0;
             fillItems.forEach(item => {
-                const key = item.word.toLowerCase().trim();
-                const w = data.dictionaries[targetDictionary].find(x => (x.word || '').toLowerCase().trim() === key);
-                if (w && !w.meaning2) { w.meaning2 = item.meaning2; filled++; }
+                const key = wordKey(item.word);
+                const w = data.dictionaries[targetDictionary].find(x => wordKey(x.word) === key && (x.category || 'Общее') === (item.category || 'Общее')) || data.dictionaries[targetDictionary].find(x => wordKey(x.word) === key);
+                if (w && !w.meaning2) { w.meaning2 = capWordFields({ meaning2: item.meaning2 }, capSt).meaning2; filled++; }
+            });
+
+            // Примеры для уже существующих слов, у которых примера ещё нет
+            let exAdded = 0;
+            bulkImportParsedData.filter(i => i.example && (i.status === 'duplicate' || i.status === 'fill')).forEach(item => {
+                const w = data.dictionaries[targetDictionary].find(x => wordKey(x.word) === wordKey(item.word) && (x.category || 'Общее') === (item.category || 'Общее')) || data.dictionaries[targetDictionary].find(x => wordKey(x.word) === wordKey(item.word));
+                if (w && !w.example) { w.example = item.example; exAdded++; }
             });
 
             saveData();
             const skipped = bulkImportParsedData.length - newWords.length - fillItems.length;
-            alert(`Добавлено ${newWords.length} слов.${filled ? ` Дополнено: ${filled}.` : ''}${skipped ? ` Пропущено (дубли/ошибки): ${skipped}.` : ''}`);
+            alert(`Добавлено ${newWords.length} слов.${filled ? ` Дополнено: ${filled}.` : ''}${exAdded ? ` Примеров: ${exAdded}.` : ''}${skipped ? ` Пропущено (дубли/ошибки): ${skipped}.` : ''}`);
             closeBulkImport();
             updateStats();
             updateCategories();
@@ -3789,11 +4120,11 @@ async function shareDictionary(name) {
                                 }
                             }
                             const target = data.dictionaries[imported.name];
-                            const existingByKey = new Map(target.map(w => [(w.word || '').toLowerCase().trim(), w]));
+                            const existingByKey = new Map(target.map(w => [wordKey(w.word), w]));
                             const now = new Date().toISOString();
                             let added = 0, skipped = 0, filled = 0;
                             imported.words.forEach(w => {
-                                const key = (w.word || '').toLowerCase().trim();
+                                const key = wordKey(w.word);
                                 if (!key) return;
                                 const ex = existingByKey.get(key);
                                 if (ex) {
@@ -3867,7 +4198,7 @@ async function shareDictionary(name) {
                         const lines = text.split('\n');
                         let count = 0, filled = 0;
                         const words = getCurrentWords();
-                        const existing = new Map(words.map(w => [w.word.toLowerCase().trim(), w]));
+                        const existing = new Map(words.map(w => [wordKey(w.word), w]));
                         const now = new Date().toISOString();
 
                         for (let i = 1; i < lines.length; i++) {
@@ -3882,7 +4213,7 @@ async function shareDictionary(name) {
                                 const notes = parts[3] || '';
                                 const meaning2 = parts[4] || '';
                                 if (!word || (!meaning && !meaning2)) continue;
-                                const key = word.toLowerCase().trim();
+                                const key = wordKey(word);
                                 const ex = existing.get(key);
                                 if (!ex) {
                                     const nw = {
@@ -3924,7 +4255,7 @@ async function shareDictionary(name) {
             gtDispose();
             if (typeof matchingData !== 'undefined' && matchingData.timerInterval) clearInterval(matchingData.timerInterval);
             quizData = { correct: 0, wrong: 0, learnedCount: 0, currentWord: null, options: [], direction: 'wordToMeaning', wordQueue: [], wrongWords: [], isRetryMode: false, isFinished: false, lastState: null, nextTimeout: null };
-            loadQuizPrefs(); quizData.direction = quizHowDirection();
+            injectModeIcons(); loadQuizPrefs(); quizData.direction = quizHowDirection();
             customTestPool = null; lastStatusForPicker = null; selectedPoolFilter = 'all'; loadSessionWordIds();
             document.getElementById('quizStartScreen').classList.remove('hidden');
             document.getElementById('quizSessionPreviewScreen').classList.add('hidden');
@@ -4326,6 +4657,14 @@ async function shareDictionary(name) {
             const optionsHtml = fieldIdx => quizData.options.map((opt, idx) => `<button class="quiz-option" dir="auto" onclick="checkAnswer(${idx})">${escapeHtml(getField(opt, fieldIdx))}</button>`).join('');
             const audioBtn = `<span class="compact-audio-btn" style="position: absolute; right: 14px; top: 12px;" onclick="speakById(${w.id}, ${q})"><svg class="svg-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>`;
 
+            if (WRITE_MODES.includes(quizHowMode)) {
+                renderWriteExercise(w, q, a, scoreBadge, audioBtn, speak);
+                document.getElementById('quizProgress').textContent = `Вопрос ${quizData.correct + quizData.wrong + 1} из ${quizData.wordQueue.length + quizData.correct + quizData.wrong + 1}`;
+                document.getElementById('remainingCount').textContent = quizData.wordQueue.length;
+                decorateQuizLabel();
+                marathonBadge();
+                return;
+            }
             if (dir === 'listening') {
                 document.getElementById('quizWord').innerHTML = `${scoreBadge}<span class="compact-audio-btn" style="width: 52px; height: 52px;" onclick="speakById(${w.id}, ${q})"><svg class="svg-icon svg-icon-large" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>`;
                 document.getElementById('quizLabel').textContent = 'Прослушайте и выберите:';
@@ -4343,9 +4682,22 @@ async function shareDictionary(name) {
             }
             document.getElementById('quizProgress').textContent = `Вопрос ${quizData.correct + quizData.wrong + 1} из ${quizData.wordQueue.length + quizData.correct + quizData.wrong + 1}`;
             document.getElementById('remainingCount').textContent = quizData.wordQueue.length;
+            decorateQuizLabel();
+            marathonBadge();
         }
 
         function showNextWord() {
+            if (quizHowMode === 'marathon' && !quizMarathon.active) {
+                if (!marathonStart()) { quizMarathon.active = false; alert('Нет подходящих упражнений для этих слов'); showResults('manual'); return; }
+                quizMarathon.shown = 1;
+            }
+            if (quizData.wordQueue.length === 0 && quizMarathon.active) {
+                if (marathonNextRound()) {
+                    quizMarathon.shown++;
+                    appDialog({ message: 'Дальше: ' + MARATHON_NAMES[quizMarathon.current], okText: 'Дальше' }).then(() => showNextWord());
+                    return;
+                }
+            }
             if (quizData.wordQueue.length === 0) { showResults('win'); return; }
             
             const undoBtn = document.getElementById('btnUndoQuiz');
@@ -4370,6 +4722,231 @@ async function shareDictionary(name) {
             renderQuizQuestion(true);
         }
         
+
+        /* ===== Упражнения: напиши ответ, собери слово, диктовка, верно/неверно, пропуск, фраза (влияют на рейтинг) ===== */
+        function normAnswer(t) {
+            return String(t || '').toLowerCase()
+                .replace(/[ً-ٰٟـ]/g, '')
+                .replace(/[آأإٱ]/g, 'ا')
+                .replace(/ى/g, 'ي').replace(/ة/g, 'ه')
+                .replace(/̇/g, '').replace(/ı/g, 'i')
+                .replace(/[.,!?;:"'«»()\-–—]/g, ' ').replace(/\s+/g, ' ').trim();
+        }
+        function answerVariants(ans) {
+            const whole = normAnswer(ans);
+            const parts = String(ans || '').split(/[,;\/،؛]/).map(normAnswer).filter(Boolean);
+            return [whole, ...parts];
+        }
+        function makeCloze(w) {
+            const ex = String(w.example || '').trim();
+            const key = normAnswer(w.word);
+            if (!ex || key.length < 2) return null;
+            if (key.includes(' ')) {
+                const i = ex.toLocaleLowerCase('tr').indexOf(String(w.word).trim().toLocaleLowerCase('tr'));
+                if (i < 0) return null;
+                const e = i + String(w.word).trim().length;
+                return { text: ex.slice(0, i) + '_____' + ex.slice(e), answer: ex.slice(i, e) };
+            }
+            const re = /[\p{L}\p{N}]+/gu; let m;
+            while ((m = re.exec(ex))) {
+                const tk = normAnswer(m[0]); if (tk.startsWith(key) || (key.length >= 4 && tk.startsWith(key.slice(0, -1)))) return { text: ex.slice(0, m.index) + '_____' + ex.slice(m.index + m[0].length), answer: m[0] };
+            }
+            return null;
+        }
+        function finishWrite(ok, w, shown) {
+            if (quizData.writeLocked) return;
+            quizData.writeLocked = true;
+            const box = document.getElementById('writeFeedback');
+            if (box && !ok) box.innerHTML = `<div style="margin-top:12px;font-size:13px;color:var(--ios-text-secondary);">Правильно:</div><div dir="auto" style="font-size:20px;font-weight:700;color:var(--ios-green);margin-top:2px;">${escapeHtml(shown)}</div>`;
+            document.querySelectorAll('#quizOptions input, #quizOptions button').forEach(el => el.disabled = true);
+            const inp = document.getElementById('writeInput');
+            if (inp) inp.style.borderColor = ok ? 'var(--ios-green)' : 'var(--ios-red)';
+            const row = document.getElementById('asmAnswer');
+            if (row) row.style.borderColor = ok ? 'var(--ios-green)' : 'var(--ios-red)';
+            quizFreeDelay = ok ? 500 : 1800;
+            const correctIdx = quizData.options.findIndex(o => o.id === w.id);
+            checkAnswer(ok ? correctIdx : -1);
+            quizFreeDelay = 0;
+        }
+        function renderWriteExercise(w, q, a, badge, audio, speak) {
+            quizData.writeLocked = false;
+            let mode = quizHowMode;
+            const ex = String(w.example || '').trim();
+            let cloze = null, units = null;
+            if (mode === 'cloze') { cloze = makeCloze(w); if (!cloze) mode = 'typing'; }
+            if (mode === 'sentence') { units = ex.split(/\s+/).filter(Boolean); if (units.length < 3 || units.length > 12) mode = 'typing'; }
+            let target = String(getField(w, a) || ''), join = '';
+            if (mode === 'assemble') {
+                units = Array.from(target.replace(/[ً-ٰٟـ\s]/g, ''));
+                if (units.length < 2 || units.length > 16) mode = 'typing';
+            }
+            if (mode === 'dictation') target = String(getField(w, q) || '');
+            if (mode === 'cloze') target = cloze.answer;
+            if (mode === 'sentence') { target = units.join(' '); join = ' '; }
+            const isAr = /[؀-ۿ]/.test(target);
+            const wordCard = `${badge}<div class="quiz-word-body"><div dir="auto">${escapeHtml(getField(w, q))}</div>${quizHintHtml(w)}</div>${audio}`;
+            const quizWord = document.getElementById('quizWord'), label = document.getElementById('quizLabel'), out = document.getElementById('quizOptions');
+            const typingUi = (ph) => `<input id="writeInput" type="text" dir="auto" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="${ph}"
+                    style="width:100%;box-sizing:border-box;padding:14px;font-size:18px;border-radius:14px;border:2px solid var(--ios-separator);background:var(--ios-card);color:var(--ios-text);text-align:center;outline:none;">
+                    <div style="display:flex;gap:8px;margin-top:10px;">
+                        <button class="quiz-option" style="flex:1;" onclick="writeHint()">Подсказка</button>
+                        <button class="quiz-option" style="flex:2;font-weight:700;" onclick="writeSubmit()">Проверить</button>
+                    </div><div id="writeFeedback" style="text-align:center;"></div>`;
+            const startTyping = () => {
+                const inp = document.getElementById('writeInput');
+                inp.addEventListener('keydown', e => { if (e.key === 'Enter') writeSubmit(); });
+                setTimeout(() => { try { inp.focus(); } catch (e) {} }, 50);
+                quizData.write = { w, target, hints: 0 };
+            };
+            if (mode === 'tf') {
+                const pool = getCurrentWords().filter(x => hasPair(x) && x.id !== w.id && getField(x, a) !== getField(w, a));
+                const truth = pool.length === 0 || Math.random() < 0.5;
+                const cand = truth ? w : pool[Math.floor(Math.random() * pool.length)];
+                quizWord.innerHTML = wordCard;
+                label.textContent = 'Это правильный перевод?';
+                out.innerHTML = `<div dir="auto" style="text-align:center;font-size:24px;font-weight:700;padding:14px 8px;">${escapeHtml(getField(cand, a))}</div>
+                    <div style="display:flex;gap:10px;"><button class="quiz-option" style="flex:1;font-weight:700;" onclick="tfAnswer(true)">Верно</button><button class="quiz-option" style="flex:1;font-weight:700;" onclick="tfAnswer(false)">Неверно</button></div>
+                    <div id="writeFeedback" style="text-align:center;"></div>`;
+                quizData.write = { w, truth, shown: String(getField(w, a) || '') };
+                if (speak && autoTts) speakField(w, q);
+            } else if (mode === 'dictation') {
+                quizWord.innerHTML = `${badge}<span class="compact-audio-btn" style="width:52px;height:52px;" onclick="speakById(${w.id}, ${q})"><svg class="svg-icon svg-icon-large" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>`;
+                label.textContent = `Напишите услышанное: ${langName(q)}`;
+                out.innerHTML = typingUi('Слово'); startTyping();
+                if (speak) speakField(w, q);
+            } else if (mode === 'cloze') {
+                quizWord.innerHTML = `${badge}<div class="quiz-word-body"><div dir="auto" style="font-size:20px;line-height:1.4;">${escapeHtml(cloze.text)}</div><div dir="auto" style="font-size:14px;color:var(--ios-text-secondary);margin-top:6px;">${escapeHtml(getField(w, a))}</div></div>`;
+                label.textContent = 'Вставьте пропущенное слово';
+                out.innerHTML = typingUi('Слово'); startTyping();
+            } else if (mode === 'sentence') {
+                quizWord.innerHTML = wordCard;
+                label.textContent = 'Составьте фразу со словом';
+                startAssemble(w, units, join, isAr, target, out);
+            } else if (mode === 'assemble') {
+                quizWord.innerHTML = wordCard;
+                label.textContent = `Соберите: ${langName(a)}`;
+                startAssemble(w, units, join, isAr, target, out);
+                if (speak && autoTts) speakField(w, q);
+            } else {
+                quizWord.innerHTML = wordCard;
+                label.textContent = `Напишите: ${langName(a)}`;
+                out.innerHTML = typingUi('Ответ'); startTyping();
+                if (speak && autoTts) speakField(w, q);
+            }
+        }
+        function startAssemble(w, units, join, isAr, target, out) {
+            const tiles = units.map((ch, i) => ({ ch, i })).sort(() => 0.5 - Math.random());
+            quizData.write = { w, target, units, join, picked: [], tiles };
+            out.innerHTML = `<div id="asmAnswer" dir="${isAr ? 'rtl' : 'ltr'}" style="min-height:56px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;padding:10px;border:2px dashed var(--ios-separator);border-radius:14px;"></div>
+                <div id="asmTiles" dir="${isAr ? 'rtl' : 'ltr'}" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px;"></div>
+                <div id="writeFeedback" style="text-align:center;"></div>`;
+            asmRender();
+        }
+        function tfAnswer(says) {
+            const st = quizData.write; if (!st || quizData.writeLocked) return;
+            finishWrite(says === st.truth, st.w, st.shown);
+        }
+        function writeSubmit() {
+            const st = quizData.write; if (!st || quizData.writeLocked) return;
+            const val = normAnswer(document.getElementById('writeInput').value);
+            if (!val) return;
+            finishWrite(answerVariants(st.target).some(v => v === val || (v.length >= 5 && lev1(v, val))), st.w, st.target);
+        }
+        function writeHint() {
+            const st = quizData.write; if (!st || quizData.writeLocked) return;
+            st.hints++;
+            const t = Array.from(String(st.target || '').replace(/[ً-ٰٟ]/g, ''));
+            const inp = document.getElementById('writeInput');
+            inp.value = t.slice(0, st.hints).join('');
+            inp.focus();
+        }
+        function asmRender() {
+            const st = quizData.write;
+            const used = new Set(st.picked);
+            const bs = 'width:auto;min-width:44px;padding:10px 12px;font-size:20px;font-weight:700;';
+            document.getElementById('asmAnswer').innerHTML = st.picked.length
+                ? st.picked.map((ti, k) => `<button class="quiz-option" style="${bs}" onclick="asmUnpick(${k})">${escapeHtml(st.tiles[ti].ch)}</button>`).join('')
+                : '<span style="color:var(--ios-text-secondary);font-size:13px;">Нажимайте по порядку</span>';
+            document.getElementById('asmTiles').innerHTML = st.tiles.map((t, ti) =>
+                `<button class="quiz-option" style="${bs}${used.has(ti) ? 'opacity:.25;' : ''}" ${used.has(ti) ? 'disabled' : ''} onclick="asmPick(${ti})">${escapeHtml(t.ch)}</button>`).join('');
+        }
+        function asmPick(ti) {
+            const st = quizData.write; if (!st || quizData.writeLocked || st.picked.includes(ti)) return;
+            st.picked.push(ti); asmRender();
+            if (st.picked.length === st.units.length) {
+                const got = normAnswer(st.picked.map(i => st.tiles[i].ch).join(st.join));
+                finishWrite(got === normAnswer(st.units.join(st.join)), st.w, st.units.join(st.join));
+            }
+        }
+        function asmUnpick(k) {
+            const st = quizData.write; if (!st || quizData.writeLocked) return;
+            st.picked.splice(k, 1); asmRender();
+        }
+
+        /* ===== Марафон: все выбранные упражнения подряд, один итог рейтинга на слово ===== */
+        function marathonRoundWords(ex) {
+            const all = getCurrentWords();
+            let list = quizMarathon.ids.map(id => all.find(w => w.id === id)).filter(Boolean);
+            if (ex === 'cloze') list = list.filter(w => makeCloze(w));
+            if (ex === 'sentence') list = list.filter(w => { const n = String(w.example || '').trim().split(/\s+/).filter(Boolean).length; return n >= 3 && n <= 12; });
+            return list.sort(() => 0.5 - Math.random());
+        }
+        function marathonNextRound() {
+            // возвращает true, если раунд запущен
+            while (quizMarathon.round < quizMarathon.list.length) {
+                const ex = quizMarathon.list[quizMarathon.round++];
+                const words = marathonRoundWords(ex);
+                if (words.length === 0) continue;
+                quizHowMode = ex;
+                quizData.direction = quizHowDirection();
+                quizData.wordQueue = words;
+                quizData.lastState = null;
+                quizMarathon.current = ex;
+                return true;
+            }
+            return false;
+        }
+        function marathonStart() {
+            quizMarathon.active = true;
+            quizMarathon.res = {};
+            quizMarathon.ids = quizData.wordQueue.map(w => w.id);
+            quizMarathon.list = MARATHON_ORDER.filter(m => quizMarathon.picked.includes(m));
+            quizMarathon.round = 0;
+            quizMarathon.total = quizMarathon.list.length;
+            quizMarathon.shown = 0;
+            return marathonNextRound();
+        }
+        function marathonFinalize() {
+            if (!quizMarathon.active) return;
+            const words = getCurrentWords();
+            Object.keys(quizMarathon.res).forEach(id => {
+                const r = quizMarathon.res[id];
+                const w = words.find(x => String(x.id) === String(id));
+                if (!w || !r.n) return;
+                const sc = w.score;
+                if (r.wrong <= 1) {
+                    if (sc === null || sc === undefined) { w.score = 1; quizData.learnedCount++; }
+                    else if (sc < 0) { const ns = sc + 1; w.score = ns >= 0 ? 1 : ns; if (w.score === 1) quizData.learnedCount++; }
+                    else w.score = 1;
+                } else {
+                    w.score = (sc === null || sc === undefined || sc === 1) ? -1 : sc - 1;
+                }
+                w.lastReviewed = new Date().toISOString();
+            });
+            setCurrentWords(words);
+            quizMarathon.active = false;
+            quizHowMode = 'marathon';
+            quizData.direction = quizHowDirection();
+            updateQuizScore();
+        }
+        function lev1(a, b) {
+            if (a === b) return true;
+            if (Math.abs(a.length - b.length) > 1) return false;
+            let i = 0; while (i < a.length && i < b.length && a[i] === b[i]) i++;
+            if (a.length === b.length) return a.slice(i + 1) === b.slice(i + 1);
+            return a.length > b.length ? a.slice(i + 1) === b.slice(i) : a.slice(i) === b.slice(i + 1);
+        }
+
         function checkAnswer(selectedIndex) {
             const selectedIndexNum = parseInt(selectedIndex);
             const correctIndex = quizData.options.findIndex(opt => opt.id === quizData.currentWord.id);
@@ -4378,6 +4955,10 @@ async function shareDictionary(name) {
             const words = getCurrentWords();
             const wordIndex = words.findIndex(w => w.id === quizData.currentWord.id);
             let newlyLearned = false;
+            if (quizMarathon.active) {
+                const mr = quizMarathon.res[quizData.currentWord.id] || (quizMarathon.res[quizData.currentWord.id] = { wrong: 0, n: 0 });
+                mr.n++; if (!isCorrect) mr.wrong++;
+            }
 
             quizData.lastState = {
                 word: quizData.currentWord,
@@ -4393,7 +4974,7 @@ async function shareDictionary(name) {
                 wasCorrect: isCorrect
             };
 
-            const buttons = document.querySelectorAll('.quiz-option');
+            const buttons = WRITE_MODES.includes(quizHowMode) ? [] : document.querySelectorAll('.quiz-option');
             buttons.forEach((btn, idx) => {
                 btn.disabled = true;
                 if (idx === correctIndex) btn.classList.add('correct');
@@ -4407,7 +4988,7 @@ async function shareDictionary(name) {
 
             if (isCorrect) {
                 quizData.correct++;
-                if (wordIndex !== -1 && !quizData.isRetryMode) {
+                if (wordIndex !== -1 && !quizData.isRetryMode && !quizMarathon.active) {
                     const currentScore = words[wordIndex].score;
                     if (currentScore === null || currentScore === undefined) {
                         words[wordIndex].score = 1; newlyLearned = true;
@@ -4426,7 +5007,7 @@ async function shareDictionary(name) {
                 if (!quizData.wrongWords.some(w => w.id === quizData.currentWord.id)) {
                     quizData.wrongWords.push(quizData.currentWord);
                 }
-                if (wordIndex !== -1) {
+                if (wordIndex !== -1 && !quizMarathon.active) {
                     const currentScore = words[wordIndex].score;
                     if (currentScore === null || currentScore === undefined) {
                         words[wordIndex].score = -1;
@@ -4451,7 +5032,7 @@ async function shareDictionary(name) {
             const waitBeforeNext = answerSpeech
                 ? Promise.race([answerSpeech, new Promise(r => setTimeout(r, 800))])
                     .then(() => new Promise(r => setTimeout(r, Math.max(0, Math.min(200, 1000 - (performance.now() - answeredAt))))))
-                : new Promise(r => setTimeout(r, 140));
+                : new Promise(r => setTimeout(r, quizFreeDelay || 140));
             waitBeforeNext
                 .then(() => {
                     if (seq !== quizAdvanceSeq) return;
@@ -4477,6 +5058,10 @@ async function shareDictionary(name) {
                 quizData.wordQueue.unshift(quizData.currentWord);
             }
             
+            if (quizMarathon.active) {
+                const mr = quizMarathon.res[quizData.lastState.word.id];
+                if (mr) { mr.n--; if (!quizData.lastState.wasCorrect) mr.wrong--; }
+            }
             quizData.correct = quizData.lastState.correct;
             quizData.wrong = quizData.lastState.wrong;
             quizData.learnedCount = quizData.lastState.learnedCount;
@@ -4512,6 +5097,7 @@ async function shareDictionary(name) {
         }
         function showResults(reason) {
             quizAdvanceSeq++;
+            marathonFinalize();
             const timerInfo = (gt && gt.kind === 'quiz') ? gtSnapshot() : null;
             gtDispose();
             let timerBanner = '';
@@ -4768,12 +5354,14 @@ async function shareDictionary(name) {
         }
 
         Object.assign(I18N, {"Новое слово":["New word","Yeni kelime","كلمة جديدة"],"Редактировать слово":["Edit word","Kelimeyi düzenle","تعديل الكلمة"],"Новое правило":["New rule","Yeni kural","قاعدة جديدة"],"Редактировать правило":["Edit rule","Kuralı düzenle","تعديل القاعدة"]});
-        I18N_PATS.push(...[["^(.+) \\((\\d+) слов\\)$",["$1 ($2 words)","$1 ($2 kelime)","$1 ($2 كلمة)"],false],["^например: (.+)$",["e.g. $1","örn: $1","مثال: $1"],true],["^(.+) \\[Категория\\]$",["$1 [Category]","$1 [Kategori]","$1 [التصنيف]"],true],["^Формат строки: (.+) \\[Категория\\]\\. Пропустить язык можно пустым местом между тире\\.?$",["Line format: $1 [Category]. To skip a language, leave the space between the dashes empty.","Satır biçimi: $1 [Kategori]. Bir dili atlamak için tireler arasını boş bırakın.","صيغة السطر: $1 [التصنيف]. لتخطي لغة اترك المكان فارغًا بين الشرطتين."],true]].map(p => [new RegExp(p[0]), p[1], p[2]]));
+        I18N_PATS.push(...[["^Примеров: (\\d+)\\.$",["Examples added: $1.","Eklenen örnek: $1.","أُضيفت أمثلة: $1."],false],["^Дальше: (.+)$",["Next: $1","Sonraki: $1","التالي: $1"],true],["^Напишите: (.+)$",["Type: $1","Yazın: $1","اكتب: $1"],true],["^Соберите: (.+)$",["Build: $1","Oluşturun: $1","ركّب: $1"],true],["^Напишите услышанное: (.+)$",["Type what you hear: $1","Duyduğunuzu yazın: $1","اكتب ما تسمعه: $1"],true],["^(\\d+)/(\\d+) · Вопрос (\\d+) из (\\d+)$",["$1/$2 · Question $3 of $4","$1/$2 · Soru $3 / $4","$1/$2 · السؤال $3 من $4"],false],["^(.+) \\((\\d+) слов\\)$",["$1 ($2 words)","$1 ($2 kelime)","$1 ($2 كلمة)"],false],["^например: (.+)$",["e.g. $1","örn: $1","مثال: $1"],true],["^(.+) \\[Категория\\]$",["$1 [Category]","$1 [Kategori]","$1 [التصنيف]"],true],["^Формат строки: (.+) \\[Категория\\]\\. Пропустить язык можно пустым местом между тире\\.?$",["Line format: $1 [Category]. To skip a language, leave the space between the dashes empty.","Satır biçimi: $1 [Kategori]. Bir dili atlamak için tireler arasını boş bırakın.","صيغة السطر: $1 [التصنيف]. لتخطي لغة اترك المكان فارغًا بين الشرطتين."],true]].map(p => [new RegExp(p[0]), p[1], p[2]]));
         Object.assign(I18N, {"Итальянский":["Italian","İtalyanca","الإيطالية"],"Португальский":["Portuguese","Portekizce","البرتغالية"],"Персидский":["Persian","Farsça","الفارسية"],"Китайский":["Chinese","Çince","الصينية"],"Японский":["Japanese","Japonca","اليابانية"],"Корейский":["Korean","Korece","الكورية"],"Мелко под вопросом":["Shown small under the question","Sorunun altında küçük yazılır","يظهر بخط صغير تحت السؤال"],"Такое имя уже занято":["This name is already taken","Bu ad zaten kullanılıyor","هذا الاسم مستخدم بالفعل"],"Такой словарь уже есть":["This dictionary already exists","Bu sözlük zaten var","هذا القاموس موجود بالفعل"],"Укажите названия языков":["Enter the language names","Dil adlarını girin","أدخل أسماء اللغات"],"Укажите название третьего языка":["Enter the third language name","Üçüncü dilin adını girin","أدخل اسم اللغة الثالثة"],"Новое":["New","Yeni","جديد"],"Изученные":["Learned","Öğrenilenler","المتعلَّمة"],"Новые":["New","Yeni","الجديدة"],"Картинка выбрана":["Picture selected","Resim seçildi","تم اختيار الصورة"],"Картинка добавлена":["Picture added","Resim eklendi","تمت إضافة الصورة"],"Ничего не найдено":["Nothing found","Hiçbir şey bulunamadı","لم يتم العثور على شيء"],"В словаре пока нет слов":["There are no words in this dictionary yet","Sözlükte henüz kelime yok","لا توجد كلمات في القاموس بعد"],"Правил пока нет":["No rules yet","Henüz kural yok","لا توجد قواعد بعد"],"Заполните тему и текст правила":["Fill in the rule topic and text","Kural konusunu ve metnini doldurun","املأ موضوع القاعدة ونصها"],"Заметки:":["Notes:","Notlar:","ملاحظات:"],"Вставьте список правил для импорта":["Paste a list of rules to import","İçe aktarılacak kural listesini yapıştırın","الصق قائمة القواعد للاستيراد"],"Вставьте список слов для импорта":["Paste a list of words to import","İçe aktarılacak kelime listesini yapıştırın","الصق قائمة الكلمات للاستيراد"],"Не удалось распознать правила.":["Could not recognize the rules.","Kurallar tanınamadı.","تعذّر التعرف على القواعد."],"Не удалось распознать слова.":["Could not recognize the words.","Kelimeler tanınamadı.","تعذّر التعرف على الكلمات."],"Не удалось распознать строку":["Could not recognize the line","Satır tanınamadı","تعذّر التعرف على السطر"],"Нет новых правил для добавления.":["No new rules to add.","Eklenecek yeni kural yok.","لا توجد قواعد جديدة للإضافة."],"Нет новых слов для добавления.":["No new words to add.","Eklenecek yeni kelime yok.","لا توجد كلمات جديدة للإضافة."],"Категории:":["Categories:","Kategoriler:","التصنيفات:"],"Список пуст":["The list is empty","Liste boş","القائمة فارغة"],"Новых слов не обнаружено":["No new words found","Yeni kelime bulunamadı","لم يتم العثور على كلمات جديدة"],"Ошибка чтения CSV файла":["Error reading the CSV file","CSV dosyası okunamadı","خطأ في قراءة ملف CSV"],"Доступно:":["Available:","Mevcut:","المتاح:"],"Нет слов":["No words","Kelime yok","لا توجد كلمات"],"Нет слов с заполненными языками пары":["No words with the pair languages filled in","Çift dilleri dolu kelime yok","لا توجد كلمات بلغتَي الزوج المملوءتين"],"В этой категории нет слов с заполненными языками пары":["No words in this category with the pair languages filled in","Bu kategoride çift dilleri dolu kelime yok","لا توجد كلمات في هذا التصنيف بلغتَي الزوج المملوءتين"],"Недостаточно слов":["Not enough words","Yeterli kelime yok","لا توجد كلمات كافية"],"Нужно минимум 4 слова":["At least 4 words are needed","En az 4 kelime gerekli","يلزم 4 كلمات على الأقل"],"Прослушайте и выберите:":["Listen and choose:","Dinleyin ve seçin:","استمع ثم اختر:"],"Время вышло":["Time's up","Süre doldu","انتهى الوقت"],"Тест остановлен":["Test stopped","Test durduruldu","توقف الاختبار"],"Все слова пройдены":["All words completed","Tüm kelimeler tamamlandı","تم إنهاء كل الكلمات"],"Все слова сопоставлены":["All words matched","Tüm kelimeler eşleşti","تمت مطابقة كل الكلمات"],"Игра остановлена":["Game stopped","Oyun durduruldu","توقفت اللعبة"],"В разделе \"Изученные\" нет слов":["There are no words in \"Learned\"","\"Öğrenilenler\" bölümünde kelime yok","لا توجد كلمات في قسم \"المتعلَّمة\""],"Файл сохранён в «Загрузки». Чтобы отправить его в WhatsApp/Telegram: откройте уведомление о загрузке (или папку «Загрузки»), нажмите на файл и выберите «Поделиться».":["The file was saved to Downloads. To send it via WhatsApp/Telegram: open the download notification (or the Downloads folder), tap the file and choose Share.","Dosya İndirilenler klasörüne kaydedildi. WhatsApp/Telegram ile göndermek için: indirme bildirimini (veya İndirilenler klasörünü) açın, dosyaya dokunun ve Paylaş'ı seçin.","تم حفظ الملف في «التنزيلات». لإرساله عبر واتساب/تيليجرام: افتح إشعار التنزيل (أو مجلد التنزيلات)، اضغط على الملف واختر «مشاركة»."]});
         I18N_PATS.unshift(...[["^Подсказка: (.+)$",["Hint: $1","İpucu: $1","تلميح: $1"],true],["^Осталось в круге: (\\d+)$",["Left in round: $1","Turda kalan: $1","المتبقي في الجولة: $1"]],["^Бонус \\+(\\d+) с$",["Bonus +$1 s","Bonus +$1 sn","مكافأة +$1 ث"]],["^Найдено правил: (\\d+)$",["Rules found: $1","Bulunan kural: $1","القواعد الموجودة: $1"]],["^Добавлено (\\d+) правил\\.$",["Added $1 rules.","$1 kural eklendi.","أُضيفت $1 قاعدة."]],["^Дополнить: (\\d+)$",["To complete: $1","Tamamlanacak: $1","للإكمال: $1"]],["^Дополнит слово: (.+)$",["Will complete the word: $1","Kelimeyi tamamlayacak: $1","سيُكمل الكلمة: $1"]],["^Словарь \"(.+)\" \\((\\d+) слов\\) сохранён$",["Dictionary \"$1\" ($2 words) saved","\"$1\" sözlüğü ($2 kelime) kaydedildi","تم حفظ القاموس \"$1\" ($2 كلمة)"]],["^Успешно импортировано (\\d+) слов из CSV$",["Imported $1 words from CSV","CSV'den $1 kelime içe aktarıldı","تم استيراد $1 كلمة من CSV"]],["^Успешно импортировано (\\d+) слов из CSV, дополнено переводом: (\\d+)$",["Imported $1 words from CSV, completed with translation: $2","CSV'den $1 kelime aktarıldı, çeviri tamamlandı: $2","تم استيراد $1 كلمة من CSV، وأُكملت ترجمة $2"]],["^Раздел: (.+)$",["Section: $1","Bölüm: $1","القسم: $1"],true],["^В разделе \"(.+)\" нет слов$",["No words in \"$1\"","\"$1\" bölümünde kelime yok","لا توجد كلمات في قسم \"$1\""],true],["^Все слова раздела \"(.+)\" пройдены \\((.+)\\)$",["All words in \"$1\" are completed ($2)","\"$1\" bölümündeki tüm kelimeler tamamlandı ($2)","تم إنهاء كل كلمات قسم \"$1\" ($2)"],true],["^(\\d+) слов перенесено в раздел \"Новые\"$",["$1 words moved to \"New\"","$1 kelime \"Yeni\" bölümüne taşındı","تم نقل $1 كلمة إلى قسم \"الجديدة\""]],["^Нужно минимум 4 слова\\. Доступно: (\\d+)$",["At least 4 words are needed. Available: $1","En az 4 kelime gerekli. Mevcut: $1","يلزم 4 كلمات على الأقل. المتاح: $1"]],["^Нужно минимум 4 слова с заполненными языками пары\\. Доступно: (\\d+)$",["At least 4 words with the pair languages filled in are needed. Available: $1","Çift dilleri dolu en az 4 kelime gerekli. Mevcut: $1","يلزم 4 كلمات على الأقل بلغتَي الزوج المملوءتين. المتاح: $1"]],["^(Изучено|Ошибки|Новые) \\((\\d+)\\)$",["$1 ($2)","$1 ($2)","$1 ($2)"],true],["^Заметка: (.+)$",["Note: $1","Not: $1","ملاحظة: $1"]],["^Выберите: (.+)$",["Choose: $1","Seçin: $1","اختر: $1"]],["^Сопоставлено: (\\d+) слов \\(Осталось в очереди: (\\d+)\\)$",["Matched: $1 words (left in queue: $2)","Eşleşen: $1 kelime (kuyrukta kalan: $2)","تمت مطابقة $1 كلمة (المتبقي في الطابور: $2)"]],["^Дополнено переводом: (\\d+)\\.?$",["Completed with translation: $1.","Çeviri tamamlandı: $1.","أُكملت ترجمة: $1."]],["^Дополнено: (\\d+)\\.$",["Completed: $1.","Tamamlandı: $1.","تم الإكمال: $1."]],["^Пропущено \\(дубли/ошибки\\): (\\d+)\\.$",["Skipped (duplicates/errors): $1.","Atlandı (tekrar/hata): $1.","تم التخطي (مكرر/أخطاء): $1."]],["^Уже было в словаре \\(рейтинг сохранён\\): (\\d+)\\.$",["Already in the dictionary (rating kept): $1.","Zaten sözlükte (puan korundu): $1.","موجودة سابقًا (حُفظ التقييم): $1."]],["^Добавлено новых слов: (\\d+)\\.$",["New words added: $1.","Eklenen yeni kelime: $1.","أُضيفت كلمات جديدة: $1."]],["^Это резервная копия ВСЕХ словарей \\((\\d+) словарей, (\\d+) слов\\)\\.[\\s\\S]*Продолжить\\?$",["This is a backup of ALL dictionaries ($1 dictionaries, $2 words).\n\nIt will completely replace all dictionaries currently on this phone. The current data will be permanently deleted.\n\nContinue?","Bu, TÜM sözlüklerin yedeğidir ($1 sözlük, $2 kelime).\n\nTelefondaki tüm sözlüklerin yerini tamamen alacak. Mevcut veriler kalıcı olarak silinecek.\n\nDevam edilsin mi?","هذه نسخة احتياطية لكل القواميس ($1 قاموسًا، $2 كلمة).\n\nستحل محل كل القواميس الموجودة على هذا الهاتف بالكامل، وسيتم حذف البيانات الحالية نهائيًا.\n\nهل تريد المتابعة؟"]]].map(p => [new RegExp(p[0]), p[1], p[2]]));
         I18N_PATS.unshift([/^Удалить "(.+)"\?$/, ['Delete "$1"?', '"$1" silinsin mi?', 'حذف "$1"؟']]);
         Object.assign(I18N, {"Глаголы":["Verbs","Fiiller","أفعال"],"Существительные":["Nouns","İsimler","أسماء"],"Прилагательные":["Adjectives","Sıfatlar","صفات"],"Наречия":["Adverbs","Zarflar","ظروف"],"Местоимения":["Pronouns","Zamirler","ضمائر"],"Предлоги":["Prepositions","Edatlar","حروف الجر"],"Союзы":["Conjunctions","Bağlaçlar","حروف العطف"],"Числительные":["Numerals","Sayı sıfatları","أعداد"],"Частицы":["Particles","Parçacıklar","أدوات"],"Междометия":["Interjections","Ünlemler","أدوات التعجب"],"Выражения":["Expressions","İfadeler","تعابير"],"Идиомы":["Idioms","Deyimler","عبارات اصطلاحية"],"Предложения":["Sentences","Cümleler","جمل"],"Слова":["Words","Kelimeler","كلمات"],"Другое":["Other","Diğer","أخرى"],"Имена":["Names","Adlar","أسماء أعلام"],"Страны":["Countries","Ülkeler","دول"],"Профессии":["Professions","Meslekler","مهن"],"Правила грамматики":["Grammar rules","Dilbilgisi kuralları","قواعد النحو"]});
         Object.assign(I18N, {"Служебные слова":["Function words","Yardımcı kelimeler","الكلمات الوظيفية"],"Быт и повседневная жизнь":["Home and daily life","Ev ve günlük yaşam","المنزل والحياة اليومية"],"Человек и общение":["People and communication","İnsan ve iletişim","الإنسان والتواصل"],"Окружающий мир":["The world around us","Çevremizdeki dünya","العالم من حولنا"],"Досуг и обучение":["Leisure and learning","Boş zaman ve eğitim","الترفيه والتعلّم"],"Разное":["Miscellaneous","Çeşitli","متفرقات"]});
+        Object.assign(I18N, {"Мой словарь":["My dictionary","Sözlüğüm","قاموسي"],"Результаты теста":["Test results","Test sonuçları","نتائج الاختبار"],"Ошибок":["Mistakes","Hata","الأخطاء"],"Пройти заново":["Try again","Tekrar dene","أعد المحاولة"],"Категория:":["Category:","Kategori:","الفئة:"],"Экспорт":["Export","Dışa aktar","تصدير"],"Предложение со словом (для упражнений «Заполни пропуск» и «Составь фразу»)":["Sentence with the word (for “Fill the gap” and “Build the phrase” exercises)","Kelimeyle cümle («Boşluğu doldur» ve «Cümle kur» alıştırmaları için)","جملة بالكلمة (لتمرينَي «املأ الفراغ» و«كوّن جملة»)"]});
+        I18N_PATS.unshift(...[["^Выберите: (.+)$",["Choose: $1","Seçin: $1","اختر: $1"],true],["^(\\d+) слов$",["$1 words","$1 kelime","$1 كلمة"]],["^Рейтинг: (.+) \\((Новое|Изучено|Ошибки)\\)$",["Rating: $1 ($2)","Puan: $1 ($2)","التقييم: $1 ($2)"],true],["^(Русский|Арабский|Турецкий|Английский|Немецкий|Французский|Испанский|Итальянский|Португальский|Персидский|Китайский|Японский|Корейский|Украинский|Польский|Слово|Перевод):$",["$1:","$1:","$1:"],true]]);
         const I18N_LOW = {};
         ['Русский', 'Турецкий', 'Арабский', 'Английский', 'Немецкий', 'Французский', 'Испанский', 'Слово', 'Перевод'].forEach(n => { I18N_LOW[n.toLowerCase()] = I18N[n]; });
         function trInner(x) {
@@ -4814,7 +5402,16 @@ async function shareDictionary(name) {
                 n.childNodes.forEach(i18nNode);
             }
         }
+        const LANG_BAR = { ru: ['#0A0F1E', '#F1F4FB'], en: ['#0E1114', '#F4F5F7'], tr: ['#140A0C', '#FFF6F4'], ar: ['#06120E', '#F1F7F3'] };
+        function applyLangStyle() {
+            const b = document.body, day = b.classList.contains('day-theme');
+            ['ru', 'en', 'tr', 'ar'].forEach(l => b.classList.toggle('lang-' + l, l === uiLang));
+            b.classList.toggle('accent-light', uiLang === 'ar' && !day);   // светлый изумруд: на нём тёмный текст читается лучше
+            const meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute('content', (LANG_BAR[uiLang] || LANG_BAR.ru)[day ? 1 : 0]);
+        }
         function applyUiLang() {
+            applyLangStyle();
             document.documentElement.lang = uiLang;
             document.documentElement.dir = uiLang === 'ar' ? 'rtl' : 'ltr';
             i18nNode(document.body);
@@ -4831,6 +5428,7 @@ async function shareDictionary(name) {
             uiLang = code;
             try { localStorage.setItem('uiLang', code); } catch (e) {}
             applyUiLang();
+            try { updateStats(); renderDictsPage(); } catch (e) {}
         }
         (function initUiLang() {
             const page = document.getElementById('pageSettings');
@@ -4847,6 +5445,7 @@ async function shareDictionary(name) {
                 else m.addedNodes.forEach(i18nNode);
             })).observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['placeholder', 'title'] });
             applyUiLang();
+            try { updateStats(); renderMainContent(); renderDictsPage(); } catch (e) {}
         })();
     
 
@@ -4871,7 +5470,7 @@ async function shareDictionary(name) {
         try {
             let m = lsGet('themeMode') || lsGet('theme');
             if (m === 'auto') m = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'day' : 'night';
-            if (THEMES.includes(m)) themeMode = m;
+            themeMode = m === 'day' ? 'day' : 'night';
             const ac = lsGet('accentCustom'); if (ac && /^#[0-9a-f]{6}$/i.test(ac)) accentCustom = ac;
             try { const bc = JSON.parse(lsGet('bgCustom')); if (bc && 'dml'.includes(bc.t)) { bgCustom = bc; BGS.custom = [bc.h, bc.s, bc.t]; } } catch (e) {}
             const a = lsGet('accent'); if (a in ACCENTS || (a === 'custom' && accentCustom)) accentName = a;
@@ -4881,20 +5480,18 @@ async function shareDictionary(name) {
         const dotColor = n => n === 'custom' ? (accentCustom || RAINBOW) : (ACCENTS[n] ? ACCENTS[n][0] : '#0A84FF');
         function bgSwatch(n) { const p = BGS[n]; if (!p) return RAINBOW; return 'hsl(' + p[0] + ',' + p[1] + '%,' + ({ d: 16, m: 32, l: 92 })[p[2]] + '%)'; }
         function applyTheme(mode) {
+            mode = mode === 'day' ? 'day' : 'night';   // остались только светлая и тёмная
             themeMode = mode;
             lsSet('themeMode', mode);
-            const man = mode === 'manual', b = document.body, light = man ? BGS[bgName][2] === 'l' : (mode === 'day' || mode === 'sepia');
-            b.classList.toggle('day-theme', light);
-            b.classList.toggle('sepia-theme', mode === 'sepia');
-            b.classList.toggle('black-theme', mode === 'black');
+            const b = document.body;
+            b.classList.toggle('day-theme', mode === 'day');
+            ['sepia-theme', 'black-theme'].forEach(c => b.classList.remove(c));
             b.classList.toggle('night-theme', mode === 'night');
-            const meta = document.querySelector('meta[name="theme-color"]');
-            if (meta) meta.setAttribute('content', man ? (light ? '#F2F2F7' : '#000000') : THEME_BAR[mode]);
-            paintCustom();
+            ['--ios-blue', '--ios-blue-rgb', '--ios-shadow-glow', '--ios-bg', '--ios-card', '--ios-card-solid', '--ios-card-hover'].forEach(k => b.style.removeProperty(k));
+            applyLangStyle();
             updateThemeIcon();
-            const sel = document.getElementById('themeModeSelect'); if (sel) sel.value = mode;
-            const blocks = document.getElementById('themeManualBlocks'); if (blocks) blocks.style.display = man ? '' : 'none';
         }
+        function toggleDayNight() { applyTheme(themeMode === 'day' ? 'night' : 'day'); }
         function paintCustom() {
             const man = themeMode === 'manual', b = document.body, p = BGS[bgName];
             const c = accentName === 'custom' && accentCustom ? [accentCustom, hexRgb(accentCustom).join(', ')] : ACCENTS[accentName];
@@ -4976,12 +5573,13 @@ async function shareDictionary(name) {
         }
         function closeLangMenu() {
             const o = document.getElementById('langMenuOverlay'); if (o) o.remove();
-            document.querySelectorAll('.header-controls').forEach(p => { p.style.transform = ''; });
+            document.querySelectorAll('.header-controls').forEach(p => { p.style.transform = ''; p.classList.remove('fan-slid'); });
         }
         // Веер из трёх кружков. slide=true: пара кнопок съезжает внутрь экрана, кружки появляются в освободившемся месте
         function openFan(btn, spots, slide) {
             closeLangMenu();
             const pill = btn.closest('.header-controls') || btn, hdr = btn.closest('.header');
+            if (slide) pill.classList.add('fan-slid');   // кнопка «?» на время веера прячется, чтобы пара не наезжала на заголовок
             const P = pill.getBoundingClientRect(), B = btn.getBoundingClientRect();
             const s = Math.round(B.height), cy = P.top + P.height / 2;
             const inward = (P.left + P.width / 2) < window.innerWidth / 2 ? 1 : -1, out = -inward;
@@ -5026,26 +5624,8 @@ async function shareDictionary(name) {
             sepia: { html: _ico('<path d="M2 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H2zM22 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8z"/>'), style: 'background:#F4ECD8;color:#6B4F2A;border-color:rgba(92,70,40,0.35);' },
             black: { html: _ico('<circle cx="12" cy="12" r="7" fill="currentColor"/>'), style: 'background:#000000;color:#FFFFFF;border-color:rgba(255,255,255,0.5);' }
         };
-        function openThemeMenu(btn) {
-            const fixed = ['day', 'night', 'sepia', 'black'], i = fixed.indexOf(themeMode), n = fixed.length;
-            const pick = i < 0 ? ['day', 'night', 'sepia'] : [fixed[(i + n - 1) % n], fixed[(i + 2) % n], fixed[(i + 1) % n]];
-            openFan(btn, pick.map(k => ({ html: THEME_ICONS[k].html, style: THEME_ICONS[k].style, run: () => applyTheme(k) })), true);
-        }
-        (function initThemes() {
-            const page = document.getElementById('pageSettings');
-            if (page) {
-                const card = document.createElement('div');
-                card.className = 'ios-settings-card';
-                const dots = (attr, keys, colorFn, fn) => keys.map(n => '<button type="button" class="accent-dot' + (n === 'custom' ? ' rainbow' : '') + '" data-' + attr + '="' + n + '" style="background:' + colorFn(n) + ';" onclick="' + (n === 'custom' ? "toggleWheel('" + attr + "')" : fn + "('" + n + "')") + '"></button>').join('');
-                const wheel = k => `<div class="wheel-box" id="wheel_${k}" style="display:none"><div class="wheel-wrap"><canvas width="240" height="240" onpointerdown="wheelDown(event,'${k}')" onpointermove="wheelMove(event,'${k}')" onpointerup="wheelUp()" onpointercancel="wheelUp()"></canvas><div class="wheel-marker" style="display:none"></div></div><div class="wheel-actions"><button type="button" class="app-dialog-btn" onclick="wheelCancel()">Отмена</button><button type="button" class="app-dialog-btn primary" onclick="wheelDone()">Готово</button></div></div>`;
-                card.innerHTML = `<div class="theme-card-row"><div style="font-size:15px;font-weight:600;">Тема</div><select class="form-input" id="themeModeSelect" style="width:auto;min-width:130px;" onchange="applyTheme(this.value)">${THEMES.map(k => '<option value="' + k + '">' + THEME_NAMES[k] + '</option>').join('')}</select></div>` +
-                    `<div id="themeManualBlocks"><div class="theme-card-block"><div class="theme-card-label">Цвет акцента</div><div class="accent-dots">${dots('accent', [...Object.keys(ACCENTS), 'custom'], dotColor, 'presetAccent')}</div>${wheel('accent')}</div>` +
-                    `<div class="theme-card-block"><div class="theme-card-label">Цвет фона</div><div class="accent-dots">${dots('bg', [...Object.keys(BGS).filter(k => k !== 'custom'), 'custom'], bgSwatch, 'presetBg')}</div>${wheel('bg')}</div></div>`;
-                const first = page.querySelector('.ios-settings-card');
-                if (first) first.parentNode.insertBefore(card, first); else page.appendChild(card);
-            }
-            applyTheme(themeMode);
-        })();
+        function openThemeMenu() { toggleDayNight(); }
+        (function initThemes() { applyTheme(themeMode); })();
         Object.assign(I18N, {"Готово":["Done","Tamam","تم"],"Вручную":["Manual","Manuel","يدوي"],"Цвет фона":["Background color","Arka plan rengi","لون الخلفية"],"Тема":["Theme","Tema","السمة"],"Авто":["Auto","Otomatik","تلقائي"],"День":["Day","Gündüz","نهار"],"Ночь":["Night","Gece","ليل"],"Сепия":["Sepia","Sepya","بنّي دافئ"],"Чёрный":["Black","Siyah","أسود"],"Цвет акцента":["Accent color","Vurgu rengi","لون التمييز"]});
         applyUiLang();
     
@@ -5123,9 +5703,529 @@ async function shareDictionary(name) {
             }
             window.open(url, '_blank');
         }
-        Object.assign(I18N, {"Третий язык":["Third language","Üçüncü dil","اللغة الثالثة"],"Отправить текстом":["Send as text","Metin olarak gönder","إرسال كنص"],"Отправить":["Send","Gönder","إرسال"],"Что отправить":["What to send","Ne gönderilsin","ماذا تريد أن ترسل"],"Языки в сообщении":["Languages in the message","Mesajdaki diller","اللغات في الرسالة"],"Приложение":["App","Uygulama","التطبيق"],"Поделиться приложением":["Share the app","Uygulamayı paylaş","مشاركة التطبيق"],"Ссылка скопирована. Откройте её в браузере и нажмите «Установить» или «Добавить на главный экран».":["Link copied. Open it in a browser and tap “Install” or “Add to Home screen”.","Bağlantı kopyalandı. Tarayıcıda açıp «Yükle» veya «Ana ekrana ekle» seçeneğine dokunun.","تم نسخ الرابط. افتحه في المتصفح واضغط «تثبيت» أو «إضافة إلى الشاشة الرئيسية»."],"Копировать":["Copy","Kopyala","نسخ"],"Поделиться":["Share","Paylaş","مشاركة"],"Текст скопирован":["Text copied","Metin kopyalandı","تم نسخ النص"],"Список пуст":["The list is empty","Liste boş","القائمة فارغة"],"Текст скопирован. Вставьте его в чат.":["Text copied. Paste it into the chat.","Metin kopyalandı. Sohbete yapıştırın.","تم نسخ النص. الصقه في المحادثة."],"Текст скопирован. Вставьте его в чат: приложение само разобьёт его на сообщения.":["Text copied. Paste it into the chat: the app will split it into messages itself.","Metin kopyalandı. Sohbete yapıştırın: uygulama onu kendisi mesajlara böler.","تم نسخ النص. الصقه في المحادثة: سيقسمه التطبيق إلى رسائل تلقائيًا."]});
+        Object.assign(I18N, {"Третий язык":["Third language","Üçüncü dil","اللغة الثالثة"],"Отправить текстом":["Send as text","Metin olarak gönder","إرسال كنص"],"Отправить":["Send","Gönder","إرسال"],"Что отправить":["What to send","Ne gönderilsin","ماذا تريد أن ترسل"],"Языки в сообщении":["Languages in the message","Mesajdaki diller","اللغات في الرسالة"],"Приложение":["App","Uygulama","التطبيق"],"Поделиться приложением":["Share the app","Uygulamayı paylaş","مشاركة التطبيق"],"Ссылка скопирована. Откройте её в браузере и нажмите «Установить» или «Добавить на главный экран».":["Link copied. Open it in a browser and tap “Install” or “Add to Home screen”.","Bağlantı kopyalandı. Tarayıcıda açıp «Yükle» veya «Ana ekrana ekle» seçeneğine dokunun.","تم نسخ الرابط. افتحه في المتصفح واضغط «تثبيت» أو «إضافة إلى الشاشة الرئيسية»."],"Справка":["Help", "Yardım", "مساعدة"],"Как пользоваться":["How to use", "Nasıl kullanılır", "طريقة الاستخدام"],"Как добавить слова с фото через нейросеть?":["How to add words from a photo using an AI?", "Fotoğraftan yapay zekâ ile kelime nasıl eklenir?", "كيف تضيف كلمات من صورة عبر الذكاء الاصطناعي؟"],"Названия и языки":["Names and languages", "Adlar ve diller", "الأسماء واللغات"],"Дополнить недостающий язык":["Fill in a missing language", "Eksik dili tamamla", "استكمال لغة ناقصة"],"Для слов, у которых нет третьего языка: подготовит их список вместе с инструкцией для нейросети.":["For words that have no third language: prepares their list together with instructions for the AI.", "Üçüncü dili olmayan kelimeler için: listelerini yapay zekâ talimatıyla birlikte hazırlar.", "للكلمات التي ليس لها لغة ثالثة: يجهّز قائمتها مع تعليمات الذكاء الاصطناعي."],"Дополнить":["Fill in", "Tamamla", "إكمال"],"Исправить заглавные буквы":["Fix capital letters", "Büyük harfleri düzelt", "تصحيح الأحرف الكبيرة"],"Копировать":["Copy","Kopyala","نسخ"],"Поделиться":["Share","Paylaş","مشاركة"],"Текст скопирован":["Text copied","Metin kopyalandı","تم نسخ النص"],"Список пуст":["The list is empty","Liste boş","القائمة فارغة"],"Текст скопирован. Вставьте его в чат.":["Text copied. Paste it into the chat.","Metin kopyalandı. Sohbete yapıştırın.","تم نسخ النص. الصقه في المحادثة."],"Текст скопирован. Вставьте его в чат: приложение само разобьёт его на сообщения.":["Text copied. Paste it into the chat: the app will split it into messages itself.","Metin kopyalandı. Sohbete yapıştırın: uygulama onu kendisi mesajlara böler.","تم نسخ النص. الصقه في المحادثة: سيقسمه التطبيق إلى رسائل تلقائيًا."]});
+        Object.assign(I18N, Object.fromEntries(Object.entries({"Напиши ответ":["Type the answer","Cevabı yaz","اكتب الجواب"],"Собери слово":["Build the word","Kelimeyi oluştur","ركّب الكلمة"],"Нажимайте на буквы":["Tap the letters","Harflere dokunun","اضغط على الحروف"],"Ответ":["Answer","Cevap","الجواب"],"Правильно:":["Correct:","Doğrusu:","الصحيح:"],"Подсказка":["Hint","İpucu","تلميح"],"Проверить":["Check","Kontrol et","تحقق"]}).filter(([k]) => !(k in I18N))));
+        Object.assign(I18N, Object.fromEntries(Object.entries({"Диктовка":["Dictation","Dikte","إملاء"],"Верно / неверно":["True / false","Doğru / yanlış","صحيح / خطأ"],"Заполни пропуск":["Fill the gap","Boşluğu doldur","املأ الفراغ"],"Составь фразу":["Build the phrase","Cümle kur","ركّب العبارة"],"Верно":["True","Doğru","صحيح"],"Неверно":["False","Yanlış","خطأ"],"Нажимайте по порядку":["Tap in order","Sırayla dokunun","اضغط بالترتيب"],"Слово":["Word","Kelime","كلمة"],"Пример предложения":["Example sentence","Örnek cümle","جملة مثال"],"Пример:":["Example:","Örnek:","مثال:"]}).filter(([k]) => !(k in I18N))));
+        Object.assign(I18N, Object.fromEntries(Object.entries({"Марафон: все упражнения":["Marathon: all exercises","Maraton: tüm alıştırmalar","ماراثون: كل التمارين"],"Обычный тест":["Regular quiz","Normal test","اختبار عادي"],"Дальше":["Next","Sonraki","التالي"],"Нет подходящих упражнений для этих слов":["No suitable exercises for these words","Bu kelimeler için uygun alıştırma yok","لا توجد تمارين مناسبة لهذه الكلمات"]}).filter(([k]) => !(k in I18N))));
+        Object.assign(I18N, Object.fromEntries(Object.entries({"Мой словарь":["My dictionary","Sözlüğüm","قاموسي"]}).filter(([k]) => !(k in I18N))));
+        Object.assign(I18N, Object.fromEntries(Object.entries({"Тур по приложению":["App tour","Uygulama turu","جولة في التطبيق"]}).filter(([k]) => !(k in I18N))));
+        Object.assign(I18N, Object.fromEntries(Object.entries({"Вставьте пропущенное слово":["Fill in the missing word","Eksik kelimeyi yazın","أدخل الكلمة الناقصة"],"Составьте фразу со словом":["Build a phrase with the word","Kelimeyle bir cümle kurun","ركّب عبارة بالكلمة"],"Это правильный перевод?":["Is this the correct translation?","Bu doğru çeviri mi?","هل هذه الترجمة صحيحة؟"]}).filter(([k]) => !(k in I18N))));
         I18N_PATS.unshift(...[["^Весь словарь \\((\\d+)\\)$",["Whole dictionary ($1)","Tüm sözlük ($1)","القاموس كله ($1)"]]].map(p => [new RegExp(p[0]), p[1], p[2]]));
         applyUiLang();
+        // ===== Справка: «?» в шапках, «Как пользоваться», инструкция для нейросети =====
+        (function initHelp() {
+            const IDX = { ru: 0, en: 1, tr: 2, ar: 3 };
+            const T = a => a[IDX[uiLang] || 0] || a[0];
+            const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+            const dig = s => uiLang === 'ar' ? s.replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]) : s;
+            const fmt = a => dig(esc(T(a)).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>'));
+            const plain = a => dig(T(a));
+
+            const UI = {
+                help: ['Справка', 'Help', 'Yardım', 'مساعدة'],
+                guide: ['Как пользоваться', 'How to use', 'Nasıl kullanılır', 'طريقة الاستخدام'],
+                full: ['Полная инструкция', 'Full guide', 'Tam kılavuz', 'الدليل الكامل'],
+                copy: ['Скопировать инструкцию для нейросети', 'Copy the instructions for the AI', 'Yapay zekâ için talimatı kopyala', 'نسخ التعليمات للذكاء الاصطناعي'],
+                copied: ['Инструкция скопирована. Вставьте её в нейросеть вместе с фото.', 'Instructions copied. Paste them into the AI together with the photo.', 'Talimat kopyalandı. Fotoğrafla birlikte yapay zekâya yapıştırın.', 'تم نسخ التعليمات. الصقها في الذكاء الاصطناعي مع الصورة.'],
+                forWhat: ['Инструкция для:', 'Instructions for:', 'Talimat şunun için:', 'التعليمات لـ:'],
+                presetTra: ['Турецкий — русский — арабский (подробная)', 'Turkish — Russian — Arabic (detailed)', 'Türkçe — Rusça — Arapça (ayrıntılı)', 'التركية — الروسية — العربية (مفصّلة)'],
+                fillTitle: ['Дополнить недостающий язык', 'Fill in a missing language', 'Eksik dili tamamla', 'استكمال لغة ناقصة'],
+                dictLabel: ['Словарь', 'Dictionary', 'Sözlük', 'القاموس'],
+                need3: ['В этом словаре только два языка. Сначала добавьте третий язык: кнопка «Названия и языки» у словаря.', 'This dictionary has only two languages. Add a third one first: the “Names and languages” button on the dictionary.', 'Bu sözlükte yalnızca iki dil var. Önce üçüncü bir dil ekleyin: sözlüğün «Adlar ve diller» düğmesi.', 'هذا القاموس فيه لغتان فقط. أضف لغة ثالثة أولًا: زر «الأسماء واللغات» الخاص بالقاموس.'],
+                fillInfo: ['Слов без языка «{L}»: {N} из {M}.', 'Words without “{L}”: {N} of {M}.', '«{L}» olmayan kelimeler: {N} / {M}.', 'كلمات بلا «{L}»: {N} من {M}.'],
+                fillDone: ['Во всех словах уже есть язык «{L}». Дополнять нечего.', 'Every word already has “{L}”. Nothing to fill in.', 'Tüm kelimelerde «{L}» zaten var. Tamamlanacak bir şey yok.', 'كل الكلمات فيها «{L}» بالفعل. لا شيء لاستكماله.'],
+                batch: ['Слов за один раз', 'Words at a time', 'Bir seferde kelime', 'عدد الكلمات في المرة'],
+                allWords: ['Все', 'All', 'Hepsi', 'الكل'],
+                fillSteps: [
+                    ['Нажмите «Скопировать» и вставьте текст в любую нейросеть (ChatGPT, Claude, Gemini и т. д.).', 'Tap “Copy” and paste the text into any AI assistant (ChatGPT, Claude, Gemini, etc.).', '«Kopyala»ya dokunup metni herhangi bir yapay zekâ asistanına yapıştırın (ChatGPT, Claude, Gemini vb.).', 'اضغط «نسخ» والصق النص في أي مساعد ذكاء اصطناعي (ChatGPT أو Claude أو Gemini وغيرها).'],
+                    ['Скопируйте ответ нейросети: готовые строки со всеми языками.', 'Copy the AI\'s answer: ready lines with all the languages.', 'Yapay zekânın cevabını kopyalayın: tüm dilleri içeren hazır satırlar.', 'انسخ جواب الذكاء الاصطناعي: أسطر جاهزة بكل اللغات.'],
+                    ['Нажмите «Открыть импорт», вставьте ответ и нажмите «Предпросмотр». Уже имеющиеся слова будут помечены «Дополнить»: приложение добавит только недостающий язык, остальное не тронет.', 'Tap “Open import”, paste the answer and tap “Preview”. Words you already have are marked “Fill in”: the app adds only the missing language and leaves the rest untouched.', '«İçe aktarmayı aç»a dokunun, cevabı yapıştırın ve «Önizleme»ye dokunun. Mevcut kelimeler «Tamamla» olarak işaretlenir: uygulama yalnızca eksik dili ekler, gerisine dokunmaz.', 'اضغط «فتح الاستيراد» والصق الجواب ثم اضغط «معاينة». الكلمات الموجودة تُوسَم «استكمال»: يضيف التطبيق اللغة الناقصة فقط ولا يمس الباقي.']
+                ],
+                openImport: ['Открыть импорт', 'Open import', 'İçe aktarmayı aç', 'فتح الاستيراد'],
+                copyText: ['Скопировать', 'Copy', 'Kopyala', 'نسخ'],
+                copiedFill: ['Скопировано. Вставьте текст в нейросеть.', 'Copied. Paste the text into the AI.', 'Kopyalandı. Metni yapay zekâya yapıştırın.', 'تم النسخ. الصق النص في الذكاء الاصطناعي.'],
+                noThird: ['В этом словаре нет третьего языка. Добавьте его: «Настройки» → «Настроить языки текущего словаря».', 'This dictionary has no third language. Add one: “Settings” → “Set up languages of the current dictionary”.', 'Bu sözlükte üçüncü dil yok. Ekleyin: «Ayarlar» → «Geçerli sözlüğün dillerini ayarla».', 'لا توجد لغة ثالثة في هذا القاموس. أضفها من «الإعدادات» ← «ضبط لغات القاموس الحالي».'],
+                noneMissing: ['Во всех словах уже заполнен третий язык.', 'The third language is already filled in for every word.', 'Tüm kelimelerde üçüncü dil zaten dolu.', 'اللغة الثالثة مملوءة بالفعل في كل الكلمات.'],
+                filled: ['Скопировано слов: ', 'Words copied: ', 'Kopyalanan kelime: ', 'عدد الكلمات المنسوخة: '],
+                filledTail: ['. Вставьте текст в нейросеть, а её ответ — в это окно, и нажмите «Предпросмотр»: слова будут отмечены «Дополнить». Затем нажмите «Добавить новые слова».', '. Paste the text into an AI, paste its reply into this window and tap “Preview”: the words will be marked “Fill in”. Then tap “Add new words”.', '. Metni yapay zekâya yapıştırın, yanıtını bu pencereye yapıştırıp «Önizleme»ye dokunun: kelimeler «Tamamla» olarak işaretlenir. Sonra «Yeni kelime ekle»ye dokunun.', '. الصق النص في الذكاء الاصطناعي، ثم الصق ردّه في هذه النافذة واضغط «معاينة»: ستُعلَّم الكلمات بـ«إكمال». ثم اضغط «إضافة كلمات جديدة».'],
+                restTail: [' Осталось ещё ', ' Still left: ', ' Kalan: ', ' المتبقي: '],
+                restTail2: ['. После импорта нажмите кнопку снова.', '. After importing, tap the button again.', '. İçe aktardıktan sonra düğmeye yeniden dokunun.', '. بعد الاستيراد اضغط الزر مرة أخرى.'],
+                shown: ['Текст инструкции', 'Instruction text', 'Talimat metni', 'نص التعليمات'],
+                firstAsk: ['Хотите пройти короткий тур по приложению? Покажу, что где находится и как пользоваться.', 'Would you like a short tour of the app? I\'ll show what is where and how to use it.', 'Uygulamada kısa bir tur yapmak ister misiniz? Neyin nerede olduğunu ve nasıl kullanılacağını göstereyim.', 'هل تريد جولة قصيرة في التطبيق؟ سأريك أين كل شيء وكيف تستخدمه.'],
+                yes: ['Да', 'Yes', 'Evet', 'نعم'],
+                later: ['Позже', 'Later', 'Sonra', 'لاحقًا']
+            };
+
+            const PAGES = {
+                home: { title: ['Главная', 'Home', 'Ana sayfa', 'الرئيسية'], lines: [
+                    ['Вверху — сколько слов в словаре и сколько добавлено сегодня и за неделю.', 'At the top: how many words are in the dictionary and how many you added today and this week.', 'Üstte: sözlükteki kelime sayısı ile bugün ve bu hafta eklenenler.', 'في الأعلى: عدد الكلمات في القاموس وما أضفته اليوم وهذا الأسبوع.'],
+                    ['Чипы категорий фильтруют список. Выбрав категорию, можно сразу начать карточки по ней.', 'Category chips filter the list. Once a category is selected, you can start flashcards for it right away.', 'Kategori etiketleri listeyi süzer. Bir kategori seçince onun kartlarını hemen başlatabilirsiniz.', 'أزرار الفئات تصفّي القائمة. وعند اختيار فئة يمكنك بدء البطاقات الخاصة بها فورًا.'],
+                    ['Кнопки языков (например, TR, RU, AR) над списком скрывают и показывают столбцы — так удобно проверять себя.', 'The language buttons (TR, RU, AR…) above the list hide and show columns, handy for testing yourself.', 'Listenin üstündeki dil düğmeleri (TR, RU, AR…) sütunları gizler veya gösterir; kendinizi sınamak için kullanışlıdır.', 'أزرار اللغات (TR وRU وAR…) فوق القائمة تُخفي الأعمدة أو تُظهرها، وهذا مفيد لاختبار نفسك.'],
+                    ['Нажмите на слово — откроется карточка с озвучкой и кнопкой редактирования. Поиск ищет по слову, переводам и заметкам.', 'Tap a word to open its card with audio and an edit button. Search looks through the word, translations and notes.', 'Bir kelimeye dokunun: sesli okuma ve düzenleme düğmesi olan kart açılır. Arama kelimede, çevirilerde ve notlarda yapılır.', 'اضغط على كلمة لتفتح بطاقتها مع النطق وزر التعديل. والبحث يشمل الكلمة والترجمات والملاحظات.'],
+                    ['Переключатель «Правила» — ваши правила и заметки. Новые слова и правила добавляются кнопкой «+» внизу.', 'The “Rules” switch holds your rules and notes. Add new words and rules with the “+” button at the bottom.', '«Kurallar» anahtarı kurallarınızı ve notlarınızı içerir. Yeni kelime ve kuralları alttaki «+» düğmesiyle ekleyin.', 'مفتاح «القواعد» يضم قواعدك وملاحظاتك. أضف الكلمات والقواعد الجديدة بزر «+» في الأسفل.']
+                ] },
+                dicts: { title: ['Словари', 'Dictionaries', 'Sözlükler', 'القواميس'], lines: [
+                    ['Здесь все ваши словари. Нажмите на словарь, чтобы сделать его текущим (рядом появится галочка).', 'All your dictionaries are here. Tap one to make it the current one (a check mark appears).', 'Tüm sözlükleriniz burada. Birine dokunup geçerli sözlük yapın (yanında onay işareti belirir).', 'هنا كل قواميسك. اضغط على قاموس ليصبح الحالي (تظهر بجانبه علامة ✓).'],
+                    ['Кнопки справа: отправить текстом, экспорт, названия и языки, удалить.', 'Buttons on the right: send as text, export, names and languages, delete.', 'Sağdaki düğmeler: metin olarak gönder, dışa aktar, adlar ve diller, sil.', 'الأزرار على الجانب: إرسال كنص، تصدير، الأسماء واللغات، حذف.'],
+                    ['В «Названиях и языках» можно переименовать словарь и выбрать для него два или три языка.', 'In “Names and languages” you can rename the dictionary and choose two or three languages for it.', '«Adlar ve diller» bölümünden sözlüğü yeniden adlandırabilir ve iki ya da üç dil seçebilirsiniz.', 'في «الأسماء واللغات» يمكنك إعادة تسمية القاموس واختيار لغتين أو ثلاث له.'],
+                    ['Новый словарь создаётся полем вверху: введите название и нажмите «Создать».', 'Create a new dictionary with the field at the top: type a name and tap “Create”.', 'Yeni sözlüğü üstteki alandan oluşturun: ad yazıp «Oluştur»a dokunun.', 'أنشئ قاموسًا جديدًا من الحقل في الأعلى: اكتب الاسم واضغط «إنشاء».']
+                ] },
+                quiz: { title: ['Изучение', 'Study', 'Çalışma', 'التعلّم'], lines: [
+                    ['Сверху три группы слов: Изучено, Ошибки, Новых. Нажмите на группу, чтобы тренироваться только по ней; двойной тап покажет список слов.', 'At the top are three groups: Learned, Mistakes, New. Tap a group to practise only with it; a double tap shows its word list.', 'Üstte üç grup var: Öğrenildi, Hatalar, Yeni. Yalnızca birini çalışmak için dokunun; çift dokunuş kelime listesini gösterir.', 'في الأعلى ثلاث مجموعات: تم تعلّمها، الأخطاء، جديدة. اضغط على مجموعة للتدرّب عليها فقط، والضغط المزدوج يعرض كلماتها.'],
+                    ['Режим: все слова, по темам (категориям) или «Сопоставление» — соедините пары слов.', 'Mode: all words, by topic (category), or “Matching” — connect the word pairs.', 'Mod: tüm kelimeler, konuya (kategoriye) göre ya da «Eşleştirme» — kelime çiftlerini birleştirin.', 'الوضع: كل الكلمات، أو حسب الموضوع (الفئة)، أو «مطابقة» — صِل أزواج الكلمات.'],
+                    ['В блоке «Языки» выберите, что показывать в вопросе и что в ответе; стрелка меняет их местами.', 'In “Languages” choose what appears in the question and what in the answer; the arrow swaps them.', '«Diller» bölümünde soruda ve cevapta neyin görüneceğini seçin; ok ikisini değiştirir.', 'في «اللغات» اختر ما يظهر في السؤال وما يظهر في الجواب، والسهم يبدّل بينهما.'],
+                    ['Как задавать: обычно, вперемешку, на слух, «Напиши ответ», «Собери слово», «Диктовка», «Верно / неверно», «Заполни пропуск» и «Составь фразу». Все они влияют на рейтинг так же, как обычный тест. Таймер даёт бонус за скорость.', 'How to ask: normal, shuffled, by ear, “Type the answer”, “Build the word”, “Dictation”, “True / false”, “Fill the gap” and “Build the phrase”. All of them affect your rating just like the regular quiz. The timer gives a speed bonus.', 'Soru biçimi: normal, karışık, dinleme, «Cevabı yaz», «Kelimeyi oluştur», «Dikte», «Doğru / yanlış», «Boşluğu doldur» ve «Cümle kur». Hepsi puanı normal test gibi etkiler. Zamanlayıcı hız için bonus verir.', 'طريقة السؤال: عادي، عشوائي، بالسماع، «اكتب الجواب»، «ركّب الكلمة»، «إملاء»، «صحيح / خطأ»، «املأ الفراغ» و«ركّب العبارة». كلها تؤثر على التقييم مثل الاختبار العادي. والمؤقّت يمنح مكافأة على السرعة.'],
+                    ['«Марафон» проводит слова через все выбранные упражнения подряд. Галочками отметьте нужные. За весь марафон слово получает один итог: не больше одной ошибки — «Изучено», две и больше — «Ошибки». Одна опечатка в написании прощается.', '“Marathon” takes the words through all the chosen exercises in a row. Tick the ones you want. For the whole marathon a word gets a single result: one mistake or fewer — “Learned”, two or more — “Mistakes”. One typo in spelling is forgiven.', '«Maraton» kelimeleri seçtiğiniz tüm alıştırmalardan art arda geçirir. İstediklerinizi işaretleyin. Tüm maraton için kelime tek bir sonuç alır: en çok bir hata — «Öğrenildi», iki ve üstü — «Hatalar». Yazımda bir yazım hatası bağışlanır.', '«الماراثون» يمرّر الكلمات عبر كل التمارين التي اخترتها تباعًا. حدّد التمارين بعلامة ✓. وتحصل الكلمة في الماراثون كله على نتيجة واحدة: خطأ واحد أو أقل — «تم تعلّمها»، خطآن أو أكثر — «الأخطاء». ويُغتفر خطأ إملائي واحد.'],
+                    ['«Заполни пропуск» и «Составь фразу» берут предложение из поля «Пример предложения» в карточке слова. Если примера нет, слово проверяется как «Напиши ответ».', '“Fill the gap” and “Build the phrase” use the sentence from the “Example sentence” field in the word card. If there is no example, the word is checked like “Type the answer”.', '«Boşluğu doldur» ve «Cümle kur», kelime kartındaki «Örnek cümle» alanını kullanır. Örnek yoksa kelime «Cevabı yaz» gibi denetlenir.', '«املأ الفراغ» و«ركّب العبارة» يأخذان الجملة من حقل «جملة مثال» في بطاقة الكلمة. وإن لم يوجد مثال تُفحص الكلمة مثل «اكتب الجواب».'],
+                    ['Кнопки сброса под счётчиками обнуляют прогресс — пользуйтесь ими осторожно.', 'The reset buttons under the counters clear your progress, so use them carefully.', 'Sayaçların altındaki sıfırlama düğmeleri ilerlemenizi siler; dikkatli kullanın.', 'أزرار إعادة الضبط تحت العدّادات تمحو تقدّمك، فاستخدمها بحذر.']
+                ] },
+                settings: { title: ['Настройки', 'Settings', 'Ayarlar', 'الإعدادات'], lines: [
+                    ['Размер шрифта, язык озвучки и языки текущего словаря настраиваются здесь.', 'Font size, speech language and the languages of the current dictionary are set here.', 'Yazı boyutu, konuşma dili ve geçerli sözlüğün dilleri burada ayarlanır.', 'حجم الخط ولغة النطق ولغات القاموس الحالي تُضبط هنا.'],
+                    ['Язык интерфейса и тема — кнопки в шапке любой вкладки. В теме «Вручную» можно выбрать свои цвета.', 'Interface language and theme are the buttons in the header of any tab. The “Manual” theme lets you pick your own colours.', 'Arayüz dili ve tema, her sekmenin üst kısmındaki düğmelerdir. «Manuel» temada kendi renklerinizi seçersiniz.', 'لغة الواجهة والمظهر هما الزرّان في رأس أي تبويب. ومظهر «يدوي» يتيح اختيار ألوانك.'],
+                    ['Резервная копия (JSON) сохраняет все словари в файл. Вернуть их можно через «Импорт из телефона».', 'A backup (JSON) saves all dictionaries to a file. Bring them back with “Import from phone”.', 'Yedek (JSON) tüm sözlükleri bir dosyaya kaydeder. «Telefondan içe aktar» ile geri yükleyebilirsiniz.', 'النسخة الاحتياطية (JSON) تحفظ كل القواميس في ملف. يمكنك استعادتها عبر «استيراد من الهاتف».'],
+                    ['Таблицы Excel (CSV) — выгрузка и загрузка слов таблицей.', 'Excel tables (CSV): export and import words as a table.', 'Excel tabloları (CSV): kelimeleri tablo olarak dışa ve içe aktarın.', 'جداول Excel (CSV): تصدير الكلمات واستيرادها كجدول.'],
+                    ['«Поделиться приложением» отправляет друзьям ссылку: им достаточно открыть её и нажать «Установить».', '“Share the app” sends friends a link: they just open it and tap “Install”.', '«Uygulamayı paylaş» arkadaşlarınıza bir bağlantı gönderir: açıp «Yükle»ye dokunmaları yeterlidir.', '«مشاركة التطبيق» ترسل رابطًا لأصدقائك: يكفي أن يفتحوه ويضغطوا «تثبيت».']
+                ] }
+            };
+
+            const GUIDE = [
+                { id: 'add', icon: '➕', title: ['Добавление слов', 'Adding words', 'Kelime ekleme', 'إضافة الكلمات'], lines: [
+                    ['Кнопка «+» внизу открывает меню: **Слово** — добавить одно слово, **Импорт слов** — добавить сразу много.', 'The “+” button at the bottom opens a menu: **Word** adds one word, **Import words** adds many at once.', 'Alttaki «+» düğmesi bir menü açar: **Kelime** tek kelime ekler, **Kelime içe aktar** birçok kelimeyi birden ekler.', 'زر «+» في الأسفل يفتح قائمة: **الكلمة** لإضافة كلمة واحدة، و**استيراد الكلمات** لإضافة عدة كلمات دفعة واحدة.'],
+                    ['Если слово в списке не нашлось, в строке поиска появляется кнопка «Добавить».', 'If a word isn\'t found in the list, an “Add” button appears in the search field.', 'Kelime listede bulunamazsa arama alanında bir «Ekle» düğmesi belirir.', 'إذا لم تُعثر على الكلمة في القائمة يظهر زر «إضافة» في حقل البحث.'],
+                    ['Нажмите на слово в списке, чтобы открыть его карточку: там можно изменить или удалить слово.', 'Tap a word in the list to open its card, where you can edit or delete it.', 'Listede bir kelimeye dokunun: kartında kelimeyi düzenleyebilir veya silebilirsiniz.', 'اضغط على كلمة في القائمة لتفتح بطاقتها، ومنها يمكنك تعديلها أو حذفها.'],
+                    ['В карточке слова есть необязательное поле «Пример предложения». При массовом импорте пример пишется в конце строки после знака |, например: Kitap — Книга — كِتَاب [Общее] | Ben kitabı okuyorum.', 'A word card has an optional “Example sentence” field. In bulk import, write the example at the end of the line after a | sign, for example: Kitap — Книга — كِتَاب [Общее] | Ben kitabı okuyorum.', 'Kelime kartında isteğe bağlı «Örnek cümle» alanı vardır. Toplu içe aktarmada örnek, satırın sonuna | işaretinden sonra yazılır, örneğin: Kitap — Книга — كِتَاب [Общее] | Ben kitabı okuyorum.', 'في بطاقة الكلمة حقل اختياري «جملة مثال». وفي الاستيراد الجماعي تُكتب الجملة في آخر السطر بعد علامة | ، مثل: Kitap — Книга — كِتَاب [Общее] | Ben kitabı okuyorum.']
+                ] },
+                { id: 'cat', icon: '🏷️', title: ['Категории и поиск', 'Categories and search', 'Kategoriler ve arama', 'الفئات والبحث'], lines: [
+                    ['Категория — тема слова (например, «Глаголы» или «Быт и повседневная жизнь»). Её выбирают при добавлении слова, а при импорте пишут в квадратных скобках: [Глаголы].', 'A category is a word\'s topic (for example “Verbs” or “Everyday life”). You pick it when adding a word; when importing, write it in square brackets, for example [Глаголы].', 'Kategori, kelimenin konusudur (örneğin «Fiiller» ya da «Günlük yaşam»). Kelime eklerken seçilir; içe aktarırken köşeli parantez içinde yazılır, örneğin [Глаголы].', 'الفئة هي موضوع الكلمة (مثل «الأفعال» أو «الحياة اليومية»). تختارها عند إضافة الكلمة، وعند الاستيراد تكتبها بين قوسين مربعين، مثل [Глаголы].'],
+                    ['Над списком — чипы категорий: нажмите на нужную, и в списке останутся только её слова. Поиск работает по слову, переводам и заметкам.', 'Above the list are category chips: tap one to show only its words. Search covers the word, translations and notes.', 'Listenin üstünde kategori etiketleri var: birine dokunursanız yalnızca onun kelimeleri kalır. Arama kelimede, çevirilerde ve notlarda yapılır.', 'فوق القائمة أزرار الفئات: اضغط على واحدة لتبقى كلماتها فقط. والبحث يشمل الكلمة والترجمات والملاحظات.']
+                ] },
+                { id: 'dict', icon: '📚', title: ['Словари и языки', 'Dictionaries and languages', 'Sözlükler ve diller', 'القواميس واللغات'], lines: [
+                    ['На вкладке «Словари» можно завести отдельный словарь для каждого языка или темы. Текущий словарь отмечен галочкой: слова, тесты и импорт работают с ним.', 'On the “Dictionaries” tab you can keep a separate dictionary for each language or topic. The current one has a check mark; words, tests and imports work with it.', '«Sözlükler» sekmesinde her dil veya konu için ayrı bir sözlük tutabilirsiniz. Geçerli sözlük onay işaretiyle gösterilir; kelimeler, testler ve içe aktarma onunla çalışır.', 'في تبويب «القواميس» يمكنك إنشاء قاموس مستقل لكل لغة أو موضوع. القاموس الحالي عليه علامة ✓، وتعمل الكلمات والاختبارات والاستيراد عليه.'],
+                    ['Кнопка «Названия и языки» позволяет переименовать словарь и выбрать два или три языка (например, турецкий, русский, арабский).', 'The “Names and languages” button lets you rename a dictionary and choose two or three languages (for example Turkish, Russian, Arabic).', 'Sözlüğün «Adlar ve diller» düğmesiyle onu yeniden adlandırabilir ve iki ya da üç dil seçebilirsiniz (örneğin Türkçe, Rusça, Arapça).', 'زر «الأسماء واللغات» يتيح إعادة تسمية القاموس واختيار لغتين أو ثلاث (مثل التركية والروسية والعربية).']
+                ] },
+                { id: 'fill', icon: '🧩', title: ['Добавить недостающий язык', 'Adding a missing language', 'Eksik dili ekleme', 'إضافة لغة ناقصة'], lines: [
+                    ['Если вы добавили словарю третий язык (например, арабский), у старых слов его ещё нет. Заполнить его сразу для всех можно с помощью нейросети.', 'If you added a third language to a dictionary (for example Arabic), the old words don\'t have it yet. You can fill it in for all of them at once with an AI.', 'Bir sözlüğe üçüncü bir dil (örneğin Arapça) eklediyseniz eski kelimelerde o yoktur. Bir yapay zekâ ile hepsini birden tamamlayabilirsiniz.', 'إذا أضفت لغة ثالثة للقاموس (مثل العربية) فلن تكون موجودة في الكلمات القديمة. يمكنك استكمالها لكل الكلمات دفعة واحدة بمساعدة الذكاء الاصطناعي.'],
+                    ['«Настройки» → «Дополнить недостающий язык»: приложение соберёт слова без этого языка вместе с готовой инструкцией для нейросети.', '“Settings” → “Fill in a missing language”: the app collects the words without that language together with ready instructions for the AI.', '«Ayarlar» → «Eksik dili tamamla»: uygulama bu dili olmayan kelimeleri yapay zekâ için hazır talimatla birlikte toplar.', '«الإعدادات» ← «استكمال لغة ناقصة»: يجمع التطبيق الكلمات التي ينقصها هذا اللسان مع تعليمات جاهزة للذكاء الاصطناعي.'],
+                    ['Ответ нейросети вставьте в «Импорт слов»: в предпросмотре такие слова отмечены «Дополнить», и приложение добавит только недостающий язык, ничего не меняя в остальном.', 'Paste the AI\'s answer into “Import words”: in the preview those words are marked “Fill in”, and the app adds only the missing language without changing anything else.', 'Yapay zekânın cevabını «Kelime içe aktar»a yapıştırın: önizlemede bu kelimeler «Tamamla» olarak işaretlenir ve uygulama yalnızca eksik dili ekler, başka bir şeyi değiştirmez.', 'الصق جواب الذكاء الاصطناعي في «استيراد الكلمات»: تُوسَم هذه الكلمات في المعاينة «استكمال»، ويضيف التطبيق اللغة الناقصة فقط دون تغيير أي شيء آخر.']
+                ] },
+                { id: 'quiz', icon: '🎯', title: ['Изучение', 'Study', 'Çalışma', 'التعلّم'], lines: [
+                    ['На вкладке «Изучение» выберите группу слов (Изучено, Ошибки, Новых), режим тренировки и количество слов, затем нажмите «Начать».', 'On the “Study” tab choose a group of words (Learned, Mistakes, New), the training mode and the number of words, then tap “Start”.', '«Çalışma» sekmesinde bir kelime grubu (Öğrenildi, Hatalar, Yeni), alıştırma modu ve kelime sayısını seçip «Başla»ya dokunun.', 'في تبويب «التعلّم» اختر مجموعة الكلمات (تم تعلّمها، الأخطاء، جديدة) ووضع التدريب وعدد الكلمات، ثم اضغط «ابدأ».'],
+                    ['В блоке «Языки» выберите, что показывать в вопросе и в ответе. В «Как задавать» — вид упражнения: тест, «На слух», «Напиши ответ», «Собери слово», «Диктовка», «Верно / неверно», «Заполни пропуск», «Составь фразу». «Сопоставление» — соединить пары.', 'In “Languages” choose what appears in the question and the answer. In “How to ask” pick the exercise type: quiz, “By ear”, “Type the answer”, “Build the word”, “Dictation”, “True / false”, “Fill the gap”, “Build the phrase”. “Matching” means connecting pairs.', '«Diller» bölümünde soruda ve cevapta neyin görüneceğini seçin. «Soru biçimi»nde alıştırma türünü seçin: test, «Dinleme», «Cevabı yaz», «Kelimeyi oluştur», «Dikte», «Doğru / yanlış», «Boşluğu doldur», «Cümle kur». «Eşleştirme» çiftleri birleştirmektir.', 'في «اللغات» اختر ما يظهر في السؤال وفي الجواب. وفي «طريقة السؤال» اختر نوع التمرين: اختبار، «بالسماع»، «اكتب الجواب»، «ركّب الكلمة»، «إملاء»، «صحيح / خطأ»، «املأ الفراغ»، «ركّب العبارة». و«مطابقة» تعني ربط الأزواج.'],
+                    ['«Марафон» проводит слова через все выбранные упражнения подряд. Галочками отметьте нужные. За весь марафон слово получает один итог: не больше одной ошибки — «Изучено», две и больше — «Ошибки». Одна опечатка в написании прощается.', '“Marathon” takes the words through all the chosen exercises in a row. Tick the ones you want. For the whole marathon a word gets a single result: one mistake or fewer — “Learned”, two or more — “Mistakes”. One typo in spelling is forgiven.', '«Maraton» kelimeleri seçtiğiniz tüm alıştırmalardan art arda geçirir. İstediklerinizi işaretleyin. Tüm maraton için kelime tek bir sonuç alır: en çok bir hata — «Öğrenildi», iki ve üstü — «Hatalar». Yazımda bir yazım hatası bağışlanır.', '«الماراثون» يمرّر الكلمات عبر كل التمارين التي اخترتها تباعًا. حدّد التمارين بعلامة ✓. وتحصل الكلمة في الماراثون كله على نتيجة واحدة: خطأ واحد أو أقل — «تم تعلّمها»، خطآن أو أكثر — «الأخطاء». ويُغتفر خطأ إملائي واحد.'],
+                    ['«Заполни пропуск» и «Составь фразу» берут предложение из поля «Пример предложения» в карточке слова. Если примера нет, слово проверяется как «Напиши ответ».', '“Fill the gap” and “Build the phrase” use the sentence from the “Example sentence” field in the word card. If there is no example, the word is checked like “Type the answer”.', '«Boşluğu doldur» ve «Cümle kur», kelime kartındaki «Örnek cümle» alanını kullanır. Örnek yoksa kelime «Cevabı yaz» gibi denetlenir.', '«املأ الفراغ» و«ركّب العبارة» يأخذان الجملة من حقل «جملة مثال» في بطاقة الكلمة. وإن لم يوجد مثال تُفحص الكلمة مثل «اكتب الجواب».'],
+                    ['Приложение запоминает результаты: слова, в которых вы ошиблись, собираются в группе «Ошибки», чтобы их можно было повторить.', 'The app remembers your results: words you got wrong are collected in “Mistakes” so you can review them.', 'Uygulama sonuçlarınızı hatırlar: yanlış yaptığınız kelimeler «Hatalar» grubunda toplanır, böylece tekrar edebilirsiniz.', 'يتذكّر التطبيق نتائجك: الكلمات التي أخطأت فيها تُجمع في «الأخطاء» لتتمكن من مراجعتها.']
+                ] },
+                { id: 'rules', icon: '📝', title: ['Правила', 'Rules', 'Kurallar', 'القواعد'], lines: [
+                    ['На главной вкладке есть переключатель «Список / Правила». В «Правилах» вы храните свои заметки, например по грамматике.', 'The home tab has a “List / Rules” switch. In “Rules” you keep your own notes, for example on grammar.', 'Ana sekmede «Liste / Kurallar» anahtarı vardır. «Kurallar»da dilbilgisi gibi kendi notlarınızı saklarsınız.', 'في التبويب الرئيسي مفتاح «القائمة / القواعد». في «القواعد» تحفظ ملاحظاتك، مثل النحو.'],
+                    ['Добавить правило: «+» → «Правило». Сразу много: «+» → «Импорт правил».', 'To add a rule use “+” → “Rule”; to add many at once use “+” → “Import rules”.', 'Kural eklemek için «+» → «Kural»; birçoğunu birden eklemek için «+» → «Kuralları içe aktar».', 'لإضافة قاعدة: «+» ← «قاعدة»، ولإضافة عدة قواعد دفعة واحدة: «+» ← «استيراد القواعد».']
+                ] },
+                { id: 'send', icon: '📤', title: ['Отправка слов текстом', 'Sending words as text', 'Kelimeleri metin olarak gönderme', 'إرسال الكلمات كنص'], lines: [
+                    ['Вкладка «Словари» → значок отправки у нужного словаря.', '“Dictionaries” tab → the send icon next to the dictionary you need.', '«Sözlükler» sekmesi → ilgili sözlüğün yanındaki gönder simgesi.', 'تبويب «القواميس» ← أيقونة الإرسال بجانب القاموس المطلوب.'],
+                    ['Выберите, что отправить: весь словарь или одну категорию, и до трёх языков в сообщении. Текст получится готовым для WhatsApp или Telegram.', 'Choose what to send: the whole dictionary or one category, and up to three languages in the message. The text is ready for WhatsApp or Telegram.', 'Ne gönderileceğini seçin: tüm sözlük ya da tek bir kategori, mesajda en çok üç dil. Metin WhatsApp veya Telegram için hazır olur.', 'اختر ما تريد إرساله: القاموس كله أو فئة واحدة، وحتى ثلاث لغات في الرسالة. يصبح النص جاهزًا لـ WhatsApp أو Telegram.'],
+                    ['«Поделиться» открывает меню телефона (WhatsApp, Telegram, SMS и т. д.), «Копировать» копирует текст, чтобы вставить его куда угодно.', '“Share” opens the phone\'s share menu (WhatsApp, Telegram, SMS, etc.); “Copy” copies the text so you can paste it anywhere.', '«Paylaş» telefonun paylaşım menüsünü açar (WhatsApp, Telegram, SMS vb.); «Kopyala» metni her yere yapıştırabilmeniz için kopyalar.', '«مشاركة» تفتح قائمة المشاركة في الهاتف (WhatsApp وTelegram والرسائل…)، و«نسخ» ينسخ النص لتلصقه أينما شئت.']
+                ] },
+                { id: 'backup', icon: '💾', title: ['Резервная копия и Excel', 'Backup and Excel', 'Yedek ve Excel', 'النسخ الاحتياطي وExcel'], lines: [
+                    ['«Настройки» → «Экспорт всех словарей» сохраняет все словари в один файл (JSON). В названии файла указаны дата и число слов.', '“Settings” → “Export all dictionaries” saves every dictionary into one file (JSON). The file name shows the date and the word count.', '«Ayarlar» → «Tüm sözlükleri dışa aktar» bütün sözlükleri tek bir dosyaya (JSON) kaydeder. Dosya adında tarih ve kelime sayısı yer alır.', '«الإعدادات» ← «تصدير كل القواميس» يحفظ كل القواميس في ملف واحد (JSON). ويظهر في اسم الملف التاريخ وعدد الكلمات.'],
+                    ['«Импорт из телефона» возвращает словари из такого файла. Делайте копию перед сменой телефона или очисткой данных браузера: слова хранятся только в телефоне.', '“Import from phone” restores dictionaries from such a file. Make a copy before changing phones or clearing browser data: words are stored only on the phone.', '«Telefondan içe aktar» sözlükleri böyle bir dosyadan geri yükler. Telefon değiştirmeden veya tarayıcı verilerini silmeden önce yedek alın: kelimeler yalnızca telefonda saklanır.', '«استيراد من الهاتف» يعيد القواميس من هذا الملف. احتفظ بنسخة قبل تغيير الهاتف أو مسح بيانات المتصفح، فالكلمات محفوظة في الهاتف فقط.'],
+                    ['Для Excel есть выгрузка и загрузка таблицей (CSV). Отдельный словарь можно экспортировать кнопкой в «Словарях».', 'For Excel there is export and import as a table (CSV). A single dictionary can be exported with the button on the “Dictionaries” tab.', 'Excel için tablo (CSV) olarak dışa ve içe aktarma vardır. Tek bir sözlük, «Sözlükler» sekmesindeki düğmeyle dışa aktarılabilir.', 'لبرنامج Excel يوجد تصدير واستيراد كجدول (CSV). ويمكن تصدير قاموس واحد بالزر الموجود في تبويب «القواميس».']
+                ] },
+                { id: 'look', icon: '🎨', title: ['Язык и тема', 'Language and theme', 'Dil ve tema', 'اللغة والمظهر'], lines: [
+                    ['Язык интерфейса: русский, английский, турецкий или арабский. Нажмите значок языка в шапке и выберите. Ваши слова не переводятся — меняется только интерфейс.', 'Interface language: Russian, English, Turkish or Arabic. Tap the language icon in the header and choose. Your words are not translated; only the interface changes.', 'Arayüz dili: Rusça, İngilizce, Türkçe veya Arapça. Üstteki dil simgesine dokunup seçin. Kelimeleriniz çevrilmez; yalnızca arayüz değişir.', 'لغة الواجهة: الروسية أو الإنجليزية أو التركية أو العربية. اضغط أيقونة اللغة في الرأس واختر. كلماتك لا تُترجم، وتتغير الواجهة فقط.'],
+                    ['Тема: «День», «Ночь», «Сепия», «Чёрный» или «Вручную» (свои цвета акцента и фона). Нажмите значок темы в шапке.', 'Theme: Day, Night, Sepia, Black or Manual (your own accent and background colours). Tap the theme icon in the header.', 'Tema: Gündüz, Gece, Sepya, Siyah veya Manuel (kendi vurgu ve arka plan renkleriniz). Üstteki tema simgesine dokunun.', 'المظهر: نهار، ليل، بنّي دافئ، أسود، أو يدوي (ألوانك الخاصة للتمييز والخلفية). اضغط أيقونة المظهر في الرأس.']
+                ] },
+                { id: 'install', icon: '📲', title: ['Установка и обновления', 'Installing and updates', 'Kurulum ve güncellemeler', 'التثبيت والتحديثات'], lines: [
+                    ['Откройте ссылку на приложение в браузере и выберите «Установить» или «Добавить на главный экран»: появится значок, как у обычного приложения.', 'Open the app\'s link in a browser and choose “Install” or “Add to Home screen”: an icon appears like any other app.', 'Uygulama bağlantısını tarayıcıda açıp «Yükle» veya «Ana ekrana ekle»yi seçin: diğer uygulamalar gibi bir simge belirir.', 'افتح رابط التطبيق في المتصفح واختر «تثبيت» أو «إضافة إلى الشاشة الرئيسية»: تظهر أيقونة كأي تطبيق آخر.'],
+                    ['Слова хранятся в вашем телефоне, поэтому приложение работает и без интернета.', 'Your words are stored on your phone, so the app also works without internet.', 'Kelimeleriniz telefonunuzda saklanır; bu yüzden uygulama internetsiz de çalışır.', 'كلماتك محفوظة في هاتفك، لذلك يعمل التطبيق بدون إنترنت أيضًا.'],
+                    ['Обновления приходят сами: при следующем запуске с интернетом (иногда со второго раза) вы увидите новую версию, а слова сохранятся.', 'Updates arrive on their own: the next time you open it with internet (sometimes the second time) you will see the new version, and your words stay.', 'Güncellemeler kendiliğinden gelir: internetle bir sonraki açılışta (bazen ikincisinde) yeni sürümü görürsünüz, kelimeleriniz korunur.', 'التحديثات تصل تلقائيًا: عند فتح التطبيق مع الإنترنت (وأحيانًا في المرة الثانية) ترى النسخة الجديدة وتبقى كلماتك.'],
+                    ['Друзьям отправьте ссылку: «Настройки» → «Поделиться приложением». Слова на другой телефон сами не переходят — переносите их через резервную копию.', 'To send friends the link use “Settings” → “Share the app”. Words don\'t move to another phone by themselves; transfer them with a backup.', 'Arkadaşlara bağlantıyı «Ayarlar» → «Uygulamayı paylaş» ile gönderin. Kelimeler başka bir telefona kendiliğinden geçmez; yedekle taşıyın.', 'أرسل الرابط لأصدقائك من «الإعدادات» ← «مشاركة التطبيق». الكلمات لا تنتقل إلى هاتف آخر تلقائيًا، انقلها عبر نسخة احتياطية.']
+                ] }
+            ];
+
+            const AI = {
+                icon: '🤖', title: ['Массовый импорт через нейросеть', 'Bulk import with an AI', 'Yapay zekâ ile toplu içe aktarma', 'الاستيراد الجماعي عبر الذكاء الاصطناعي'],
+                intro: ['Не нужно печатать слова вручную: нейросеть сама прочитает фото страницы и выдаст готовый список.', 'No need to type words by hand: an AI can read a photo of a page and give you a ready list.', 'Kelimeleri elle yazmanıza gerek yok: yapay zekâ sayfa fotoğrafını okuyup hazır bir liste verir.', 'لا حاجة لكتابة الكلمات يدويًا: يقرأ الذكاء الاصطناعي صورة الصفحة ويعطيك قائمة جاهزة.'],
+                steps: [
+                    ['Откройте любую нейросеть (ChatGPT, Claude, Gemini и т. д.).', 'Open any AI assistant (ChatGPT, Claude, Gemini, etc.).', 'Herhangi bir yapay zekâ asistanını açın (ChatGPT, Claude, Gemini vb.).', 'افتح أي مساعد ذكاء اصطناعي (ChatGPT أو Claude أو Gemini وغيرها).'],
+                    ['Загрузите фото страницы или сфотографируйте текст: печатный или написанный от руки.', 'Upload a photo of the page or take a picture of the text: printed or handwritten.', 'Sayfanın fotoğrafını yükleyin ya da metni çekin: basılı veya el yazısı olabilir.', 'ارفع صورة الصفحة أو صوّر النص: مطبوعًا كان أو مكتوبًا بخط اليد.'],
+                    ['Нажмите кнопку ниже, чтобы скопировать инструкцию, и вставьте её в чат вместе с фото. Инструкция подстроена под языки вашего текущего словаря.', 'Tap the button below to copy the instructions and paste them into the chat together with the photo. The instructions match the languages of your current dictionary.', 'Talimatı kopyalamak için aşağıdaki düğmeye dokunun ve fotoğrafla birlikte sohbete yapıştırın. Talimat, geçerli sözlüğünüzün dillerine göre hazırlanır.', 'اضغط الزر أدناه لنسخ التعليمات والصقها في المحادثة مع الصورة. التعليمات مهيأة للغات قاموسك الحالي.'],
+                    ['Нейросеть выдаст готовый список — по одному слову в строке.', 'The AI will give you a ready list, one word per line.', 'Yapay zekâ her satırda bir kelime olan hazır bir liste verir.', 'سيعطيك الذكاء الاصطناعي قائمة جاهزة، كلمة واحدة في كل سطر.'],
+                    ['Скопируйте список. В приложении нажмите «+» → «Импорт слов», выберите словарь и вставьте текст.', 'Copy the list. In the app tap “+” → “Import words”, choose the dictionary and paste the text.', 'Listeyi kopyalayın. Uygulamada «+» → «Kelime içe aktar»a dokunun, sözlüğü seçin ve metni yapıştırın.', 'انسخ القائمة. في التطبيق اضغط «+» ← «استيراد الكلمات»، واختر القاموس والصق النص.'],
+                    ['Нажмите «Предпросмотр»: приложение покажет, какие слова новые, какие уже есть в словаре и какие не удалось разобрать. Затем нажмите «Добавить новые слова».', 'Tap “Preview”: the app shows which words are new, which are already in the dictionary and which could not be read. Then tap “Add new words”.', '«Önizleme»ye dokunun: uygulama hangi kelimelerin yeni olduğunu, hangilerinin sözlükte zaten bulunduğunu ve hangilerinin okunamadığını gösterir. Sonra «Yeni kelime ekle»ye dokunun.', 'اضغط «معاينة»: سيُظهر التطبيق الكلمات الجديدة وما هو موجود في القاموس وما تعذّرت قراءته. ثم اضغط «إضافة كلمات جديدة».']
+                ],
+                extra: ['Добавили третий язык в словарь, где слова уже есть? В окне «Импорт слов» нажмите «Дополнить недостающий язык»: приложение скопирует слова без этого языка вместе с инструкцией. Вставьте текст в нейросеть, а её ответ — в окно импорта и нажмите «Предпросмотр». Слова отметятся как «Дополнить», и недостающий язык добавится к существующим словам, остальное не изменится.', 'Added a third language to a dictionary that already has words? In the “Import words” window tap “Fill in the missing language”: the app copies the words without that language together with the instructions. Paste the text into an AI, paste its reply into the import window and tap “Preview”. The words are marked “Fill in”, and the missing language is added to the existing words; nothing else changes.', 'Zaten kelimeleri olan bir sözlüğe üçüncü bir dil mi eklediniz? «Kelime içe aktar» penceresinde «Eksik dili tamamla»ya dokunun: uygulama o dili olmayan kelimeleri talimatla birlikte kopyalar. Metni yapay zekâya, yanıtını da içe aktarma penceresine yapıştırıp «Önizleme»ye dokunun. Kelimeler «Tamamla» olarak işaretlenir ve eksik dil mevcut kelimelere eklenir; başka hiçbir şey değişmez.', 'أضفت لغة ثالثة إلى قاموس فيه كلمات بالفعل؟ في نافذة «استيراد الكلمات» اضغط «إكمال اللغة الناقصة»: ينسخ التطبيق الكلمات التي ليس لها هذه اللغة مع التعليمات. الصق النص في الذكاء الاصطناعي، ثم الصق ردّه في نافذة الاستيراد واضغط «معاينة». ستُعلَّم الكلمات بـ«إكمال» وتُضاف اللغة الناقصة إلى الكلمات الموجودة دون تغيير أي شيء آخر.'],
+                note: ['Нейросеть может ошибаться, особенно в арабских огласовках и при неразборчивом почерке, поэтому просматривайте результат до добавления. Сомнительные места она выводит отдельно, под заголовком «Спорное» — не вставляйте их в приложение, пока не проверите.', 'An AI can make mistakes, especially with Arabic vowel marks and unclear handwriting, so look through the result before adding it. It lists doubtful items separately under the heading “Спорное”; don\'t paste them into the app until you have checked them.', 'Yapay zekâ özellikle Arapça harekelerde ve okunaksız el yazısında hata yapabilir; bu yüzden eklemeden önce sonucu gözden geçirin. Şüpheli yerleri ayrı olarak «Спорное» başlığı altında verir; kontrol edene kadar bunları uygulamaya yapıştırmayın.', 'قد يخطئ الذكاء الاصطناعي، خصوصًا في التشكيل العربي والخط غير الواضح، لذا راجع النتيجة قبل الإضافة. يعرض الأمور المشكوك فيها منفصلة تحت عنوان «Спорное»؛ لا تلصقها في التطبيق قبل التحقق منها.']
+            };
+
+            // Инструкция для нейросети: по языкам текущего словаря
+            function buildAiPrompt(key) {
+                key = key || data.currentDictionary;
+                const s = key === '__tra__' ? { langs: [{ n: 'Турецкий', c: 'tr-TR' }, { n: 'Русский', c: 'ru-RU' }, { n: 'Арабский', c: 'ar-SA' }], show: [true, true, true] } : getDictSettings(key), act = activeLangIdx(s);
+                const codes = act.map(i => (s.langs[i].c || '').slice(0, 2).toLowerCase());
+                const names = act.map(i => s.langs[i].n);
+                const isTRA = act.length === 3 && ['tr', 'ru', 'ar'].every(c => codes.includes(c));
+                const hasAr = codes.includes('ar');
+                const STD = ['Глаголы', 'Прилагательные', 'Наречия', 'Местоимения', 'Вопросы', 'Служебные слова', 'Грамматика', 'Быт и повседневная жизнь', 'Человек и общение', 'Окружающий мир', 'Досуг и обучение', 'Разное'];
+                const have = [];
+                (data.dictionaries[key] || []).forEach(w => { const c = (w.category || '').trim(); if (c && !have.includes(c)) have.push(c); });
+                const cats = (isTRA ? STD : (have.length ? have.slice(0, 40) : STD)).join(', ');
+                if (isTRA) {
+                    const label = { tr: 'Турецкое слово', ru: 'Русский перевод', ar: 'Арабский перевод' };
+                    const sample = { tr: 'Açmak', ru: 'Открывать', ar: 'فَتَحَ' };
+                    return [
+                        'Помоги составить список слов для моего словаря. Я пришлю фото страницы (печатный или рукописный текст) или просто текст. Сам найди в нём слова для словаря и вытащи их: ничего дополнительно объяснять мне не нужно. Выдай ТОЛЬКО готовые строки, по одной на слово, без нумерации, заголовков и пояснений.',
+                        '',
+                        'ФОРМАТ СТРОКИ',
+                        codes.map(c => label[c]).join(' — ') + ' [Категория]',
+                        'Пример: ' + codes.map(c => sample[c]).join(' — ') + ' [Глаголы]',
+                        'Заголовки категорий не пиши — каждая строка сразу в готовом виде.',
+                        '',
+                        'ПРИМЕР ПРЕДЛОЖЕНИЯ (необязательно)',
+                        'Если в исходном тексте слово стоит в предложении, можешь добавить это предложение в конец строки после знака |  (после категории). Например: Слово — Перевод [Категория] | Предложение со словом. Не придумывай предложения сам: если в тексте его нет, знак | не ставь. Предложения с пропусками (точки, подчёркивания, пустые места) в качестве примера не используй.',
+                        '',
+                        'ОФОРМЛЕНИЕ ОТВЕТА',
+                        'Не добавляй ссылки на источники, сноски, номера и служебные пометки вроде [span_0] или [1]: только чистый текст строк. Одна строка — одно слово: каждое слово на отдельной строке, не сплошным текстом и не таблицей. Весь список выдай одним блоком кода (в тройных обратных кавычках), чтобы строки сохранились при копировании. Раздел «Спорное» (если он нужен) выведи после этого блока.',
+                        '',
+                        'ЯЗЫКИ',
+                        'Все три языка обязательны всегда, арабский никогда не пропускай.',
+                        'Турецкое слово и русский перевод — каждое с заглавной буквы. Если это фраза из нескольких слов, с заглавной только первое слово, остальные строчными: Öğleden sonra — После обеда (а не öğleden sonra — после обеда и не Öğleden Sonra — После Обеда).',
+                        'Арабский — в обычном написании, обязательно с полными харакатами. У существительных и прилагательных ставь конечный танвин (مَدِينَةٌ, هَاتِفٌ, سَعِيدٌ); у слов с артиклем «ال» — конечная огласовка без танвина (اللُّغَةُ التُّرْكِيَّةُ); у глаголов — как в начальной форме.',
+                        '',
+                        'ГЛАГОЛЫ',
+                        'Турецкий — только в форме -mak / -mek.',
+                        'Арабский — в начальной форме: 3-е лицо, мужской род, единственное число, прошедшее время (по образцу فَعَلَ), включая составные и сложные глаголы. Пример: Yazmak — Писать — كَتَبَ.',
+                        '',
+                        'ОСТАЛЬНЫЕ СЛОВА',
+                        'Давай в чистой словарной форме, без падежных, личных и прочих аффиксов (Sana → Sen, Sınavım → Sınav, Evde → Ev). Отрицательные и производные формы (Sevmemek, Gelmemek) не добавляй: только основное слово. Имена людей (Doruk, Leyla) не добавляй, а города и страны добавляй.',
+                        'Перевод короткий и точный, без лишних вариантов.',
+                        '',
+                        'КАТЕГОРИИ — ровно 12, одна на слово',
+                        cats + '.',
+                        'Никаких других категорий и пометок (типа «послелог») не добавляй ни в категорию, ни в перевод.',
+                        '',
+                        'ПУНКТУАЦИЯ',
+                        'Вопросительные слова → [Вопросы], знак «?» сохраняй.',
+                        'Восклицания и устойчивые выражения сохраняют «!» (Afiyet olsun!, Hoş geldin!).',
+                        '',
+                        'ПОВТОРЫ И ОСОБЫЕ СЛУЧАИ',
+                        'Сначала приводи слово к словарной форме, потом проверяй, нет ли его уже в твоём списке: одно и то же слово дважды не пиши. Перед выдачей ещё раз просмотри весь список и убери повторы. Слова, которые уже есть в моём словаре, приложение отметит само — тебе их проверять не нужно.',
+                        'Одно турецкое слово может встречаться дважды, если оно и существительное, и глагол (Yemek — Еда [Быт и повседневная жизнь] / Yemek — Есть, кушать [Глаголы]) — оба варианта сохраняй.',
+                        'Разговорные вопросительные формы (Kime?, Kimde?, Kimden?, Nereye?, Nereden?, Nerede?, Neler?, Hangisi?, Kaçar?) считаются отдельными словами и не сводятся к базовой форме.',
+                        'Страны, национальности и языки вноси триплетом (страна — [Окружающий мир], национальность — [Человек и общение], язык — [Досуг и обучение]), если в источнике есть все три формы.',
+                        '',
+                        'РАБОТА С ИСТОЧНИКОМ',
+                        'Извлекай все слова из источника.',
+                        'Неразборчивые или неоднозначные по смыслу места не додумывай и не угадывай: выведи их ОТДЕЛЬНО после основного списка, под заголовком «Спорное», чтобы я их уточнил.',
+                        'Если у слова несколько значений, а в арабском нет одного слова на оба сразу — выбери основное (первое) значение, а остальные явно пометь в том же разделе «Спорное» как неохваченные.'
+                    ].join('\n');
+                }
+                const fmtLine = names.map(n => '<' + n + '>').join(' — ') + ' [Категория]';
+                const out = [
+                    'Помоги составить список слов для моего словаря (языки: ' + names.join(', ') + '). Я пришлю фото страницы (печатный или рукописный текст) или просто текст. Сам найди в нём слова для словаря и вытащи их. Выдай ТОЛЬКО готовые строки, по одной на слово, без нумерации, заголовков и пояснений.',
+                    '',
+                    'ФОРМАТ СТРОКИ',
+                    fmtLine,
+                    'Вместо угловых скобок подставляй слово или перевод на соответствующем языке. Порядок языков в строке именно такой, разделитель — « — ».',
+                    '',
+                    'ПРИМЕР ПРЕДЛОЖЕНИЯ (необязательно)',
+                    'Если в исходном тексте слово стоит в предложении, можешь добавить это предложение в конец строки после знака |  (после категории). Например: Слово — Перевод [Категория] | Предложение со словом. Не придумывай предложения сам: если в тексте его нет, знак | не ставь. Предложения с пропусками (точки, подчёркивания, пустые места) в качестве примера не используй.',
+                    '',
+                    'ОФОРМЛЕНИЕ ОТВЕТА',
+                    'Не добавляй ссылки на источники, сноски, номера и служебные пометки вроде [span_0] или [1]: только чистый текст строк. Одна строка — одно слово: каждое слово на отдельной строке, не сплошным текстом и не таблицей. Весь список выдай одним блоком кода (в тройных обратных кавычках), чтобы строки сохранились при копировании. Раздел «Спорное» (если он нужен) выведи после этого блока.',
+                    '',
+                    'ПРАВИЛА',
+                    'Все ' + names.length + ' языка обязательны в каждой строке, ни один не пропускай.',
+                    'Слово и перевод пиши каждый с заглавной буквы. Если это фраза из нескольких слов, с заглавной только первое слово, остальные строчными (например: Dans etmek, После обеда).'
+                ];
+                if (hasAr) out.push('Арабский — в обычном написании, обязательно с полными харакатами. У существительных и прилагательных ставь конечный танвин (مَدِينَةٌ, هَاتِفٌ, سَعِيدٌ); у слов с артиклем «ال» — конечная огласовка без танвина (اللُّغَةُ التُّرْكِيَّةُ); у глаголов — как в начальной форме.');
+                out.push(
+                    'Давай слова в чистой словарной форме, без падежных, личных и прочих окончаний; глаголы — в начальной форме (инфинитив). Отрицательные и производные формы (например, Sevmemek) не добавляй. Имена людей не добавляй, а города и страны добавляй.',
+                    'Перевод короткий и точный, без лишних вариантов.',
+                    'Одна категория на слово, пиши её в квадратных скобках в конце строки. Выбирай из списка: ' + cats + '. Если ничего не подходит — «Разное».',
+                    'Знаки «?» и «!» сохраняй.',
+                    'Одно и то же слово дважды в списке не пиши. Слова, которые уже есть в моём словаре, приложение отметит само — тебе их проверять не нужно.',
+                    'Неразборчивые или неоднозначные по смыслу места не додумывай: выведи их ОТДЕЛЬНО после основного списка, под заголовком «Спорное», чтобы я их уточнил.'
+                );
+                return out.join('\n');
+            }
+
+            const list = lines => '<ul class="help-list">' + lines.map(l => '<li>' + fmt(l) + '</li>').join('') + '</ul>';
+
+            function renderPage(kind) {
+                return list(PAGES[kind].lines) +
+                    '<button class="btn-primary" style="margin-top:18px;" onclick="openHelp(\'guide\')">' + esc(plain(UI.full)) + '</button>';
+            }
+            function aiOptions() {
+                // Если у текущего словаря языки не настроены («Слово», «Перевод»), нейросеть не поймёт, о каких языках речь: по умолчанию берём подробную инструкцию
+                const unset = n => { const st = getDictSettings(n); return activeLangIdx(st).every(i => ['слово', 'перевод'].includes(String(st.langs[i].n).trim().toLowerCase())); };
+                let h = '<option value="__tra__"' + (unset(data.currentDictionary) ? ' selected' : '') + '>' + esc(plain(UI.presetTra)) + '</option>';
+                Object.keys(data.dictionaries).forEach(n => {
+                    const st = getDictSettings(n), langs = activeLangIdx(st).map(i => st.langs[i].n).join(' · ');
+                    h += '<option value="' + esc(n) + '"' + (n === data.currentDictionary && !unset(n) ? ' selected' : '') + '>' + esc(n) + ' (' + esc(langs) + ')</option>';
+                });
+                return h;
+            }
+            function renderGuide() {
+                let h = GUIDE.map(g => '<details class="help-sec" data-sec="' + g.id + '"><summary><span>' + g.icon + '</span> ' + esc(plain(g.title)) + '</summary><div class="help-sec-body">' + list(g.lines) + '</div></details>').join('');
+                h += '<details class="help-sec" data-sec="ai"><summary><span>' + AI.icon + '</span> ' + esc(plain(AI.title)) + '</summary><div class="help-sec-body">' +
+                    '<div class="help-intro">' + fmt(AI.intro) + '</div>' +
+                    '<ol class="help-ol">' + AI.steps.map(st => '<li>' + fmt(st) + '</li>').join('') + '</ol>' +
+                    '<div class="help-note">' + esc(plain(UI.forWhat)) + '</div>' +
+                    '<select id="aiPromptFor" class="form-input" data-no-i18n style="margin-top:6px;" onchange="refreshAiPrompt()">' + aiOptions() + '</select>' +
+                    '<button class="btn-primary" style="margin-top:14px;" onclick="copyAiPrompt()">' + esc(plain(UI.copy)) + '</button>' +
+                    '<div class="help-note">' + esc(plain(UI.shown)) + ':</div>' +
+                    '<textarea id="aiPromptText" class="form-textarea help-prompt" dir="auto" readonly></textarea>' +
+                    '<div class="help-note">' + fmt(AI.note) + '</div>' +
+                    '<div class="help-intro" style="margin-top:14px;">' + fmt(AI.extra) + '</div>' +
+                    '</div></details>';
+                return h;
+            }
+
+
+            // ===== Дополнить недостающий язык =====
+            const fillState = { dict: null, batch: 50 };
+            const fillMissing = name => (data.dictionaries[name] || []).filter(w => !String(w.meaning2 || '').trim());
+            function buildFillPrompt(name, limit) {
+                const st = getDictSettings(name), n0 = st.langs[0].n, n1 = st.langs[1].n, n2 = st.langs[2].n;
+                const isAr = /^ar/i.test(st.langs[2].c || '') || /араб/i.test(n2);
+                const words = fillMissing(name);
+                const part = limit ? words.slice(0, limit) : words;
+                const lines = part.map(w => { const t = [w.word, w.meaning].map(x => String(x || '').replace(/\s*\n\s*/g, ' ').trim()).filter(Boolean).join(' — '); return t + ' [' + (w.category || 'Общее') + ']'; });
+                const out = [
+                    'Помоги дополнить мой словарь. К каждой строке ниже нужно добавить третье поле — перевод на язык «' + n2 + '». Выдай ТОЛЬКО готовые строки, по одной на слово, без нумерации, заголовков и пояснений.',
+                    '',
+                    'ФОРМАТ СТРОКИ НА ВЫХОДЕ',
+                    '<' + n0 + '> — <' + n1 + '> — <' + n2 + '> [Категория]',
+                    '',
+                    'ОФОРМЛЕНИЕ ОТВЕТА',
+                    'Не добавляй ссылки на источники, сноски, номера и служебные пометки вроде [span_0] или [1]: только чистый текст строк. Одна строка — одно слово: каждое слово на отдельной строке, не сплошным текстом и не таблицей. Весь список выдай одним блоком кода (в тройных обратных кавычках), чтобы строки сохранились при копировании. Раздел «Спорное» (если он нужен) выведи после этого блока.',
+                    '',
+                    'ПРАВИЛА',
+                    'Категорию в квадратных скобках оставляй ТОЧНО как дана. Слово и второе поле оставляй такими же, но первая буква каждого из них должна быть заглавной (açık → Açık, после обеда → После обеда); если это фраза из нескольких слов, заглавная только у первого слова. Больше ничего не исправляй, не переставляй и не переводи заново. Добавляй только третье поле.',
+                    'Сколько строк я дал, столько и верни, в том же порядке: ничего не пропускай и не добавляй.'
+                ];
+                if (isAr) out.push(
+                    'Арабский — в обычном написании, обязательно с полными харакатами. У существительных и прилагательных ставь конечный танвин (مَدِينَةٌ, هَاتِفٌ, سَعِيدٌ); у слов с артиклем «ال» — конечная огласовка без танвина (اللُّغَةُ التُّرْكِيَّةُ); у глаголов — как в начальной форме.',
+                    'Если слово — глагол (категория [Глаголы]), арабский давай в начальной форме: 3-е лицо, мужской род, единственное число, прошедшее время (по образцу فَعَلَ). Пример: Yazmak — Писать — كَتَبَ [Глаголы].'
+                );
+                out.push(
+                    'Перевод короткий и точный, без лишних вариантов. Если у слова несколько значений, а в «' + n2 + '» нет одного слова на оба, выбери основное (первое) значение.',
+                    'Если не уверен в слове или оно неоднозначно, не угадывай: выведи его ОТДЕЛЬНО после основного списка, под заголовком «Спорное».',
+                    '',
+                    'СЛОВА (' + part.length + ')',
+                    lines.join('\n')
+                );
+                return out.join('\n');
+            }
+            function renderFill() {
+                const name = fillState.dict, st = getDictSettings(name), body = document.getElementById('fillBody');
+                document.getElementById('fillTitle').textContent = plain(UI.fillTitle);
+                const sel = '<div class="form-group"><label class="form-label">' + esc(plain(UI.dictLabel)) + '</label><select class="form-input" onchange="fillSetDict(this.value)">' +
+                    Object.keys(data.dictionaries).map(n => '<option value="' + esc(n) + '"' + (n === name ? ' selected' : '') + '>' + esc(dictLabel(n)) + '</option>').join('') + '</select></div>';
+                if (!st.langs[2]) { body.innerHTML = sel + '<div class="help-note" style="font-size:14px;">' + esc(plain(UI.need3)) + '</div>'; return; }
+                const L = st.langs[2].n, miss = fillMissing(name), M = (data.dictionaries[name] || []).length;
+                const sub = (a, extra) => dig(esc(T(a)).replace('{L}', esc(trText(L))).replace('{N}', miss.length).replace('{M}', M));
+                if (!miss.length) { body.innerHTML = sel + '<div class="help-note" style="font-size:14px;">' + sub(UI.fillDone) + '</div>'; return; }
+                const bs = [50, 100, 200, 0].map(v => '<option value="' + v + '"' + (fillState.batch === v ? ' selected' : '') + '>' + (v ? dig(String(v)) : esc(plain(UI.allWords))) + '</option>').join('');
+                body.innerHTML = sel +
+                    '<div class="help-intro" style="font-weight:600;">' + sub(UI.fillInfo) + '</div>' +
+                    '<div class="form-group"><label class="form-label">' + esc(plain(UI.batch)) + '</label><select class="form-input" onchange="fillSetBatch(this.value)">' + bs + '</select></div>' +
+                    '<ol class="help-ol">' + UI.fillSteps.map(x => '<li>' + fmt(x) + '</li>').join('') + '</ol>' +
+                    '<textarea id="fillPrompt" class="form-textarea help-prompt" dir="auto" readonly></textarea>' +
+                    '<div style="display:flex; gap:8px; margin-top:12px;"><button class="btn-primary" style="margin-top:0;" onclick="fillCopy()">' + esc(plain(UI.copyText)) + '</button>' +
+                    '<button class="btn-primary" style="margin-top:0; background: var(--ios-fill); color: var(--ios-text); box-shadow: none;" onclick="fillOpenImport()">' + esc(plain(UI.openImport)) + '</button></div>';
+                document.getElementById('fillPrompt').value = buildFillPrompt(name, fillState.batch);
+            }
+            window.openFillLang = function (name) {
+                fillState.dict = (name && data.dictionaries[name]) ? name : data.currentDictionary;
+                renderFill();
+                document.getElementById('fillLangModal').classList.add('active');
+            };
+            window.closeFillLang = function () { document.getElementById('fillLangModal').classList.remove('active'); };
+            window.fillSetDict = v => { fillState.dict = v; renderFill(); };
+            window.fillSetBatch = v => { fillState.batch = parseInt(v, 10) || 0; renderFill(); };
+            window.fillCopy = async function () {
+                const ta = document.getElementById('fillPrompt'); if (!ta) return;
+                let ok = false;
+                try { await navigator.clipboard.writeText(ta.value); ok = true; } catch (e) {
+                    ta.removeAttribute('readonly'); ta.select(); try { ok = document.execCommand('copy'); } catch (e2) {} ta.setAttribute('readonly', '');
+                }
+                if (ok) alert(plain(UI.copiedFill));
+            };
+            window.fillOpenImport = function () {
+                const name = fillState.dict;
+                closeFillLang();
+                openBulkImport();
+                const sel = document.getElementById('bulkImportDictionary');
+                if (sel) { sel.value = name; updateBulkImportHint(); }
+            };
+
+            window.openHelp = function (kind, sec) {
+                const m = document.getElementById('helpModal'), body = document.getElementById('helpBody');
+                if (!m || !body) return;
+                if (kind !== 'guide' && !PAGES[kind]) kind = 'home';
+                document.getElementById('helpTitle').textContent = kind === 'guide' ? plain(UI.guide) : plain(UI.help) + ' · ' + plain(PAGES[kind].title);
+                body.innerHTML = kind === 'guide' ? renderGuide() : renderPage(kind);
+                refreshAiPrompt();
+                m.classList.add('active');
+                const box = m.querySelector('.modal-content');
+                if (box) box.scrollTop = 0;
+                if (sec) {
+                    const d = body.querySelector('[data-sec="' + sec + '"]');
+                    if (d) { d.open = true; setTimeout(() => { try { d.scrollIntoView({ block: 'start' }); } catch (e) {} }, 60); }
+                }
+            };
+            window.refreshAiPrompt = function () {
+                const ta = document.getElementById('aiPromptText'), sel = document.getElementById('aiPromptFor');
+                if (ta) ta.value = buildAiPrompt(sel ? sel.value : undefined);
+            };
+            window.closeHelp = function () { const m = document.getElementById('helpModal'); if (m) m.classList.remove('active'); };
+            window.copyAiPrompt = async function () {
+                const ta = document.getElementById('aiPromptText'), text = ta ? ta.value : buildAiPrompt();
+                let ok = false;
+                try { await navigator.clipboard.writeText(text); ok = true; } catch (e) {
+                    if (ta) { ta.removeAttribute('readonly'); ta.select(); try { ok = document.execCommand('copy'); } catch (e2) {} ta.setAttribute('readonly', ''); }
+                }
+                if (ok) alert(plain(UI.copied));
+            };
+
+
+
+            // ===== Заглавная первая буква у слов и переводов текущего словаря =====
+            const CAPUI = {
+                ask: ['Поставить заглавную первую букву у слов и переводов в словаре «{d}»? Изменится слов: {n}. Остальные буквы не меняются.', 'Capitalize the first letter of words and translations in “{d}”? Words to change: {n}. Other letters stay as they are.', '«{d}» sözlüğündeki kelime ve çevirilerin ilk harfi büyük yapılsın mı? Değişecek kelime: {n}. Diğer harfler değişmez.', 'جعل الحرف الأول كبيرًا في الكلمات والترجمات في قاموس «{d}»؟ عدد الكلمات التي ستتغير: {n}. لا تتغير بقية الحروف.'],
+                none: ['Во всех словах уже стоит заглавная первая буква.', 'All words already start with a capital letter.', 'Tüm kelimelerin ilk harfi zaten büyük.', 'كل الكلمات تبدأ بحرف كبير بالفعل.'],
+                done: ['Готово. Изменено слов: {n}.', 'Done. Words changed: {n}.', 'Tamam. Değişen kelime: {n}.', 'تم. عدد الكلمات التي تغيّرت: {n}.'],
+                ok: ['Исправить', 'Fix', 'Düzelt', 'تصحيح']
+            };
+            const capSub = (a, o) => plain(a).replace(/\{(\w+)\}/g, (_, k) => o[k]);
+            window.fixCapitalization = async function () {
+                const name = data.currentDictionary, st = getDictSettings(name), words = data.dictionaries[name] || [];
+                const changes = [];
+                words.forEach(w => {
+                    const cf = capWordFields(w, st);
+                    if (cf.word !== (w.word || '') || cf.meaning !== (w.meaning || '') || cf.meaning2 !== (w.meaning2 || '')) changes.push([w, cf]);
+                });
+                if (!changes.length) return alert(plain(CAPUI.none));
+                if (!(await appConfirm(capSub(CAPUI.ask, { d: name, n: changes.length }), { okText: plain(CAPUI.ok) }))) return;
+                changes.forEach(([w, cf]) => { w.word = cf.word; w.meaning = cf.meaning; if (w.meaning2 || cf.meaning2) w.meaning2 = cf.meaning2; });
+                saveData();
+                renderMainContent();
+                alert(capSub(CAPUI.done, { n: changes.length }));
+            };
+
+            // Первый запуск: один раз предложить посмотреть инструкцию
+            setTimeout(async () => {
+                try { if (localStorage.getItem('helpSeen')) return; } catch (e) { return; }
+                if (document.querySelector('.modal.active, .app-dialog-overlay')) return;
+                try { localStorage.setItem('helpSeen', '1'); } catch (e) { return; }
+                const ok = await appConfirm(plain(UI.firstAsk), { okText: plain(UI.yes), cancelText: plain(UI.later) });
+                if (ok) startTour();
+            }, 1500);
+        })();
+    </script>
+    <script>
+    /* ===== Тур по приложению ===== */
+    (function () {
+        const IDX = { ru: 0, en: 1, tr: 2, ar: 3 };
+        const T = a => a[IDX[typeof uiLang !== 'undefined' ? uiLang : 'ru'] ?? 0];
+        const U = {
+            next: ['Далее', 'Next', 'İleri', 'التالي'], back: ['Назад', 'Back', 'Geri', 'السابق'], done: ['Готово', 'Done', 'Bitti', 'تم'],
+            skip: ['Пропустить', 'Skip', 'Atla', 'تخطّي']
+        };
+        const STEPS = [
+            { tab: 'home', sel: '#searchInput',
+              t: ['Главная: ваши слова', 'Home: your words', 'Ana sayfa: kelimeleriniz', 'الرئيسية: كلماتك'],
+              x: ['Здесь список слов текущего словаря. Ищите слово в этой строке, нажмите на слово — откроется карточка с озвучкой.', 'Your dictionary\'s word list is here. Search in this field; tap a word to open its card with audio.', 'Geçerli sözlüğün kelime listesi burada. Bu alandan arayın; sesli kartı açmak için kelimeye dokunun.', 'هنا قائمة كلمات القاموس الحالي. ابحث في هذا الحقل، واضغط على كلمة لتفتح بطاقتها مع النطق.'] },
+            { tab: 'home', sel: '.tab-center-btn',
+              t: ['Кнопка «+»', 'The “+” button', '«+» düğmesi', 'زر «+»'],
+              x: ['Добавить одно слово или много сразу через «Импорт слов». Для импорта можно взять список от нейросети по фото страницы. Здесь же добавляются правила.', 'Add one word, or many at once with “Import words”. You can import a list an AI made from a photo of a page. Rules are added here too.', 'Tek bir kelime ya da «Kelime içe aktar» ile birçoğunu birden ekleyin. Sayfa fotoğrafından yapay zekânın hazırladığı listeyi içe aktarabilirsiniz. Kurallar da buradan eklenir.', 'أضف كلمة واحدة أو عدة كلمات دفعة واحدة عبر «استيراد الكلمات». يمكنك استيراد قائمة أعدّها الذكاء الاصطناعي من صورة صفحة. وتُضاف القواعد من هنا أيضًا.'] },
+            { tab: 'dicts', sel: '#tabNavDicts',
+              t: ['Словари', 'Dictionaries', 'Sözlükler', 'القواميس'],
+              x: ['Отдельный словарь для каждого языка или темы. Здесь можно выбрать текущий словарь, отправить слова текстом и экспортировать.', 'A separate dictionary for each language or topic. Pick the current one here, send words as text and export.', 'Her dil ya da konu için ayrı sözlük. Geçerli olanı seçin, kelimeleri metin olarak gönderin ve dışa aktarın.', 'قاموس مستقل لكل لغة أو موضوع. اختر الحالي هنا، وأرسل الكلمات كنص، وصدّرها.'] },
+            { tab: 'quiz', sel: () => { const e = document.getElementById('statCardWeak'); return e && e.parentElement; },
+              t: ['Изучение: ваш прогресс', 'Study: your progress', 'Çalışma: ilerlemeniz', 'التعلّم: تقدّمك'],
+              x: ['Изучено, Ошибки, Новых. Нажмите на группу, чтобы тренироваться только по ней; двойной тап покажет список слов.', 'Learned, Mistakes, New. Tap a group to practise only with it; a double tap shows its word list.', 'Öğrenildi, Hatalar, Yeni. Yalnızca birini çalışmak için dokunun; çift dokunuş kelime listesini gösterir.', 'تم تعلّمها، الأخطاء، جديدة. اضغط على مجموعة للتدرّب عليها فقط، والضغط المزدوج يعرض قائمة الكلمات.'] },
+            { tab: 'quiz', sel: '#directionSection',
+              t: ['Упражнения и «Марафон»', 'Exercises and “Marathon”', 'Alıştırmalar ve «Maraton»', 'التمارين و«الماراثون»'],
+              x: ['Выберите упражнение: тест, на слух, написать ответ, собрать слово, диктовка, верно/неверно, пропуск, фраза. «Марафон» проведёт слова через все выбранные упражнения. Все они влияют на рейтинг.', 'Pick an exercise: quiz, by ear, type the answer, build the word, dictation, true/false, gap, phrase. “Marathon” takes the words through all the chosen exercises. All of them affect your rating.', 'Bir alıştırma seçin: test, dinleme, cevabı yaz, kelimeyi oluştur, dikte, doğru/yanlış, boşluk, cümle. «Maraton» kelimeleri seçtiğiniz tüm alıştırmalardan geçirir. Hepsi puanı etkiler.', 'اختر تمرينًا: اختبار، بالسماع، اكتب الجواب، ركّب الكلمة، إملاء، صحيح/خطأ، فراغ، عبارة. «الماراثون» يمرّر الكلمات عبر كل التمارين المختارة. وكلها تؤثر على التقييم.'] },
+            { tab: 'quiz', sel: '#quantitySection',
+              t: ['Сколько слов', 'How many words', 'Kaç kelime', 'كم كلمة'],
+              x: ['Выберите количество слов для одного круга: 50, 100 или все.', 'Choose how many words go into one round: 50, 100 or all.', 'Bir tur için kelime sayısını seçin: 50, 100 veya tümü.', 'اختر عدد الكلمات في الجولة الواحدة: 50 أو 100 أو الكل.'] },
+            { tab: 'quiz', sel: '.btn-primary[onclick="beginQuiz()"]',
+              t: ['Начать', 'Start', 'Başla', 'ابدأ'],
+              x: ['Нажмите «Начать»: сначала увидите список слов круга, затем пойдут вопросы. Ошибки попадут в группу «Ошибки», чтобы их повторить.', 'Tap “Start”: you first see the word list for the round, then the questions begin. Mistakes go to the “Mistakes” group so you can review them.', '«Başla»ya dokunun: önce turun kelime listesini görürsünüz, sonra sorular başlar. Hatalar tekrar için «Hatalar» grubuna gider.', 'اضغط «ابدأ»: سترى أولًا قائمة كلمات الجولة ثم تبدأ الأسئلة. وتذهب الأخطاء إلى مجموعة «الأخطاء» لتراجعها.'] },
+            { tab: 'settings', sel: '.help-btn',
+              t: ['Подсказки везде', 'Help everywhere', 'Her yerde yardım', 'مساعدة في كل مكان'],
+              x: ['Значок «?» в шапке каждой вкладки объясняет именно её. Полная инструкция — в Настройках → «Как пользоваться». Тур можно пройти снова там же.', 'The “?” icon in each tab\'s header explains that tab. The full guide is in Settings → “How to use”. You can repeat this tour there too.', 'Her sekmenin üstündeki «?» simgesi o sekmeyi açıklar. Tam kılavuz Ayarlar → «Nasıl kullanılır» içindedir. Bu turu orada tekrar başlatabilirsiniz.', 'أيقونة «؟» في رأس كل تبويب تشرح ذلك التبويب. والدليل الكامل في الإعدادات ← «طريقة الاستخدام». ويمكنك إعادة هذه الجولة من هناك.'] }
+        ];
+        let layer, hole, card, cur = 0, onResize;
+        function visibleRect(sel) {
+            const el = typeof sel === 'function' ? sel() : Array.from(document.querySelectorAll(sel)).find(e => e.getBoundingClientRect().width > 0);
+            if (!el) return null;
+            const r = el.getBoundingClientRect();
+            return r.width > 0 && r.height > 0 ? { el, r } : null;
+        }
+        function place() {
+            const st = STEPS[cur];
+            const f = visibleRect(st.sel);
+            const vh = window.innerHeight;
+            if (f) {
+                const pad = 6, r = f.r;
+                hole.style.display = 'block';
+                hole.style.left = (r.left - pad) + 'px'; hole.style.top = (r.top - pad) + 'px';
+                hole.style.width = (r.width + pad * 2) + 'px'; hole.style.height = Math.min(r.height + pad * 2, vh - 8) + 'px';
+                const cardH = card.offsetHeight;
+                const below = r.bottom + 14 + cardH < vh - 8;
+                card.style.top = (below ? r.bottom + 14 : Math.max(8, r.top - 14 - cardH)) + 'px';
+            } else {
+                hole.style.display = 'none';
+                card.style.top = Math.max(8, (vh - card.offsetHeight) / 2) + 'px';
+            }
+        }
+        function render() {
+            const st = STEPS[cur];
+            switchNavTab(st.tab);
+            card.setAttribute('dir', uiLang === 'ar' ? 'rtl' : 'ltr');
+            card.innerHTML = `<div class="tour-step"><span dir="ltr" style="unicode-bidi: isolate;">${cur + 1} / ${STEPS.length}</span></div>
+                <div class="tour-title">${T(st.t)}</div>
+                <div class="tour-text">${T(st.x)}</div>
+                <div class="tour-btns">
+                    <button class="tour-skip" onclick="endTour()">${T(U.skip)}</button>
+                    <button onclick="tourGo(-1)" ${cur === 0 ? 'disabled' : ''}>${T(U.back)}</button>
+                    <button class="primary" onclick="tourGo(1)">${cur === STEPS.length - 1 ? T(U.done) : T(U.next)}</button>
+                </div>`;
+            card.style.top = '-9999px';
+            setTimeout(() => {
+                const f = visibleRect(st.sel);
+                if (f && f.el.scrollIntoView) f.el.scrollIntoView({ block: 'center' });
+                setTimeout(place, 260);
+            }, 120);
+        }
+        window.tourGo = d => {
+            const n = cur + d;
+            if (n >= STEPS.length) return endTour();
+            if (n < 0) return;
+            cur = n; render();
+        };
+        window.endTour = () => {
+            if (layer) layer.remove();
+            layer = null;
+            window.removeEventListener('resize', onResize);
+            try { switchNavTab('home'); } catch (e) {}
+            try { localStorage.setItem('helpSeen', '1'); } catch (e) {}
+        };
+        window.startTour = () => {
+            if (layer) return;
+            document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
+            layer = document.createElement('div'); layer.id = 'tourLayer';
+            layer.innerHTML = '<div class="tour-block"></div><div class="tour-hole"></div><div class="tour-card"></div>';
+            document.body.appendChild(layer);
+            hole = layer.querySelector('.tour-hole'); card = layer.querySelector('.tour-card');
+            onResize = () => place();
+            window.addEventListener('resize', onResize);
+            cur = 0; render();
+        };
+    })();
     </script>
 </body>
-                    </html>
+    </html>
