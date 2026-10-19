@@ -15,7 +15,7 @@
     <meta name="apple-mobile-web-app-title" content="Словарь">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&family=Nunito:wght@500;600;700;800&family=Cairo:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&family=Nunito:wght@500;600;700;800&family=Cairo:wght@500;600;700;800&family=Montserrat:wght@500;600;700;800&family=PT+Serif:wght@400;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         * { 
             margin: 0; 
@@ -1355,6 +1355,18 @@
             --ios-card-hover: rgba(26, 26, 26, 0.9); --ios-border: rgba(255, 255, 255, 0.08);
         }
         body.black-theme .ambient-sphere { display: none; }
+        .set-head { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
+        .set-head svg { width: 16px; height: 16px; flex: none; }
+        .set-grid { display: grid; gap: 8px; }
+        .set-grid.c3 { grid-template-columns: repeat(3, 1fr); }
+        .set-grid.c4 { grid-template-columns: repeat(4, 1fr); }
+        .set-grid.c5 { grid-template-columns: repeat(5, 1fr); }
+        .set-grid .quiz-mode-btn { padding: 12px 2px; font-size: 12.5px; white-space: nowrap; min-width: 0; overflow: hidden; }
+        .set-grid.c5 .quiz-mode-btn { font-size: 11.5px; padding: 12px 0; }
+        .set-grid .quiz-mode-btn small { display: block; font-size: 11px; font-weight: 600; opacity: 0.75; margin-top: 3px; }
+        .font-card { padding: 12px 2px 10px !important; }
+        .font-card .aa { display: block; font-size: 21px; font-weight: 700; line-height: 1.15; color: var(--ios-text); }
+        .font-card.active .aa { color: inherit; }
         .theme-card-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
         .theme-card-row + .theme-card-row { margin-top: 14px; }
         .accent-dots { display: flex; gap: 10px; }
@@ -1870,18 +1882,6 @@ setTimeout(end,9000);
                 </div>
             </div>
 
-            <div class="ios-settings-card">
-                <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Оформление</div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 15px; font-weight: 500;">Размер шрифта</span>
-                    <select class="form-input" id="fontSizeSelect" style="width: 130px; padding: 8px 12px;" onchange="changeFontSize()">
-                        <option value="small">Мелкий</option>
-                        <option value="medium" selected>Средний</option>
-                        <option value="large">Крупный</option>
-                    </select>
-                </div>
-            </div>
-            
             <div class="ios-settings-card">
                 <div style="font-size: 11px; font-weight: 700; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Приложение</div>
                 <div style="display: flex; flex-direction: column; gap: 8px;">
@@ -3082,19 +3082,15 @@ setTimeout(end,9000);
             applyTheme(document.body.classList.contains('day-theme') ? 'night' : 'day');
         }
 
+        var fontScaleKey = 'm';
         function changeFontSize() {
-            const size = document.getElementById('fontSizeSelect').value;
-            try { localStorage.setItem('fontSize', size); } catch (e) {}
-            const wordTexts = document.querySelectorAll('.compact-word, .wcell-main');
-            const wordMeanings = document.querySelectorAll('.compact-meaning, .wcell-sec');
-            if (size === 'small') { wordTexts.forEach(el => el.style.fontSize = '14px'); wordMeanings.forEach(el => el.style.fontSize = '13px'); }
-            else if (size === 'large') { wordTexts.forEach(el => el.style.fontSize = '18px'); wordMeanings.forEach(el => el.style.fontSize = '17px'); }
-            else { wordTexts.forEach(el => el.style.fontSize = '16px'); wordMeanings.forEach(el => el.style.fontSize = '15px'); }
+            const f = ({ s: 0.9, m: 1, l: 1.15, xl: 1.3 })[fontScaleKey] || 1, px = v => (Math.round(v * f * 10) / 10) + 'px';
+            document.querySelectorAll('.compact-word, .wcell-main').forEach(el => el.style.fontSize = px(16));
+            document.querySelectorAll('.compact-meaning, .wcell-sec').forEach(el => el.style.fontSize = px(15));
         }
-        
         try { 
             const savedSize = localStorage.getItem('fontSize'); 
-            if (savedSize) document.getElementById('fontSizeSelect').value = savedSize; 
+            fontScaleKey = ({ small: 's', medium: 'm', large: 'l', s: 's', m: 'm', l: 'l', xl: 'xl' })[savedSize] || 'm';
             document.getElementById('ttsLangSelect').value = ttsLang;
         } catch (e) {}
 
@@ -5433,6 +5429,7 @@ async function shareDictionary(name) {
             i18nNode(document.body);
             document.title = trText('Личный словарь');
             document.querySelectorAll('.ui-lang-btn').forEach(b => { b.textContent = uiLang.toUpperCase(); });
+            try { refreshSettingsChips(); applyFontStyle(); } catch (e) {}
             const sel = document.getElementById('uiLangSelect');
             if (sel) { sel.value = uiLang; sel.dir = uiLang === 'ar' ? 'rtl' : 'ltr'; }
         }
@@ -5447,14 +5444,6 @@ async function shareDictionary(name) {
             try { updateStats(); renderDictsPage(); } catch (e) {}
         }
         (function initUiLang() {
-            const page = document.getElementById('pageSettings');
-            if (page) {
-                const card = document.createElement('div');
-                card.className = 'ios-settings-card';
-                card.innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;"><div style="font-size:15px;font-weight:600;">Язык интерфейса</div><select class="form-input" id="uiLangSelect" data-no-i18n dir="ltr" style="width:auto;min-width:130px;" onchange="setUiLang(this.value)">' + UI_LANGS.map(l => '<option value="' + l[0] + '">' + l[1] + '</option>').join('') + '</select></div>';
-                const first = page.querySelector('.ios-settings-card');
-                if (first) first.parentNode.insertBefore(card, first); else page.appendChild(card);
-            }
             new MutationObserver(ms => ms.forEach(m => {
                 if (m.type === 'attributes') i18nAttrs(m.target);
                 else if (m.type === 'characterData') i18nNode(m.target);
@@ -5519,7 +5508,7 @@ async function shareDictionary(name) {
             const meta = document.querySelector('meta[name="theme-color"]');
             if (meta && (man || mode === 'sepia' || mode === 'black')) meta.setAttribute('content', man ? (light ? '#F2F2F7' : '#000000') : THEME_BAR[mode]);
             updateThemeIcon();
-            const sel = document.getElementById('themeModeSelect'); if (sel) sel.value = mode;
+            try { refreshSettingsChips(); } catch (e) {}
             const blocks = document.getElementById('themeManualBlocks'); if (blocks) blocks.style.display = man ? '' : 'none';
         }
         function toggleDayNight() { applyTheme(themeMode === 'day' ? 'night' : 'day'); }
@@ -5660,6 +5649,28 @@ async function shareDictionary(name) {
             const pick = i < 0 ? ['day', 'night', 'sepia'] : [fixed[(i + n - 1) % n], fixed[(i + 2) % n], fixed[(i + 1) % n]];
             openFan(btn, pick.map(k => ({ html: THEME_ICONS[k].html, style: THEME_ICONS[k].style, run: () => applyTheme(k) })), true);
         }
+        const FONT_STYLES = [['auto', 'По языку', null], ['manrope', 'Manrope', 'Manrope'], ['inter', 'Inter', 'Inter'], ['nunito', 'Nunito', 'Nunito'], ['ptserif', 'PT Serif', 'PT Serif'], ['montserrat', 'Montserrat', 'Montserrat']];
+        let fontStyleKey = lsGet('fontStyle');
+        if (!FONT_STYLES.some(f => f[0] === fontStyleKey)) fontStyleKey = 'auto';
+        function fontStack(k) {
+            const f = FONT_STYLES.find(x => x[0] === k);
+            if (!f || !f[2]) return '';
+            return '"' + f[2] + '", "Cairo", ' + (k === 'ptserif' ? 'Georgia, serif' : '-apple-system, "Segoe UI", sans-serif');
+        }
+        function applyFontStyle() {
+            const b = document.body, st = fontStack(fontStyleKey);
+            if (!st) ['--font-display', '--font-body'].forEach(k => b.style.removeProperty(k));
+            else { b.style.setProperty('--font-display', st); b.style.setProperty('--font-body', st); }
+        }
+        function setFontStyle(k) { fontStyleKey = k; lsSet('fontStyle', k); applyFontStyle(); refreshSettingsChips(); }
+        function setFontScale(k) { fontScaleKey = k; lsSet('fontSize', k); changeFontSize(); refreshSettingsChips(); }
+        function refreshSettingsChips() {
+            const q = (sel, fn) => document.querySelectorAll(sel).forEach(fn);
+            q('[data-set-theme]', b => b.classList.toggle('active', b.dataset.setTheme === themeMode));
+            q('[data-set-lang]', b => b.classList.toggle('active', b.dataset.setLang === uiLang));
+            q('[data-set-font]', b => b.classList.toggle('active', b.dataset.setFont === fontStyleKey));
+            q('[data-set-size]', b => b.classList.toggle('active', b.dataset.setSize === fontScaleKey));
+        }
         (function initThemes() {
             const page = document.getElementById('pageSettings');
             if (page) {
@@ -5667,14 +5678,32 @@ async function shareDictionary(name) {
                 card.className = 'ios-settings-card';
                 const dots = (attr, keys, colorFn, fn) => keys.map(n => '<button type="button" class="accent-dot' + (n === 'custom' ? ' rainbow' : '') + '" data-' + attr + '="' + n + '" style="background:' + colorFn(n) + ';" onclick="' + (n === 'custom' ? "toggleWheel('" + attr + "')" : fn + "('" + n + "')") + '"></button>').join('');
                 const wheel = k => `<div class="wheel-box" id="wheel_${k}" style="display:none"><div class="wheel-wrap"><canvas width="240" height="240" onpointerdown="wheelDown(event,'${k}')" onpointermove="wheelMove(event,'${k}')" onpointerup="wheelUp()" onpointercancel="wheelUp()"></canvas><div class="wheel-marker" style="display:none"></div></div><div class="wheel-actions"><button type="button" class="app-dialog-btn" onclick="wheelCancel()">Отмена</button><button type="button" class="app-dialog-btn primary" onclick="wheelDone()">Готово</button></div></div>`;
-                card.innerHTML = `<div class="theme-card-row"><div style="font-size:15px;font-weight:600;">Тема</div><select class="form-input" id="themeModeSelect" style="width:auto;min-width:130px;" onchange="applyTheme(this.value)">${THEMES.map(k => '<option value="' + k + '">' + THEME_NAMES[k] + '</option>').join('')}</select></div>` +
+                const ico = d => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>';
+                const head = (i, t) => '<div class="set-head">' + i + t + '</div>';
+                card.innerHTML = head(ico('<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/>'), 'Тема') +
+                    '<div class="set-grid c5">' + THEMES.map(k => '<button type="button" class="quiz-mode-btn" data-set-theme="' + k + '" onclick="applyTheme(\'' + k + '\')">' + THEME_NAMES[k] + '</button>').join('') + '</div>' +
                     `<div id="themeManualBlocks"><div class="theme-card-block"><div class="theme-card-label">Цвет акцента</div><div class="accent-dots">${dots('accent', [...Object.keys(ACCENTS), 'custom'], dotColor, 'presetAccent')}</div>${wheel('accent')}</div>` +
                     `<div class="theme-card-block"><div class="theme-card-label">Цвет фона</div><div class="accent-dots">${dots('bg', [...Object.keys(BGS).filter(k => k !== 'custom'), 'custom'], bgSwatch, 'presetBg')}</div>${wheel('bg')}</div></div>`;
+                const lang = document.createElement('div');
+                lang.className = 'ios-settings-card';
+                lang.innerHTML = head(ico('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>'), 'Язык интерфейса') +
+                    '<div class="set-grid c4" dir="ltr">' + ['ru', 'en', 'ar', 'tr'].map(c => '<button type="button" class="quiz-mode-btn" data-no-i18n data-set-lang="' + c + '" onclick="setUiLang(\'' + c + '\')">' + UI_LANGS.find(l => l[0] === c)[1] + '</button>').join('') + '</div>';
+                const font = document.createElement('div');
+                font.className = 'ios-settings-card';
+                font.innerHTML = head(ico('<path d="M5 19L12 5l7 14M8.5 14h7"/>'), 'Стиль шрифта') +
+                    '<div class="set-grid c3">' + FONT_STYLES.map(f => '<button type="button" class="quiz-mode-btn font-card" data-set-font="' + f[0] + '" onclick="setFontStyle(\'' + f[0] + '\')"><span class="aa" data-no-i18n style="font-family:' + (f[2] ? fontStack(f[0]) : 'var(--font-display)') + ';">Aa Аа</span><small' + (f[2] ? ' data-no-i18n' : '') + '>' + f[1] + '</small></button>').join('') + '</div>';
+                const size = document.createElement('div');
+                size.className = 'ios-settings-card';
+                size.innerHTML = head(ico('<path d="M3 7V5h10v2M8 5v14M14 12v-1h7v1M17.5 11v8"/>'), 'Размер текста') +
+                    '<div class="set-grid c4">' + [['s', 'Мелкий', '90%'], ['m', 'Обычный', '100%'], ['l', 'Крупный', '115%'], ['xl', 'Огромный', '130%']].map(z => '<button type="button" class="quiz-mode-btn" data-set-size="' + z[0] + '" onclick="setFontScale(\'' + z[0] + '\')">' + z[1] + '<small>' + z[2] + '</small></button>').join('') + '</div>';
                 const first = page.querySelector('.ios-settings-card');
-                if (first) first.parentNode.insertBefore(card, first); else page.appendChild(card);
+                [card, lang, font, size].forEach(c => { if (first) first.parentNode.insertBefore(c, first); else page.appendChild(c); });
             }
+            applyFontStyle();
             applyTheme(themeMode);
+            refreshSettingsChips();
         })();
+        Object.assign(I18N, Object.fromEntries(Object.entries({"Стиль шрифта":["Font style","Yazı stili","نمط الخط"],"Размер текста":["Text size","Metin boyutu","حجم النص"],"По языку":["By language","Dile göre","حسب اللغة"],"Мелкий":["Small","Küçük","صغير"],"Обычный":["Normal","Normal","عادي"],"Крупный":["Large","Büyük","كبير"],"Огромный":["Huge","Çok büyük","ضخم"]}).filter(([k]) => !(k in I18N))));
         Object.assign(I18N, {"Готово":["Done","Tamam","تم"],"Вручную":["Manual","Manuel","يدوي"],"Цвет фона":["Background color","Arka plan rengi","لون الخلفية"],"Тема":["Theme","Tema","السمة"],"Авто":["Auto","Otomatik","تلقائي"],"День":["Day","Gündüz","نهار"],"Ночь":["Night","Gece","ليل"],"Сепия":["Sepia","Sepya","بنّي دافئ"],"Чёрный":["Black","Siyah","أسود"],"Цвет акцента":["Accent color","Vurgu rengi","لون التمييز"]});
         applyUiLang();
     
@@ -5829,7 +5858,7 @@ async function shareDictionary(name) {
                     ['Кнопки сброса под счётчиками обнуляют прогресс — пользуйтесь ими осторожно.', 'The reset buttons under the counters clear your progress, so use them carefully.', 'Sayaçların altındaki sıfırlama düğmeleri ilerlemenizi siler; dikkatli kullanın.', 'أزرار إعادة الضبط تحت العدّادات تمحو تقدّمك، فاستخدمها بحذر.']
                 ] },
                 settings: { title: ['Настройки', 'Settings', 'Ayarlar', 'الإعدادات'], lines: [
-                    ['Размер шрифта, язык озвучки и языки текущего словаря настраиваются здесь.', 'Font size, speech language and the languages of the current dictionary are set here.', 'Yazı boyutu, konuşma dili ve geçerli sözlüğün dilleri burada ayarlanır.', 'حجم الخط ولغة النطق ولغات القاموس الحالي تُضبط هنا.'],
+                    ['Тема, язык интерфейса, шрифт, размер текста, язык озвучки и языки текущего словаря настраиваются здесь.', 'Theme, interface language, font, text size, speech language and the languages of the current dictionary are set here.', 'Tema, arayüz dili, yazı tipi, metin boyutu, konuşma dili ve geçerli sözlüğün dilleri burada ayarlanır.', 'السمة ولغة الواجهة والخط وحجم النص ولغة النطق ولغات القاموس الحالي تُضبط هنا.'],
                     ['Язык интерфейса и тема — кнопки в шапке любой вкладки. В теме «Вручную» можно выбрать свои цвета.', 'Interface language and theme are the buttons in the header of any tab. The “Manual” theme lets you pick your own colours.', 'Arayüz dili ve tema, her sekmenin üst kısmındaki düğmelerdir. «Manuel» temada kendi renklerinizi seçersiniz.', 'لغة الواجهة والمظهر هما الزرّان في رأس أي تبويب. ومظهر «يدوي» يتيح اختيار ألوانك.'],
                     ['Резервная копия (JSON) сохраняет все словари в файл. Вернуть их можно через «Импорт из телефона».', 'A backup (JSON) saves all dictionaries to a file. Bring them back with “Import from phone”.', 'Yedek (JSON) tüm sözlükleri bir dosyaya kaydeder. «Telefondan içe aktar» ile geri yükleyebilirsiniz.', 'النسخة الاحتياطية (JSON) تحفظ كل القواميس في ملف. يمكنك استعادتها عبر «استيراد من الهاتف».'],
                     ['Таблицы Excel (CSV) — выгрузка и загрузка слов таблицей.', 'Excel tables (CSV): export and import words as a table.', 'Excel tabloları (CSV): kelimeleri tablo olarak dışa ve içe aktarın.', 'جداول Excel (CSV): تصدير الكلمات واستيرادها كجدول.'],
