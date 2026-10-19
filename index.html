@@ -1344,6 +1344,11 @@
             --ios-text: #4B3B26; --ios-text-secondary: rgba(75, 59, 38, 0.7); --ios-text-tertiary: rgba(75, 59, 38, 0.4);
             --ios-fill: rgba(120, 90, 50, 0.14); --ios-fill-secondary: rgba(120, 90, 50, 0.09);
         }
+        body.sepia-theme[class*="lang-"] {
+            --ios-bg: #F4ECD8; --ios-card: rgba(251, 245, 231, 0.85); --ios-card-solid: #FBF5E7;
+            --ios-card-hover: rgba(240, 230, 205, 0.95);
+            --ios-blue: #A9552B; --ios-blue-rgb: 169, 85, 43; --ios-shadow-glow: 0 8px 24px rgba(169, 85, 43, 0.3);
+        }
         body.sepia-theme .ambient-sphere { opacity: 0.25; }
         body.black-theme {
             --ios-bg: #000000; --ios-card: rgba(12, 12, 12, 0.8); --ios-card-solid: #0B0B0B;
@@ -5417,7 +5422,7 @@ async function shareDictionary(name) {
         function applyLangStyle() {
             const b = document.body, day = b.classList.contains('day-theme');
             ['ru', 'en', 'tr', 'ar'].forEach(l => b.classList.toggle('lang-' + l, l === uiLang));
-            b.classList.toggle('accent-light', uiLang === 'ar' && !day);   // светлый изумруд: на нём тёмный текст читается лучше
+            b.classList.toggle('accent-light', accentLightOn());   // светлый изумруд: на нём тёмный текст читается лучше
             const meta = document.querySelector('meta[name="theme-color"]');
             if (meta) meta.setAttribute('content', (LANG_BAR[uiLang] || LANG_BAR.ru)[day ? 1 : 0]);
         }
@@ -5481,26 +5486,41 @@ async function shareDictionary(name) {
         try {
             let m = lsGet('themeMode') || lsGet('theme');
             if (m === 'auto') m = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'day' : 'night';
-            themeMode = m === 'day' ? 'day' : 'night';
+            if (THEMES.includes(m)) themeMode = m;
             const ac = lsGet('accentCustom'); if (ac && /^#[0-9a-f]{6}$/i.test(ac)) accentCustom = ac;
             try { const bc = JSON.parse(lsGet('bgCustom')); if (bc && 'dml'.includes(bc.t)) { bgCustom = bc; BGS.custom = [bc.h, bc.s, bc.t]; } } catch (e) {}
             const a = lsGet('accent'); if (a in ACCENTS || (a === 'custom' && accentCustom)) accentName = a;
             const g = lsGet('bgColor'); if (g in BGS) bgName = g;
         } catch (e) {}
         const RAINBOW = 'conic-gradient(#ff3b30, #ffcc00, #34c759, #00c7be, #007aff, #af52de, #ff3b30)';
-        const dotColor = n => n === 'custom' ? (accentCustom || RAINBOW) : (ACCENTS[n] ? ACCENTS[n][0] : '#0A84FF');
+        const LANG_ACCENT = { ru: '#4F8DFF', en: '#1E9BCF', tr: '#E5384A', ar: '#2DD4A0' };
+        const dotColor = n => n === 'custom' ? (accentCustom || RAINBOW) : (ACCENTS[n] ? ACCENTS[n][0] : (LANG_ACCENT[uiLang] || '#0A84FF'));
         function bgSwatch(n) { const p = BGS[n]; if (!p) return RAINBOW; return 'hsl(' + p[0] + ',' + p[1] + '%,' + ({ d: 16, m: 32, l: 92 })[p[2]] + '%)'; }
+        function accentLightOn() {
+            const b = document.body, day = b.classList.contains('day-theme');
+            try {   // темы объявлены ниже: при самом раннем запуске их ещё нет
+                const man = themeMode === 'manual', c = accentName === 'custom' && accentCustom ? [accentCustom] : ACCENTS[accentName];
+                if (man && c) return lumOf(c[0]) > 0.45;
+                return uiLang === 'ar' && !day && themeMode !== 'sepia' && themeMode !== 'black';
+            } catch (e) { return uiLang === 'ar' && !day; }
+        }
         function applyTheme(mode) {
-            mode = mode === 'day' ? 'day' : 'night';   // остались только светлая и тёмная
+            if (!THEMES.includes(mode)) mode = 'night';
             themeMode = mode;
             lsSet('themeMode', mode);
-            const b = document.body;
-            b.classList.toggle('day-theme', mode === 'day');
-            ['sepia-theme', 'black-theme'].forEach(c => b.classList.remove(c));
-            b.classList.toggle('night-theme', mode === 'night');
+            const man = mode === 'manual', b = document.body, light = man ? BGS[bgName][2] === 'l' : (mode === 'day' || mode === 'sepia');
+            b.classList.toggle('day-theme', light);
+            b.classList.toggle('sepia-theme', mode === 'sepia');
+            b.classList.toggle('black-theme', mode === 'black');
+            b.classList.toggle('night-theme', !light);
             ['--ios-blue', '--ios-blue-rgb', '--ios-shadow-glow', '--ios-bg', '--ios-card', '--ios-card-solid', '--ios-card-hover'].forEach(k => b.style.removeProperty(k));
+            paintCustom();
             applyLangStyle();
+            const meta = document.querySelector('meta[name="theme-color"]');
+            if (meta && (man || mode === 'sepia' || mode === 'black')) meta.setAttribute('content', man ? (light ? '#F2F2F7' : '#000000') : THEME_BAR[mode]);
             updateThemeIcon();
+            const sel = document.getElementById('themeModeSelect'); if (sel) sel.value = mode;
+            const blocks = document.getElementById('themeManualBlocks'); if (blocks) blocks.style.display = man ? '' : 'none';
         }
         function toggleDayNight() { applyTheme(themeMode === 'day' ? 'night' : 'day'); }
         function paintCustom() {
@@ -5509,7 +5529,7 @@ async function shareDictionary(name) {
             const set = (k, v) => b.style.setProperty(k, v), clear = k => b.style.removeProperty(k);
             if (man && c) { set('--ios-blue', c[0]); set('--ios-blue-rgb', c[1]); set('--ios-shadow-glow', '0 8px 24px rgba(' + c[1] + ', 0.35)'); }
             else ['--ios-blue', '--ios-blue-rgb', '--ios-shadow-glow'].forEach(clear);
-            b.classList.toggle('accent-light', !!(man && c && lumOf(c[0]) > 0.45));
+            b.classList.toggle('accent-light', accentLightOn());
             if (man) {
                 const h = p[0], s = p[1], ty = p[2], lt = ty === 'l', cs = lt ? s : s * 0.8, T = ({ d: [7, 13, 18], m: [24, 31, 37], l: [94, 99, 92] })[ty];
                 set('--ios-bg', 'hsl(' + h + ',' + s + '%,' + T[0] + '%)');
@@ -5517,7 +5537,7 @@ async function shareDictionary(name) {
                 set('--ios-card-solid', 'hsl(' + h + ',' + cs + '%,' + T[1] + '%)');
                 set('--ios-card-hover', 'hsla(' + h + ',' + cs + '%,' + T[2] + '%,' + (lt ? 0.9 : 0.8) + ')');
             } else ['--ios-bg', '--ios-card', '--ios-card-solid', '--ios-card-hover'].forEach(clear);
-            document.querySelectorAll('.accent-dot[data-accent]').forEach(x => { x.classList.toggle('active', x.dataset.accent === accentName); if (x.dataset.accent === 'custom') x.style.background = dotColor('custom'); });
+            document.querySelectorAll('.accent-dot[data-accent]').forEach(x => { x.classList.toggle('active', x.dataset.accent === accentName); if (x.dataset.accent === 'custom' || x.dataset.accent === 'blue') x.style.background = dotColor(x.dataset.accent); });
             document.querySelectorAll('.accent-dot[data-bg]').forEach(x => { x.classList.toggle('active', x.dataset.bg === bgName); if (x.dataset.bg === 'custom') x.style.background = bgSwatch('custom'); });
         }
         function applyAccent(name) { accentName = name; lsSet('accent', name); applyTheme(themeMode); }
@@ -5635,8 +5655,26 @@ async function shareDictionary(name) {
             sepia: { html: _ico('<path d="M2 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H2zM22 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8z"/>'), style: 'background:#F4ECD8;color:#6B4F2A;border-color:rgba(92,70,40,0.35);' },
             black: { html: _ico('<circle cx="12" cy="12" r="7" fill="currentColor"/>'), style: 'background:#000000;color:#FFFFFF;border-color:rgba(255,255,255,0.5);' }
         };
-        function openThemeMenu() { toggleDayNight(); }
-        (function initThemes() { applyTheme(themeMode); })();
+        function openThemeMenu(btn) {
+            const fixed = ['day', 'night', 'sepia', 'black'], i = fixed.indexOf(themeMode), n = fixed.length;
+            const pick = i < 0 ? ['day', 'night', 'sepia'] : [fixed[(i + n - 1) % n], fixed[(i + 2) % n], fixed[(i + 1) % n]];
+            openFan(btn, pick.map(k => ({ html: THEME_ICONS[k].html, style: THEME_ICONS[k].style, run: () => applyTheme(k) })), true);
+        }
+        (function initThemes() {
+            const page = document.getElementById('pageSettings');
+            if (page) {
+                const card = document.createElement('div');
+                card.className = 'ios-settings-card';
+                const dots = (attr, keys, colorFn, fn) => keys.map(n => '<button type="button" class="accent-dot' + (n === 'custom' ? ' rainbow' : '') + '" data-' + attr + '="' + n + '" style="background:' + colorFn(n) + ';" onclick="' + (n === 'custom' ? "toggleWheel('" + attr + "')" : fn + "('" + n + "')") + '"></button>').join('');
+                const wheel = k => `<div class="wheel-box" id="wheel_${k}" style="display:none"><div class="wheel-wrap"><canvas width="240" height="240" onpointerdown="wheelDown(event,'${k}')" onpointermove="wheelMove(event,'${k}')" onpointerup="wheelUp()" onpointercancel="wheelUp()"></canvas><div class="wheel-marker" style="display:none"></div></div><div class="wheel-actions"><button type="button" class="app-dialog-btn" onclick="wheelCancel()">Отмена</button><button type="button" class="app-dialog-btn primary" onclick="wheelDone()">Готово</button></div></div>`;
+                card.innerHTML = `<div class="theme-card-row"><div style="font-size:15px;font-weight:600;">Тема</div><select class="form-input" id="themeModeSelect" style="width:auto;min-width:130px;" onchange="applyTheme(this.value)">${THEMES.map(k => '<option value="' + k + '">' + THEME_NAMES[k] + '</option>').join('')}</select></div>` +
+                    `<div id="themeManualBlocks"><div class="theme-card-block"><div class="theme-card-label">Цвет акцента</div><div class="accent-dots">${dots('accent', [...Object.keys(ACCENTS), 'custom'], dotColor, 'presetAccent')}</div>${wheel('accent')}</div>` +
+                    `<div class="theme-card-block"><div class="theme-card-label">Цвет фона</div><div class="accent-dots">${dots('bg', [...Object.keys(BGS).filter(k => k !== 'custom'), 'custom'], bgSwatch, 'presetBg')}</div>${wheel('bg')}</div></div>`;
+                const first = page.querySelector('.ios-settings-card');
+                if (first) first.parentNode.insertBefore(card, first); else page.appendChild(card);
+            }
+            applyTheme(themeMode);
+        })();
         Object.assign(I18N, {"Готово":["Done","Tamam","تم"],"Вручную":["Manual","Manuel","يدوي"],"Цвет фона":["Background color","Arka plan rengi","لون الخلفية"],"Тема":["Theme","Tema","السمة"],"Авто":["Auto","Otomatik","تلقائي"],"День":["Day","Gündüz","نهار"],"Ночь":["Night","Gece","ليل"],"Сепия":["Sepia","Sepya","بنّي دافئ"],"Чёрный":["Black","Siyah","أسود"],"Цвет акцента":["Accent color","Vurgu rengi","لون التمييز"]});
         applyUiLang();
     
