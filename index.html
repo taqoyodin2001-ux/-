@@ -4038,7 +4038,7 @@ async function shareDictionary(name) {
         function confirmBulkImport() {
             const newWords = bulkImportParsedData.filter(item => item.status === 'new');
             const fillItems = bulkImportParsedData.filter(item => item.status === 'fill');
-            if (newWords.length === 0 && fillItems.length === 0) return alert('Нет новых слов для добавления.');
+            if (newWords.length === 0 && fillItems.length === 0 && !bulkImportParsedData.some(i => i.example && i.status === 'duplicate')) return alert('Нет новых слов для добавления.');
 
             const targetDictionary = bulkImportTargetDictionary;
             const now = new Date().toISOString();
