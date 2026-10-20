@@ -4749,19 +4749,42 @@ async function shareDictionary(name) {
             const parts = String(ans || '').split(/[,;\/،؛]/).map(normAnswer).filter(Boolean);
             return [whole, ...parts];
         }
+        /* Глагол в любой форме: корень + окончание времени/лица (в словаре остаётся -mak/-mek) */
+        const VERB_IRR = { git: 'gid', et: 'ed', ye: 'yi', de: 'di' };
+        const VERB_REST = new RegExp('^(?:m[aeiouöü]?)?(?:' + [
+            '[iuü]?yor', '[dt][iuü]', 'm[iuü]ş', 'y?(?:acak|ecek|acağ|eceğ)', '[aeiouöü]?r',
+            'mal[iu]', 'mel[iü]', 'y?(?:sa|se)', 'm[aeiı]?[kğ]?', 'y?(?:ip|up|üp)', 'y?(?:arak|erek)', 'y?(?:ince|unca|ünce|inca)',
+            'ken', 'y?(?:an|en)', '[iuü]ş', 'y?(?:ayim|eyim)', 'y?(?:alim|elim)', 'y?(?:in|un|ün)', '(?:sin|sun|sün)', 'y?(?:ar|er)', 'y?(?:ma|me)', 'y?(?:mak|mek)'
+        ].join('|') + ')[a-zçğöşü]{0,10}$');
+        function verbMatch(tk, stem) {
+            const vars = [stem];
+            if (VERB_IRR[stem]) vars.push(VERB_IRR[stem]);
+            if (stem.length > 2 && /et$/.test(stem)) vars.push(stem.slice(0, -1) + 'd');
+            for (const v of vars) if (tk.startsWith(v) && VERB_REST.test(tk.slice(v.length))) return true;
+            if (stem.length >= 3 && /[ae]$/.test(stem)) { const v = stem.slice(0, -1); if (tk.startsWith(v) && /^[iuü]yor/.test(tk.slice(v.length))) return true; }
+            return false;
+        }
         function makeCloze(w) {
             const ex = String(w.example || '').trim();
             const key = normAnswer(w.word);
             if (!ex || key.length < 2) return null;
+            const isVerb = /(mak|mek)$/.test(key);
+            const toks = []; { const re = /[\p{L}\p{N}]+/gu; let m; while ((m = re.exec(ex))) toks.push({ i: m.index, e: m.index + m[0].length, n: normAnswer(m[0]) }); }
             if (key.includes(' ')) {
                 const i = ex.toLocaleLowerCase('tr').indexOf(String(w.word).trim().toLocaleLowerCase('tr'));
-                if (i < 0) return null;
-                const e = i + String(w.word).trim().length;
-                return { text: ex.slice(0, i) + '_____' + ex.slice(e), answer: ex.slice(i, e) };
+                if (i >= 0) { const e = i + String(w.word).trim().length; return { text: ex.slice(0, i) + '_____' + ex.slice(e), answer: ex.slice(i, e) }; }
+                if (!isVerb) return null;
+                const ws = key.split(' '), last = ws.pop(), stem = last.slice(0, -3);
+                for (let a = 0; a + ws.length < toks.length; a++) {
+                    if (!ws.every((x, j) => toks[a + j].n === x || toks[a + j].n.startsWith(x))) continue;
+                    const t = toks[a + ws.length];
+                    if (verbMatch(t.n, stem)) return { text: ex.slice(0, toks[a].i) + '_____' + ex.slice(t.e), answer: ex.slice(toks[a].i, t.e) };
+                }
+                return null;
             }
-            const re = /[\p{L}\p{N}]+/gu; let m;
-            while ((m = re.exec(ex))) {
-                const tk = normAnswer(m[0]); if (tk.startsWith(key) || (key.length >= 4 && tk.startsWith(key.slice(0, -1)))) return { text: ex.slice(0, m.index) + '_____' + ex.slice(m.index + m[0].length), answer: m[0] };
+            for (const t of toks) {
+                const tk = t.n;
+                if (tk.startsWith(key) || (key.length >= 4 && tk.startsWith(key.slice(0, -1))) || (isVerb && verbMatch(tk, key.slice(0, -3)))) return { text: ex.slice(0, t.i) + '_____' + ex.slice(t.e), answer: ex.slice(t.i, t.e) };
             }
             return null;
         }
