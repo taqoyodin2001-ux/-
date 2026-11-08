@@ -1,4 +1,4 @@
-const CACHE_NAME = "my-dictionary-v29";
+const CACHE_NAME = "my-dictionary-v31";
 const FILES_TO_CACHE = [
   "./",
   "./index.html",
